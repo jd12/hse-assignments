@@ -226,7 +226,35 @@ cd ~/version_control/hse-2026-2027-tokenizer-<your-username>
 git switch -c dev/setup
 ```
 
-Write `SETUP.md` at the top level, then:
+Write `SETUP.md` at the top level. It is a lab notebook, not an essay: short, exact, and copied from your terminal rather than remembered. Use these six headings in this order, and put something under every one of them.
+
+```
+# Setup — <your name>
+
+## 1. Time to run
+<mm:ss> from Enter on `git clone` to the first real agent response.
+The question I asked: ...
+The tool it called: ...
+
+## 2. Errors, in order
+For each one: the step number, the exact command you ran, the first line of the error, and the exact command that fixed it. "Nothing broke" is allowed only if it is true.
+
+## 3. check_env.py
+Paste the full output of `uv run python check_env.py` here, unedited.
+
+## 4. Secret guard
+Paste the terminal output from the fake.txt test in step 7: the `git commit` command and the rejection message.
+
+## 5. Notebook filter
+Open `notebooks/01_tokenizer_probe.ipynb`, run one cell, SAVE, then paste the output of `git diff --stat` and of `git config --get filter.nbstrip.clean`. The diff should be a few lines, not thousands of lines of output.
+
+## 6. GitHub Student Developer Pack
+One of: `active since <date>`, `applied on <date>, pending`, or `not applied — <why>`.
+```
+
+Paste real output between triple backticks. Lengths, not keys: if any pasted output contains `sk-`, you have pasted a key, and the secret guard will refuse the commit for exactly that reason.
+
+Then:
 
 ```
 git add SETUP.md
