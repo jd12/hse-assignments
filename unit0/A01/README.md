@@ -240,7 +240,7 @@ The tool it called: ...
 For each one: the step number, the exact command you ran, the first line of the error, and the exact command that fixed it. "Nothing broke" is allowed only if it is true.
 
 ## 3. check_env.py
-Paste the full output of `uv run python check_env.py` here, unedited.
+Paste the full output of `uv run scripts/check_env.py` here, unedited.
 
 ## 4. Secret guard
 Paste the terminal output from the fake.txt test in step 7: the `git commit` command and the rejection message.
