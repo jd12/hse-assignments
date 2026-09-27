@@ -2,9 +2,18 @@
 
 **Meetings:** D09 · **Points:** 15 pts
 
-**Video/Source Link(s):**
+**Watch — 24 min**
+
+**One meeting — 24 min**
 [But what is a Neural Network?, 3Blue1Brown Deep Learning Ch. 1](https://www.youtube.com/watch?v=aircAruvnKk) (18m40s)
-[How Transformer LLMs Work](https://www.deeplearning.ai/short-courses/how-transformer-llms-work/): lesson 3 ((Word) Embeddings), rewatch with A03–A04 in your head
+[How Transformer LLMs Work](https://www.deeplearning.ai/short-courses/how-transformer-llms-work/) · lesson 3, (Word) Embeddings (5m), rewatch with A03–A04 in your head
+ · Paper and a pencil for the first one; `embed/probe.py` from Step 4 open for the second.
+
+**During the video**
+
+**3Blue1Brown Ch. 1 · write, do not type.** No code. Watch it for the picture of what a learned representation *is*; there is nothing to type along with. When he shows what he hoped each hidden neuron would stand for, a loop or an edge, and then shows what a trained network actually does, pause and write both in your log in one sentence each. Question 1 asks you to put your own vectors next to that.
+
+**DLAI lesson 3 · write one line down.** No code. When the lesson says a word's vector is learned from the text around it, write that sentence in your log in your own words. Question 2 asks you to use it.
 
 **Notes**
 
@@ -18,9 +27,7 @@ One zero vector poisons everything. A length of 0 gives you `nan`, and `nan` spr
 
 `np.argsort` is ascending, so top-k needs `[::-1]` or a negated matrix. And every vector's nearest neighbour is itself. Slice that off or your top-5 is really a top-4, and slice it off **by index**: the self-match is 1.0 to within floating-point error rather than exactly 1.0, so `S[i] == 1.0` finds it for about a quarter of your words and quietly misses the rest.
 
-3Blue1Brown has no code in it. Watch it for the picture of what a learned representation *is*; there is nothing to type along with.
-
-**Do**
+**Walkthrough — the probe, by hand**
 
 **Step 1. Accept your second repo.**
 
@@ -363,7 +370,11 @@ Run the whole file one last time.
 
 *You should see*, top to bottom: the word count, the load line, the four shapes, `True` and your first pair, ten neighbor lines, three analogy lines, the baseline line, and `probe.py ran to the end`.
 
-**Step 8. Write `embed/FINDINGS.md`.**
+**Extension — the part of the probe that is yours (ASSIGNED)**
+
+The 28 words you added, the ten in `MY_TEN`, your two analogies and the row you disagree with are the extension: they are the only parts of this file no one else in the room has, and `FINDINGS.md` is where they go.
+
+**X1. Write `embed/FINDINGS.md`.**
 
 Create it the same way as `probe.py`: right-click `embed`, **New File**, `FINDINGS.md`. Copy this in and fill every angle bracket. Paste output exactly as it printed: do not retype it, round it, or tidy it up.
 
@@ -401,7 +412,7 @@ What that mean tells me about reading any single score from this model:
 
 The reflection questions are not in this file. They go in your log, and nothing they ask needs repeating here.
 
-**Step 9. Commit, push, open the pull request.**
+**X2. Commit, push, open the pull request.**
 
 ```bash
 git add embed/probe.py embed/vecs.npy embed/words.npy embed/FINDINGS.md
@@ -413,7 +424,7 @@ git push -u origin dev/embeddings
 
 **Merge when the assignment is finished and I have approved it, not before.** That will usually land a day or two into the next assignment, because the next one opens before this one is due. Branches are independent, so having two open at once is normal and is not a sign you are behind.
 
-**Step 10. Close the log.**
+**X3. Close the log.**
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>
@@ -422,7 +433,7 @@ git add logs && git commit && git push
 ```
 
 **Deliverable**
-`embed/probe.py`, `embed/vecs.npy`, `embed/words.npy` and `embed/FINDINGS.md` in the shape Step 8 gives, plus the three reflection questions answered in your log.
+`embed/probe.py`, `embed/vecs.npy`, `embed/words.npy` and `embed/FINDINGS.md` in the shape X1 gives, plus the three reflection questions answered in your log.
 
 **Reflection Questions**
 

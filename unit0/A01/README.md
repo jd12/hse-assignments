@@ -2,7 +2,7 @@
 
 **Meetings:** D01–D02 · **Points:** 15 pts
 
-**Video/Source Link(s):** No video. In-house setup. [GitHub Student Developer Pack](https://education.github.com/pack) · [Master.dev](https://master.dev) (Pack unlocks 6 months) · Your two repositories, `hse-2026-2027-tokenizer-<your-username>` and `hse-2026-2027-student-log-<your-username>`, both created by Classroom 50. Accept links are in the Do section below.
+**Video/Source Link(s):** No video. In-house setup. [GitHub Student Developer Pack](https://education.github.com/pack) · Your two repositories, `hse-2026-2027-tokenizer-<your-username>` and `hse-2026-2027-student-log-<your-username>`, both created by Classroom 50. Accept links are in the Do section below.
 
 **Notes**  
 Find your AI Agents Fundamentals v2 repo. Do not open the folder that's already on your laptop. Clone it fresh into a new directory and start a stopwatch at the moment you hit Enter on `git clone`. Stop it when the agent returns its first real response. That number is data: do not round it down.
@@ -247,7 +247,7 @@ Both pull requests stay open until the setup actually works: `check_env.py` clea
 When you are there, push, tell me, and merge both once I have approved them. If A03 has already started by then, that is fine and expected. Assignments overlap, so you will often have the previous branch open beside the current one. What you must not do is merge work that is half-finished because the calendar moved on.
 
 **Deliverable**  
-`SETUP.md` on branch `dev/setup` **of your tokenizer repo**, not of your v2 repo, with its pull request open and me as reviewer: your recorded time-to-run, every error you hit in order with the exact command that fixed it, `check_env.py` output, proof the secret guard rejected a test commit, proof the notebook filter is stripping output, and your Pack/Master.dev activation status.
+`SETUP.md` on branch `dev/setup` **of your tokenizer repo**, not of your v2 repo, with its pull request open and me as reviewer: your recorded time-to-run, every error you hit in order with the exact command that fixed it, `check_env.py` output, proof the secret guard rejected a test commit, proof the notebook filter is stripping output, and your GitHub Student Developer Pack activation status.
 
 **Reflection Questions**
 
