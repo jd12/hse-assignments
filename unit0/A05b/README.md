@@ -12,7 +12,7 @@ From today until May, every assignment in this course runs on one text file that
 
 So the file has to be good, and "good" is specific. Big enough that a search over it has something to find and a model trained on it produces readable text: **one million characters is the floor**, and the checker fails below it. Plain UTF-8 text with paragraphs separated by blank lines, because that is what the chunker in A06 splits on. Free of the license header and footer a download comes wrapped in, because otherwise "Project Gutenberg" is the top hit for a third of your queries. Not mostly repeats. Something you can legally use and are willing to have excerpts of pasted into committed files all year, which rules out anything private and anything you scraped from behind a login. And re-fetchable by a script, because I re-run your numbers, and a corpus nobody can reproduce is a result nobody can check.
 
-`Choosing a Corpus.md`, linked from the repo README, has sources for literature, history, sports, technology, science, games, law and food, each with the command that fetches it. The worked example throughout this course is Homer, because it is what I used: the Odyssey and the Iliad in Butler's translation, Project Gutenberg #1727 and #6130, glued into one file of about 1.5 million characters. The Odyssey alone is 700,000, under the floor, which is the first lesson of the day: one book is usually not enough, and the fix is a second book from the same source, fetched by the same script.
+`Choosing a Corpus.md`, linked from the repo README, has sources for literature, history, sports, technology, science, games, law and food, each with the command that fetches it. The worked example throughout this course is Homer, because it is what I used: the Odyssey and the Iliad in Butler's translation, Project Gutenberg #1727 and #2199, glued into one file of about 1.5 million characters. The Odyssey alone is 700,000, under the floor, which is the first lesson of the day: one book is usually not enough, and the fix is a second book from the same source, fetched by the same script.
 
 **The checker is a script and a test file, and they check the same things.** `scripts/check_corpus.py` prints a report with a fix under every failure. `tests/test_corpus.py` is the same set of facts as pytest tests, one per thing a later assignment assumes, and the last test in it is empty because it is yours to write.
 
@@ -74,7 +74,7 @@ Open `Choosing a Corpus.md` and pick. Then create `scripts/fetch_corpus.sh` from
 set -e
 mkdir -p data
 : > data/corpus.txt                      # start empty; every book below is appended
-for ID in 1727 6130; do                  # 1727 = the Odyssey, 6130 = the Iliad (Butler). Change these.
+for ID in 1727 2199; do                  # 1727 = the Odyssey, 2199 = the Iliad (Butler). Change these.
   curl -fsSL --retry 4 --retry-delay 5 --retry-all-errors "https://www.gutenberg.org/cache/epub/$ID/pg$ID.txt" -o data/raw.txt
   # Keep only what is between the START and END markers, then drop the marker lines themselves.
   awk '/\*\*\* START OF/{flag=1; next} /\*\*\* END OF/{flag=0} flag' data/raw.txt >> data/corpus.txt
@@ -120,7 +120,7 @@ Then `data/SOURCE.md`:
 # Corpus
 
 Title: The Odyssey and The Iliad, Samuel Butler translations
-URL: https://www.gutenberg.org/cache/epub/1727/pg1727.txt and https://www.gutenberg.org/cache/epub/6130/pg6130.txt
+URL: https://www.gutenberg.org/cache/epub/1727/pg1727.txt and https://www.gutenberg.org/cache/epub/2199/pg2199.txt
 License: public domain (Project Gutenberg)
 Fetched: 2026-09-28 by scripts/fetch_corpus.sh
 sha256: <paste the whole hash>

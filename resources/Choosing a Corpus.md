@@ -43,7 +43,7 @@ To glue two books, fetch each to `data/raw1.txt`, `data/raw2.txt`, apply the `aw
 
 | Interest | Books (IDs to confirm on the site) | Rough size |
 |---|---|---|
-| **Epic / myth** | The Odyssey, Butler (1727) · The Iliad, Butler (6130) · Beowulf (16328) · Bulfinch's Mythology (4928) | 0.7 MB each; Odyssey + Iliad ≈ 1.6 MB |
+| **Epic / myth** | The Odyssey, Butler (1727) · The Iliad, Butler (2199) · Beowulf (16328) · Bulfinch's Mythology (4928) | 0.7 MB each; Odyssey + Iliad ≈ 1.6 MB |
 | **Novels** | Moby Dick (2701, 1.2 MB) · War and Peace (2600, 3.2 MB) · Pride and Prejudice (1342, 0.7 MB) · Dracula (345, 0.9 MB) · Frankenstein (84, 0.4 MB) · The Adventures of Sherlock Holmes (1661, 0.6 MB) + The Memoirs (834) + The Return (108) | one novel is usually 0.5–1.2 MB |
 | **Complete Shakespeare** | 100 | 5.5 MB; cut to the tragedies if it is slow |
 | **History — ancient** | Herodotus, *The Histories* (2707 vol. 1, 2456 vol. 2) · Thucydides, *Peloponnesian War* (7142) · Plutarch's *Lives* (674) · Gibbon, *Decline and Fall* vol. 1 (25717) | 0.8–1.5 MB each |
