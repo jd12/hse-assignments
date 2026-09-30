@@ -132,6 +132,26 @@ for name, cs in [('naive', [p for p in re.split(r'\n\s*\n', text) if p.strip()])
 
 *If it broke:* a `chunk` count under 300 means your corpus is too small for these settings; lower `min_chars` to 150 and write down that you did. A `chunk` minimum under 200 means the corpus is one chunk long, which A05b's checker should have refused.
 
+Then look at the piece behind that `naive` minimum, and where it went. Same place, same shape:
+
+```bash
+uv run python -c "
+import re, sys; sys.path.insert(0, '.')
+from search.search import chunk, CORPUS
+text = CORPUS.read_text(encoding='utf-8')
+naive = [p for p in re.split(r'\n\s*\n', text) if p.strip()]
+frag = min(naive, key=len)
+print('shortest naive piece:', repr(frag), '(', len(frag), 'chars )')
+chunks = chunk(text)
+pat = re.compile(r'(?<!\S)' + re.escape(' '.join(frag.split())) + r'(?!\S)')
+hits = [i for i, c in enumerate(chunks) if pat.search(c)]
+print('lands in chunk(s)', hits, 'of', len(chunks))
+print(repr(chunks[hits[0]][:90]) if hits else '(not found)')
+"
+```
+
+*You should see* three lines: the piece itself in quotes (on Homer it is `'BOOK I'`, 6 characters), the index of the chunk it was absorbed into, and that chunk's first 90 characters. The piece is almost always a heading, a page break, a stage direction or a stray line number, which is why the naive split has a minimum in the single digits and yours does not. Keep all three lines; Reflection Question 1 asks for them.
+
 **Step 4. Embed in batches, sorted by `index`.**
 
 ```python
@@ -320,7 +340,7 @@ git add logs && git commit && git push
 
 **Reflection Questions**
 
-1. Paste the two lines from Step 3, `naive` and `chunk`. Find the shortest chunk the naive split produced by printing it, paste it, and say what it is in your file (a heading, a line number, a stage direction, a page break). Then find the chunk it ended up inside after `chunk()` (`[i for i, c in enumerate(chunks) if frag in c]`), give its index, paste its first 90 characters, and say whether that chunk appeared in any of your thirty semantic results.
+1. Paste the two lines from Step 3, `naive` and `chunk`, and the three lines from the second snippet: the shortest piece the naive split produced, the index of the chunk it ended up inside after `chunk()`, and that chunk's first 90 characters. Say what the piece is in your file (a heading, a line number, a stage direction, a page break), and whether that chunk appeared in any of your thirty semantic results.
 
 2. Your predicted cutoff, committed in E1, and the cutoff that made the fewest mistakes in E4: give both, with the commit hash of the prediction. Which off-corpus query scored highest, what was its top chunk, and why does a question your corpus cannot answer still land above the chunk floor you measured in E2?
 
