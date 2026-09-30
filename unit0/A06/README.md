@@ -342,7 +342,7 @@ git add logs && git commit && git push
 
 1. Paste the two lines from Step 3, `naive` and `chunk`, and the three lines from the second snippet: the shortest piece the naive split produced, the index of the chunk it ended up inside after `chunk()`, and that chunk's first 90 characters. Say what the piece is in your file (a heading, a line number, a stage direction, a page break), and whether that chunk appeared in any of your thirty semantic results.
 
-   *How to get it:* both snippets are in Step 3; run them again if you did not keep the output. For the last part, search your run for the index in square brackets, with your number in place of 23:
+   *How to get it:* both snippets are in Step 3; run them again if you did not keep the output. The index is the number in square brackets on the `lands in chunk(s)` line, and it is the same numbering `search()` prints in its results, so for the last part search your run for it, with your number in place of 23:
 
    ```bash
    grep -n "sem .*\[23\]" search/run1.txt
