@@ -342,6 +342,38 @@ git add logs && git commit && git push
 
 1. Paste the two lines from Step 3, `naive` and `chunk`, and the three lines from the second snippet: the shortest piece the naive split produced, the index of the chunk it ended up inside after `chunk()`, and that chunk's first 90 characters. Say what the piece is in your file (a heading, a line number, a stage direction, a page break), and whether that chunk appeared in any of your thirty semantic results.
 
+   *How to get it:* both snippets are in Step 3; run them again if you did not keep the output. For the last part, search your run for the index in square brackets, with your number in place of 23:
+
+   ```bash
+   grep -n "sem .*\[23\]" search/run1.txt
+   ```
+
+   A hit means that chunk was a top-3 semantic result for the query on that line; no output means it never appeared.
+
 2. Your predicted cutoff, committed in E1, and the cutoff that made the fewest mistakes in E4: give both, with the commit hash of the prediction. Which off-corpus query scored highest, what was its top chunk, and why does a question your corpus cannot answer still land above the chunk floor you measured in E2?
 
+   *How to get it:* the predicted cutoff is the line you wrote under the floor in `search/RESULTS.md`; the fewest-mistakes cutoff is the one you worked out in E4. The hash is the first commit that touched the queries file:
+
+   ```bash
+   git log --oneline --follow -- search/queries.txt | tail -1
+   ```
+
+   The two off-corpus queries are the last two `##` blocks of `search/run1.txt`; the higher of their first `sem` lines is the one to report, with the chunk text on that line. For the why, look at the E2 numbers: every chunk sits above the floor because they all come from one file on one subject, and an off-topic question phrased in that subject's words lands in the same neighbourhood.
+
 3. Pick the query where semantic and keyword disagreed most. Paste both top results. Then use your timing from the lesson 3 code-along: how many chunks do you have, how long does one `Vn @ q` over them take on your machine (time it), and how many times larger would your corpus need to be before that search, not the API call, is the slow part of a query?
+
+   *How to get it:* "disagreed most" is the query in your E3 table where one method got it and the other did not, or where the two `[index]` values differ and the scores are furthest apart; its two top lines are in `search/run1.txt` under that `##` heading. For the timing, from the repo root:
+
+   ```bash
+   uv run python -c "
+   import sys, time, numpy as np; sys.path.insert(0, '.')
+   from search.search import normalize
+   Vn = normalize(np.load('search/chunks.npy')); q = Vn[0]
+   t = time.perf_counter()
+   for _ in range(200): Vn @ q
+   dt = (time.perf_counter() - t) / 200
+   print(len(Vn), 'chunks;', round(dt * 1e6), 'microseconds per search;', round(0.3 / dt), 'x more chunks before the search matches a 300 ms API call')
+   "
+   ```
+
+   *You should see* a few hundred microseconds and a multiplier in the hundreds or thousands. The 300 ms is a typical embeddings round-trip; if you timed the API call in Step 5, use your own number in place of `0.3`.
