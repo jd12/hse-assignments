@@ -230,6 +230,28 @@ git add logs && git commit && git push
 
 1. Paste the pronoun's row from seed 1 with the column labels above it. Which token got the biggest weight, and by how much did it beat the even share? Then quote the sentence in your `attention.md` that describes what that row should look like in a trained model, and say which number in the pasted row it disagrees with.
 
+   *How to get it:* seed 1 is the first block of `transformer/head_runs.txt`, or run it again. With your pronoun's position `p` from X1 (counting from 0), the row you want is the one labeled with the pronoun token; the column labels are line 2 of the output:
+
+   ```bash
+   uv run python transformer/head_on_corpus.py 1 | grep -n "^ *he \|^  *But Apollo"
+   ```
+
+   Put your pronoun in place of `he` and the first two column labels of your sentence in place of `But Apollo`. The even share for one token in that row is `1/(p+1)`; "beat it by" is the biggest weight minus that.
+
 2. Your X1 prediction for the random head, with the commit hash, next to the five-seed mean and range. How many seeds went below the even share? If your prediction was far off, say what you assumed about an untrained head that the run showed was wrong.
 
+   *How to get it:* the prediction is the number you wrote in `HEAD_RUN.md` before any run; the mean, range and below-the-share count are the X3 lines under your table. The hash is the first commit that touched the file:
+
+   ```bash
+   git log --oneline --follow -- transformer/HEAD_RUN.md | tail -1
+   ```
+
 3. Change `dim=-1` to `dim=0` in the softmax line, run seed 1, and paste the first three rows and the `row sums:` line. Say which invariant from the Step 4 table broke and which still held. Then name the claim in your `attention.md` that would be false for a head built that way. Put the line back before you commit.
+
+   *How to get it:* change only the `F.softmax(wei, dim=-1)` line; the `wei.sum(dim=-1)` line below it stays, or the row-sums print will lie to you. Then:
+
+   ```bash
+   uv run python transformer/head_on_corpus.py 1 | sed -n '2,5p;$p'
+   ```
+
+   *You should see* the first row no longer `1.00`, and row sums that climb from near zero toward one instead of all reading `1.0`; the zeros above the diagonal are still there. Afterwards `git diff transformer/head_on_corpus.py` should show nothing but that one line, and `git restore transformer/head_on_corpus.py` puts it back.

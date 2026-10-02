@@ -238,6 +238,28 @@ git add logs && git commit && git push
 
 1. Paste the six lines Step 6 printed. Then, from the photo in `transformer/block.png`, name every arrow you crossed out in Step 8 and what you had written there first. If you crossed out nothing, name the arrow you were least sure of on Day 1 and say which printed line settled it.
 
+   *How to get it:* `uv run python scratch/a07-video.py` prints the six lines again. The crossed-out arrows are on your own photo; each one matches one printed line (`one head` is the split, `heads concat` the join, `ffwd hidden` the wide layer, `x in` and `x out` the two block boundaries).
+
 2. From `COUNT.md`: your hand count, PyTorch's count, and the hash of the commit that holds the hand count. Name the sublayer where you were wrong and by how many parameters, and say what you had forgotten. If you were exactly right, give the one line of `named_parameters()` output you would most likely have got wrong, and why.
 
-3. Set `T = block_size + 1` in `scratch/a07-video.py`, run it, and paste the last line of the error. Say which line of `Head` raised it. Then give the context length of the model in your 3B1B tally (or your extension config), and say how many attention weights one head computes at that length versus at half of it.
+   *How to get it:* both counts are in your `COUNT.md` table from X2. The hash is the first commit that touched the file:
+
+   ```bash
+   git log --oneline --follow -- transformer/COUNT.md | tail -1
+   ```
+
+   To see every tensor with its shape and size, which is where a missing bias or projection shows up:
+
+   ```bash
+   uv run python -c "
+   import sys; sys.argv = ['x']
+   exec(open('scratch/a07-video.py').read().split('x = torch.randn')[0])
+   for n, p in Block(n_embd, n_head).named_parameters(): print(f'{n:28} {tuple(p.shape)!s:12} {p.numel()}')
+   "
+   ```
+
+   *You should see* 34 lines (24 head matrices, the projection weight and bias, four feedforward tensors, four layer-norm tensors) that sum to your `params` line.
+
+3. Set `T` to one more than `block_size` in `scratch/a07-video.py`, run it, and paste the last line of the error. Say which line of `Head` raised it. Then give the context length of the model in your 3B1B tally (or your extension config), and say how many attention weights one head computes at that length versus at half of it.
+
+   *How to get it:* `block_size` is set below `B, T` in the file, so write the number in, not the name: change `B, T = 2, 7` to `B, T = 2, 17` and run `uv run python scratch/a07-video.py`. The traceback ends with a `RuntimeError` about tensor sizes, and the line above it names the `masked_fill` line in `Head.forward`. Put `T` back to 7 afterwards. For the last part, one head's attention matrix is `T × T` (Step 7 printed `(2, 8, 7, 7)` for `T = 7`), so the count at the context length is that length squared.
