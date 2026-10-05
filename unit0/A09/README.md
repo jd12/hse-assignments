@@ -228,7 +228,21 @@ def api(prompt, temperature, n_tokens=30):
     return c["message"]["content"], c["logprobs"]["content"][0]["top_logprobs"]
 ```
 
-and an `api0` branch that calls `api(PROMPTS[0], 0)` twenty times, saves every text and every first-token `top_logprobs` list to `sampling/api_t0.json`, and prints the number of distinct texts. `max_tokens=30` is a spend control.
+and this branch to `__main__`:
+
+```python
+    elif cmd == "api0":
+        runs = [api(PROMPTS[0], 0) for _ in range(20)]
+        (ROOT / "sampling" / "api_t0.json").write_text(
+            json.dumps([{"text": t, "first_token_top5": lp} for t, lp in runs], indent=1), encoding="utf-8")
+        print(len({t for t, _ in runs}), "distinct texts in 20")
+```
+
+```bash
+uv run python sampling/lab.py api0
+```
+
+Twenty calls of 30 tokens; `max_tokens=30` is a spend control.
 
 *You should see* a count between 1 and 20. Most people predict 1. Whatever you get, count it over all twenty runs, and compare the first-token `top_logprobs` across runs: if the probabilities themselves differ between two runs, the model computed a different distribution, and temperature 0 faithfully took the top of a different thing. A count of 1 is a real result too; report it as twenty runs, not as "deterministic".
 
@@ -243,7 +257,23 @@ git commit -m "A09: predicted distinct counts, before the temperature table runs
 
 I will check your commit timestamps.
 
-**X2. Run the table.** Add a `table` branch to `__main__`: for each prompt, for `t` in `0, 0.7, 1.2`, for `seed` in `0` to `4`, `generate(p, seed=seed, temperature=t)`; print every continuation and, per cell, the number of distinct ones. Save the output to `sampling/table.txt`.
+**X2. Run the table.** Add a `table` branch to `__main__`:
+
+```python
+    elif cmd == "table":
+        for p in PROMPTS:
+            for t in (0, 0.7, 1.2):
+                outs = [generate(p, seed=s, temperature=t) for s in range(5)]
+                print(f"\n## {p[-40:]!r}  T={t}  distinct {len(set(outs))} of 5")
+                for o in outs:
+                    print("  ", repr(o))
+```
+
+```bash
+uv run python sampling/lab.py table > sampling/table.txt
+```
+
+Forty-five generations of thirty tokens each; on a laptop CPU that is a few minutes, so start it and read the snapshots while it runs.
 
 **X3. Mark it.** Read every continuation and mark it usable if it reads as a plausible next thirty tokens of *your corpus*, in its voice. Build:
 
@@ -279,6 +309,30 @@ git add logs && git commit && git push
 
 1. From `sampling/snapshots.txt`, paste the top three tokens and the tokens-for-90% count for your most concentrated prompt and your least concentrated one, both at `T=1.0`. Quote the last few words of each prompt and say what about where your corpus chunk was cut explains the difference.
 
+   *How to get it:* `grep -n "T=1.0" -A1 sampling/snapshots.txt` prints the three `T=1.0` lines with their tokens-for-90% line; the smallest count is your most concentrated prompt, the largest your least. The prompts themselves are the `PROMPTS` constant in `lab.py`, in the same order as the snapshot blocks.
+
 2. From `sampling/api_t0.json`: how many distinct texts in twenty, and did the first-token `top_logprobs` differ between any two runs? Paste two lists if they did. Your local sampler gave 1 of 5 at temperature 0 on the same prompt. Name the one mechanism your evidence supports for the gap, and the observation you would need to rule it out.
 
+   *How to get it:* the distinct count is what `api0` printed. For the lists:
+
+   ```bash
+   uv run python -c "
+   import json
+   runs = json.load(open('sampling/api_t0.json'))
+   lists = [json.dumps([[a['token'], round(a['logprob'], 3)] for a in r['first_token_top5']]) for r in runs]
+   print(len(set(r['text'] for r in runs)), 'distinct texts;', len(set(lists)), 'distinct first-token top-5 lists')
+   for l in sorted(set(lists)): print(' ', l)
+   "
+   ```
+
+   One distinct list and several distinct texts means the first distribution was identical and the divergence came later; several distinct lists means the model computed a different distribution for the same input, which is the batching-and-floating-point mechanism. The local 1-of-5 is the first row of `table.txt`.
+
 3. Your X1 prediction row for `T=1.2` (with the commit hash) next to what happened. Paste the worst continuation in your table and say what went wrong in it, token by token if you can. Then give your v2 agent's sampling temperature with the file and line, and say whether this table argues for changing it.
+
+   *How to get it:* the prediction row is the `T=1.2` column of the table you wrote in `RESULTS.md` before running; the hash:
+
+   ```bash
+   git log --oneline --follow -- sampling/RESULTS.md | tail -1
+   ```
+
+   What happened is the `distinct` number on each `T=1.2` heading in `sampling/table.txt`. For the agent's temperature, search the v2 repo (`grep -rn -i temperature src/`); in the reference agent it is `TEMPERATURE = 0.2` in `src/llm.ts`.

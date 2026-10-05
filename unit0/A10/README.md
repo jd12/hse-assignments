@@ -158,7 +158,7 @@ Open each trace next to its quote. Mark each of the ten answers as one of four t
 | **hedged** | Says it does not know, or that the text does not say. |
 | **off** | Answers some other question, or produces no answer at all. |
 
-Put the counts in `failures/marks.md`:
+Put the counts in `failures/marks.md`; `off` is whatever is left of five, so it needs no column:
 
 | id | API right/5 | API fabricated/5 | API hedged/5 | GPT-2 right/5 | GPT-2 fabricated/5 | notes |
 |---|---|---|---|---|---|---|
@@ -185,7 +185,9 @@ At least six entries come from your twenty questions. The other four can come fr
 
 At least two are failures you caused, where the model did what it was told. Look hard at your own prompt.
 
-One entry you cannot explain goes in bounded, not blank:
+One entry you cannot explain goes in bounded, not blank: under Hypothesis write `unknown`, then name the categories you ruled out and the evidence that ruled each one out. An empty Hypothesis field is not bounded; this is:
+
+> Category: unknown. Ruled out: sampling (fails 5/5 at 0.7 and 5/5 at 0), memorization gap (the model quotes the surrounding passage correctly).
 
 A hypothesis with a trace under it is an argument. Without one it is a guess, and I read it as a guess.
 
@@ -228,6 +230,24 @@ git add logs && git commit && git push
 
 1. Your most-fabricated question: paste it, the quote from your corpus, and two of the fabricated answers. From its trace, give the probability on the first wrong token of one of them and say whether the right token was anywhere in the top five at that position. What does that number say about how "confident" the model was?
 
+   *How to get it:* the question is the row of `marks.md` with the largest `API fabricated/5`. Its trace is `failures/traces/<id>.json`; the five answers are the `text` fields under `api`, and `tokens` is a list of `[token, [[alternative, probability] × 5]]` for every position. To print one answer position by position, with your id and run number:
+
+   ```bash
+   uv run python -c "
+   import json
+   q = json.load(open('failures/traces/q07.json')); run = q['api'][0]
+   print(run['text'])
+   for tok, top5 in run['tokens']:
+       print(repr(tok).ljust(14), top5)
+   " | head -20
+   ```
+
+   Read down until the first token that is not in the quote; the number beside it in `top5` is the probability on the wrong token, and whether the right token appears in that same list of five is the second half of the question.
+
 2. Paste `git log --oneline failures/`. Name the entry you first filed under the wrong category and what moved it. Then name one of the two failures you caused, and the line of `ask.py` or `questions.jsonl` responsible.
 
+   *How to get it:* the log is the command as written, from the repo root. The re-filed entry is one whose category changed between two commits: `git log -p --follow -- failures/CATALOG.md | grep "^[-+].*Category"` prints every category line that was added or removed, in order. The usual self-caused failures are the `Answer in one sentence.` suffix in `ask_api` (it pushes the model away from "the text does not say") and a question that names the answer's category in its wording ("What false name…") so the model has a shape to fill; the line is `grep -n "one sentence" failures/ask.py`, or the question's `id`.
+
 3. Your extension: the number, the baseline, and the comparison, with the prediction you wrote in the log before running. Where did it get worse? State the result that would falsify your catalog hypothesis for that category, and whether anything in your deep dive came close.
+
+   *How to get it:* the prediction is in your Day 1 log entry (`grep -n -i predict logs/*.md` in the log repo); the number and baseline are the two figures your option's row of the extension table asked for, and the deep-dive section of `CATALOG.md` already holds them. The falsifier is the result that would have come out the other way if your hypothesis were wrong: for A, open-book no better than closed-book; for B, right answers independent of whether the top-1 chunk held the quote; for C, temperature 0 no more right than 1.2; for D, the setting that looped least also the most right.
