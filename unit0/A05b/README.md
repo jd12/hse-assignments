@@ -31,26 +31,26 @@ bash scripts/start-entry.sh
 Under the timestamp, write today's checklist:
 
 ```markdown
-- [ ] Pull the checker and the unit's helper scripts from the template
+- [ ] Pull the checker, the unit's helper scripts and the evidence files from the template
 - [ ] Pick a corpus from the guide; paste scripts/fetch_corpus.sh with my IDs in it and run it
 - [ ] Run scripts/check_corpus.py until it reports 0 FAIL; write data/SOURCE.md with the sha256
 - [ ] Run pytest: 9 passed, 1 skipped
 - [ ] Pick one sample test, find my number, paste it in: 10 passed; break it on purpose, fix it back
-- [ ] Push, open the PR, sign off the log
+- [ ] Fill every slot in evidence/A05b.md (check_evidence.py: all slots filled); push, open the PR, sign off the log
 ```
 
-**Step 2. Pull the checker, and the helper scripts for the rest of the unit, into your repo.** The template shipped without them.
+**Step 2. Pull the checker, the helper scripts for the rest of the unit, and the evidence files into your repo.** The template shipped without them.
 
 ```bash
 cd ~/version_control/hse-2026-2027-foundations-<your-username>
 git fetch template 2>/dev/null || git remote add template https://github.com/Sierra-Canyon/foundations-template.git
 git fetch template
-git checkout template/main -- scripts/check_corpus.py tests/test_corpus.py scratch transformer failures
+git checkout template/main -- scripts/check_corpus.py scripts/check_evidence.py tests/test_corpus.py scratch transformer failures evidence
 uv add --dev pytest
-ls scripts tests scratch
+ls scripts tests scratch evidence
 ```
 
-*You should see* `check_corpus.py` under `scripts/`, `test_corpus.py` under `tests/`, and the unit's helper scripts under `scratch/`. *If it broke* with `fatal: couldn't find remote ref main`, the template's default branch is `master` on your clone; use `template/master` in the checkout line. <!-- JD: the checkout line pulls the directories the A06–A10 helpers land in (scratch/, transformer/, failures/). If one of them is not in the template yet, drop it from the line: one missing pathspec fails the whole checkout. Students who accepted the repo before the helpers landed get them through the template-update PR instead. -->
+*You should see* `check_corpus.py` and `check_evidence.py` under `scripts/`, `test_corpus.py` under `tests/`, the unit's helper scripts under `scratch/`, and `A05b.md` through `A10.md` under `evidence/`. **Each assignment from today on has one evidence file**, `evidence/A<nn>.md`, with a marked slot for every paste and every answer; you fill the slots as you reach them, and `uv run python scripts/check_evidence.py A05b` lists the ones still empty. *If it broke* with `fatal: couldn't find remote ref main`, the template's default branch is `master` on your clone; use `template/master` in the checkout line. <!-- JD: the checkout line pulls the directories the A06–A10 helpers and evidence templates land in (scratch/, transformer/, failures/, evidence/). If one of them is not in the template yet, drop it from the line: one missing pathspec fails the whole checkout. Students who accepted the repo before the helpers landed get them through the template-update PR instead. -->
 
 **Step 3. Choose, then write the fetch script before you download anything.**
 
@@ -73,7 +73,7 @@ rm data/raw.txt                          # the download is no longer needed
 wc -c data/corpus.txt                    # print the size in bytes
 ```
 
-Run it with `bash scripts/fetch_corpus.sh`. *You should see* a byte count. On the Odyssey plus the Iliad this printed `1607209 data/corpus.txt`. Under 1,000 means the URL returned an error page, not the book; open `data/corpus.txt` and look. About 700,000 means you fetched one book; go back to the guide and pick its companion.
+Run it with `bash scripts/fetch_corpus.sh`. *You should see* a byte count; paste that line under `## Step 3` in `evidence/A05b.md`. On the Odyssey plus the Iliad this printed `1607209 data/corpus.txt`. Under 1,000 means the URL returned an error page, not the book; open `data/corpus.txt` and look. About 700,000 means you fetched one book; go back to the guide and pick its companion.
 
 **Step 4. Run the checker. Read every line, not just the last one.**
 
@@ -99,7 +99,7 @@ uv run python scripts/check_corpus.py
 
 **Step 5. Write `data/SOURCE.md` and make the hash match.**
 
-Run `shasum -a 256 data/corpus.txt` (`sha256sum` on Linux and Git Bash). Create `data/SOURCE.md` (right-click `data`, **New File**) and paste this in, with your own title, URLs, license, date and hash:
+Run `shasum -a 256 data/corpus.txt` (`sha256sum` on Linux and Git Bash) and paste the line it prints under `## Step 5` in `evidence/A05b.md`. Create `data/SOURCE.md` (right-click `data`, **New File**) and paste this in, with your own title, URLs, license, date and hash:
 
 ```markdown
 # Corpus
@@ -120,11 +120,11 @@ What I expect to be different about this corpus: <one or two sentences, e.g. "na
 uv run pytest tests/test_corpus.py -v
 ```
 
-*You should see* `9 passed, 1 skipped`. The skipped one is `test_something_true_of_my_corpus`, and the extension fills it in. If anything fails here that the checker passed, read the test's docstring: each one names the assignment that would break. *If it broke* with `file or directory not found: tests/test_corpus.py`, you ran `pytest` from inside `tests/`; run it from the repo root.
+*You should see* `9 passed, 1 skipped`; paste the output under `## Step 6` in `evidence/A05b.md`. The skipped one is `test_something_true_of_my_corpus`, and the extension fills it in. If anything fails here that the checker passed, read the test's docstring: each one names the assignment that would break. *If it broke* with `file or directory not found: tests/test_corpus.py`, you ran `pytest` from inside `tests/`; run it from the repo root.
 
 **Extension — one test that is true of your corpus and would fail on a random book (ASSIGNED)**
 
-The nine tests you just ran are true of every good corpus. The tenth has to be true of **yours** and false of almost any other file, because it is the alarm that goes off in January if a URL rots and `fetch_corpus.sh` silently pulls down the wrong book. Below are five complete tests. Pick the one that fits your corpus, run the command that finds your number, change the string and the number, and paste it over the placeholder: the last two lines of `tests/test_corpus.py`, `def test_something_true_of_my_corpus(text):` and the `pytest.skip(...)` under it. `text` is your whole corpus as one string; the lines marked `(change this)` are the ones you change.
+The nine tests you just ran are true of every good corpus. The tenth has to be true of **yours** and false of almost any other file, because it is the alarm that goes off in January if a URL rots and `fetch_corpus.sh` silently pulls down the wrong book. Below are five complete tests. Pick the one that fits your corpus, run the command that finds your number, change the string and the number, and paste it over the placeholder: the last two lines of `tests/test_corpus.py`, `def test_something_true_of_my_corpus(text):` and the `pytest.skip(...)` under it. `text` is your whole corpus as one string; the lines marked `(change this)` are the ones you change. Under `## Extension` in `evidence/A05b.md`, say which sample and why, and paste the command with its number and the test as you pasted it.
 
 **Sample 1. A heading that repeats a known number of times.** For a Gutenberg book with `BOOK` or `CHAPTER` lines, the Federalist Papers (`FEDERALIST No.`), a legal code (`Section`), or a season of box scores where every game ends with the same word. Find your number with `grep -c "^BOOK " data/corpus.txt`; `^` means the line starts with what follows. On Homer it printed `48`, 24 books in each poem.
 
@@ -190,7 +190,7 @@ def test_something_true_of_my_corpus(text):
     assert share <= AT_MOST, f"{share:.1%} of {len(lines)} lines start with a digit, limit {AT_MOST:.0%}"   # .1% prints a share as a percentage
 ```
 
-Whichever one you pasted, change its docstring so it says what the test guards in your file, then run the whole file again: `uv run pytest tests/test_corpus.py -v`. *You should see* `10 passed`, and no `skipped`. *If it broke* with `IndentationError`, the pasted function is indented; the `def` line starts at the left margin and the body lines start four spaces in. `test_something_true_of_my_corpus FAILED` on the first run means your number is wrong, not the file: the message after `AssertionError:` prints the real count. **Then break it on purpose.** Change the value in your test to something wrong (Sample 1, `EXPECTED = 24`; Sample 2, `AT_LEAST = 100000`; Sample 3, `MAX_LINE = 20`; Sample 4, misspell the phrase; Sample 5, `AT_MOST = 0.0`) and run pytest again:
+Whichever one you pasted, change its docstring so it says what the test guards in your file, then run the whole file again: `uv run pytest tests/test_corpus.py -v`. *You should see* `10 passed`, and no `skipped`; paste that line in the evidence file. *If it broke* with `IndentationError`, the pasted function is indented; the `def` line starts at the left margin and the body lines start four spaces in. `test_something_true_of_my_corpus FAILED` on the first run means your number is wrong, not the file: the message after `AssertionError:` prints the real count. **Then break it on purpose.** Change the value in your test to something wrong (Sample 1, `EXPECTED = 24`; Sample 2, `AT_LEAST = 100000`; Sample 3, `MAX_LINE = 20`; Sample 4, misspell the phrase; Sample 5, `AT_MOST = 0.0`), write the wrong value in the evidence file's `<answer: ...>` slot, and run pytest again:
 
 ```bash
 uv run pytest tests/test_corpus.py -v --tb=short 2>&1 | tail -15
@@ -205,10 +205,10 @@ E   AssertionError: 48 lines start with 'BOOK ', expected 24
 E   assert 48 == 24
 ```
 
-That `AssertionError` line is what the alarm sounds like: it names the thing counted, the count it found and the count it expected, which is enough to know whether the fetch pulled one book or two before you open the file (Sample 4's failure also prints a long slice of the corpus on one line; the `AssertionError:` line above it is the one to read). Paste the block into your log for Reflection Question 2, put the right value back, and run pytest once more to see `10 passed`. Then commit, push, and open the pull request:
+That `AssertionError` line is what the alarm sounds like: it names the thing counted, the count it found and the count it expected, which is enough to know whether the fetch pulled one book or two before you open the file (Sample 4's failure also prints a long slice of the corpus on one line; the `AssertionError:` line above it is the one to read). Paste the block under `## Extension` in `evidence/A05b.md`, put the right value back, run pytest once more to see `10 passed`, and paste that line too. Fill `## Reflection` (the questions are below), run `uv run python scripts/check_evidence.py A05b` until it says `all slots filled`, then commit, push, and open the pull request:
 
 ```bash
-git add scripts/fetch_corpus.sh scripts/check_corpus.py tests/test_corpus.py data/SOURCE.md pyproject.toml uv.lock
+git add scripts/fetch_corpus.sh scripts/check_corpus.py scripts/check_evidence.py tests/test_corpus.py data/SOURCE.md evidence/A05b.md pyproject.toml uv.lock
 git status                      # data/corpus.txt must NOT be listed
 git commit -m "A05b: lock in corpus, checker passes, one test of my own"
 git push -u origin dev/corpus
@@ -223,9 +223,9 @@ git add logs && git commit && git push
 ```
 
 **Deliverable**
-All of it, today: `scripts/fetch_corpus.sh` (re-creates a `data/corpus.txt` of at least 1,000,000 characters from the URL) · `data/SOURCE.md` (title, URL, license, date, sha256, what you expect to be different) · `tests/test_corpus.py` with one of the five sample tests filled in with your string, your number and your docstring · a checker run at `0 FAIL` pasted in the PR body. `data/corpus.txt` itself is never committed.
+All of it, today: `scripts/fetch_corpus.sh` (re-creates a `data/corpus.txt` of at least 1,000,000 characters from the URL) · `data/SOURCE.md` (title, URL, license, date, sha256, what you expect to be different) · `tests/test_corpus.py` with one of the five sample tests filled in with your string, your number and your docstring · `evidence/A05b.md` with every slot filled (the fetch run, the hash, the first pytest run, your test with its command, the passing and broken runs, the checker report, the three reflection answers) · a checker run at `0 FAIL` pasted in the PR body. `data/corpus.txt` itself is never committed.
 
-**Reflection Questions**
+**Reflection Questions** (answer under `## Reflection` in `evidence/A05b.md`)
 
 1. Paste the full checker report from your final run. For every `warn` line, say what you decided and why. If there were none, say which check you came closest to failing and how you know.
 
@@ -233,7 +233,7 @@ All of it, today: `scripts/fetch_corpus.sh` (re-creates a `data/corpus.txt` of a
 
 2. Paste your test from `tests/test_corpus.py` and the pytest output for it, once passing and once after you broke the expected value on purpose. Say what about your corpus that test is guarding, and what a wrong-URL fetch would have to look like for the test to *miss* it.
 
-   *How to get it:* the passing output is the `tests/test_corpus.py::test_something_true_of_my_corpus PASSED` line from `uv run pytest tests/test_corpus.py -v`; the broken output is the block you pasted into your log. For the last part, re-read the command that found your number: a wrong file that produces the same count, the same name more than N times, or the same phrase is the one your test cannot see, so name one if you can (for Sample 1 on Homer, any two 24-book poems; for Sample 4, any other edition of the Odyssey).
+   *How to get it:* the passing output is the `tests/test_corpus.py::test_something_true_of_my_corpus PASSED` line from `uv run pytest tests/test_corpus.py -v`; the broken output is the block you pasted under `## Extension` in `evidence/A05b.md`. For the last part, re-read the command that found your number: a wrong file that produces the same count, the same name more than N times, or the same phrase is the one your test cannot see, so name one if you can (for Sample 1 on Homer, any two 24-book poems; for Sample 4, any other edition of the Odyssey).
 
 3. Delete `data/corpus.txt`, run `bash scripts/fetch_corpus.sh`, and run `shasum -a 256 data/corpus.txt` again. Paste both hashes. If they match, say which line of the fetch script is doing the most work to make that true. If they do not, say what changed between runs and fix the script until they do, then paste the third hash.
 

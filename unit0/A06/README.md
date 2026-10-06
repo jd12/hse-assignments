@@ -21,7 +21,7 @@ uv run python scratch/a06-video.py
 
 The script needs the `search/search.py` from Day 1 and nothing from the API. Part 1 turns three chunks of your corpus into word-count vectors and prints the four distances from lesson 2 on them. Part 2 is brute-force search in his shape, then the timing curve as the number of vectors grows. Part 3 prints the shape of your lookup table.
 
-*You should see* a distance table with four rows, one brute-force result, a six-row timing table and one shape line, in a few seconds. Paste all of it into your log.
+*You should see* a distance table with four rows, one brute-force result, a six-row timing table and one shape line, in a few seconds. Paste all of it under `## During the video` in `evidence/A06.md`.
 
 *If it broke* with `ModuleNotFoundError: No module named 'search'`, Day 1 is not done: `search/search.py` has to exist with `chunk` in it.
 
@@ -29,7 +29,7 @@ The script needs the `search/search.py` from Day 1 and nothing from the API. Par
 
 **Lesson 3 · brute force, and what it costs.** His search is one query against every stored vector, sort, keep the top few: `X @ q`, `argsort`, `[::-1][:k]`. That is `brute_force` in Part 2, and it is `search()` in Step 5 with the API call taken out. The result line shows row 7 finding itself at 1.0 and two strangers near 0.07, which is what random vectors in 1,536 dimensions look like. *You should see* the microseconds roughly double when N doubles: brute force is a straight line in N. On Homer, 1,000 vectors took about 130 microseconds, 20,000 about 2,700, and the row marked `<- your chunk count` about 300. Reflection Question 3 compares that row with the API call.
 
-**(Word) Embeddings · one line in your log.** When the lookup table appears, one row per token, write down the shape Part 3 printed: one row per chunk of your corpus, 1,536 wide. On Homer it printed `(2142, 1536)`. Step 4 builds that table and Step 5 searches it.
+**(Word) Embeddings · one line in `evidence/A06.md`.** When the lookup table appears, one row per token, write down the shape Part 3 printed in the `<answer: ...>` slot under `## During the video`: one row per chunk of your corpus, 1,536 wide. On Homer it printed `(2142, 1536)`. Step 4 builds that table and Step 5 searches it.
 
 **Notes**
 
@@ -52,7 +52,7 @@ git switch main && git pull
 git switch -c dev/semantic-search
 ```
 
-Step 2 of A05b's template update, or the pull request I opened on your repo, put `a06-video.py` and `a06-cutoff.py` in `scratch/`; `ls scratch` should show them.
+Step 2 of A05b's template update, or the pull request I opened on your repo, put `a06-video.py` and `a06-cutoff.py` in `scratch/`, and `evidence/A06.md`; `ls scratch evidence` should show them.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>
@@ -63,11 +63,11 @@ Under the timestamp, write today's checklist:
 
 ```markdown
 - [ ] Day 1: corpus passes A05b's checker
-- [ ] Day 1: Steps 2–3, search.py started, both chunk commands run and pasted in the log
-- [ ] Day 2: scratch/a06-video.py run, output in the log, the three lessons read against it
+- [ ] Day 1: Steps 2–3, search.py started, both chunk commands run and pasted in evidence/A06.md
+- [ ] Day 2: scratch/a06-video.py run, output in evidence/A06.md, the three lessons read against it
 - [ ] Day 2: Steps 4–6, embed once, self-retrieval check, keyword baseline
 - [ ] Extension: queries and prediction committed before any run; run, marked, cutoff tested
-- [ ] Push and open the PR
+- [ ] Fill every slot in evidence/A06.md (check_evidence.py: all slots filled); push and open the PR
 ```
 
 Two meetings, one branch. Push again each day; one PR, not two; one log entry per meeting.
@@ -150,7 +150,7 @@ chunk 2142 min 200 median 596 max 2095
 
 The checker's `chunks` line said 2079 on the same file because it drops short pieces where `chunk()` merges them; the count you carry from here on is the `chunk` one.
 
-*If it broke:* a `chunk` count under 300 means your corpus is too small for these settings; change `min_chars=200` to `min_chars=150` in the `def chunk` line and write down that you did.
+*If it broke:* a `chunk` count under 300 means your corpus is too small for these settings; change `min_chars=200` to `min_chars=150` in the `def chunk` line and write down that you did, in the `<answer: ...>` slot under `## Step 3` in `evidence/A06.md`.
 
 Now find the piece behind that `naive` minimum, and where `chunk()` put it:
 
@@ -180,7 +180,7 @@ lands in chunk(s) [23] of 2142
 'HENRY FESTING JONES. 120 MAIDA VALE, W.9. 4th _December_, 1921. THE ODYSSEY BOOK I THE GOD'
 ```
 
-The piece is almost always a heading, a page break or a stray line number. Paste both outputs into your log; Reflection Question 1 asks for them.
+The piece is almost always a heading, a page break or a stray line number. Paste both outputs under `## Step 3` in `evidence/A06.md`; Reflection Question 1 asks for them.
 
 **Step 4. Embed in batches, sorted by `index`.**
 
@@ -261,7 +261,7 @@ uv run python search/search.py --check
 uv run python search/search.py --check
 ```
 
-*You should see* the same four lines both times: your chunk count with `(n, 1536)` twice and `True`, then three lines, each starting with the index you searched with, then that same index again at 0.999 or higher inside the brackets, then some other chunk clearly lower. The first run takes seconds and spends money; the second is instant, or the load branch is not being taken. On Homer the first line is `2142 chunks (2142, 1536) (2142, 1536) True` and the three indexes are `0`, `1071` and `2141`.
+*You should see* the same four lines both times: your chunk count with `(n, 1536)` twice and `True`, then three lines, each starting with the index you searched with, then that same index again at 0.999 or higher inside the brackets, then some other chunk clearly lower. The first run takes seconds and spends money; the second is instant, or the load branch is not being taken. Paste the second run's four lines under `## Step 5` in `evidence/A06.md`. On Homer the first line is `2142 chunks (2142, 1536) (2142, 1536) True` and the three indexes are `0`, `1071` and `2141`.
 
 <!-- JD: fill the three Homer --check lines after a run; the shape is "i [(i, 0.999+), (j, lower)]". -->
 
@@ -296,7 +296,7 @@ Do not run the runner yet; writing the queries file is the extension. Count the 
 wc -l search/search.py
 ```
 
-*You should see* about `106 search/search.py`, give or take the blank lines between pastes. Over 130 means a piece was pasted twice; the file has exactly one `def` of each of `chunk`, `embed`, `normalize`, `search`, `words` and `keyword_search`, and one `if __name__` block.
+*You should see* about `106 search/search.py`, give or take the blank lines between pastes; paste the line under `## Step 6` in `evidence/A06.md`. Over 130 means a piece was pasted twice; the file has exactly one `def` of each of `chunk`, `embed`, `normalize`, `search`, `words` and `keyword_search`, and one `if __name__` block.
 
 **Extension — ten queries and a cutoff (ASSIGNED)**
 
@@ -341,22 +341,12 @@ for line in open('search/queries.txt', encoding='utf-8'):
 "
 ```
 
-*You should see* ten lines, none saying `PHRASE NOT FOUND`, most saying `1 chunk(s)`. A query shares no content words when the printed list holds only words like `he`, `not`, `so`, `will`: on Homer the veil query printed `['he', 'not', 'so', 'will']`, which counts, and the Cyclops query printed `['cyclops', 'name']`, which does not. `PHRASE NOT FOUND` means you retyped the phrase instead of copying it; curly and straight quotes are different characters.
+*You should see* ten lines, none saying `PHRASE NOT FOUND`, most saying `1 chunk(s)`; paste them under `## Extension E1` in `evidence/A06.md`. A query shares no content words when the printed list holds only words like `he`, `not`, `so`, `will`: on Homer the veil query printed `['he', 'not', 'so', 'will']`, which counts, and the Cyclops query printed `['cyclops', 'name']`, which does not. `PHRASE NOT FOUND` means you retyped the phrase instead of copying it; curly and straight quotes are different characters.
 
-Now the prediction. Open `embed/FINDINGS.md` from A05 and find your Probe 3 line, the mean over 1,000 random word pairs. Create `search/RESULTS.md` and paste this in, with your numbers:
-
-```markdown
-# A06 results: <your name>
-
-## Prediction (before any run)
-
-A05 word floor (Probe 3 mean): <0.xxx>
-Predicted cutoff: <0.xxx>. Below this score I predict "no good answer".
-Why this number: <one sentence; the cutoff sits above the floor, and how far above is your guess>
-```
+Now the prediction. Open `embed/FINDINGS.md` from A05 and find your Probe 3 line, the mean over 1,000 random word pairs. Fill the three slots under `## Prediction` in `evidence/A06.md`: that word floor, your predicted cutoff (below this score you predict "no good answer"), and one sentence on why that number: the cutoff sits above the floor, and how far above is your guess.
 
 ```bash
-git add search/queries.txt search/RESULTS.md
+git add search/queries.txt evidence/A06.md
 git commit -m "A06: ten queries, expected chunks, predicted cutoff (before any run)"
 ```
 
@@ -375,7 +365,7 @@ print('chunk floor mean', round(float(s.mean()), 3), ' 95th pct', round(float(np
 "
 ```
 
-*You should see* one line, a clearly positive `chunk floor mean` and a `95th pct` above it. If it read `chunk floor mean 0.300  95th pct 0.420`, a top score of 0.600 would mean something and a top score of 0.410 would be one a random pair produces one time in twenty. Whether the chunk floor sits above or below your word floor depends on your corpus: one book on one subject pulls every chunk toward the same place. Add a `## Floors` heading to `RESULTS.md` with your A05 word floor, these two numbers, and one sentence on why the chunk floor is above or below the word floor.
+*You should see* one line, a clearly positive `chunk floor mean` and a `95th pct` above it. If it read `chunk floor mean 0.300  95th pct 0.420`, a top score of 0.600 would mean something and a top score of 0.410 would be one a random pair produces one time in twenty. Whether the chunk floor sits above or below your word floor depends on your corpus: one book on one subject pulls every chunk toward the same place. Paste the line under `## Extension E2` in `evidence/A06.md`, and in the `<answer: ...>` slot under it say in one sentence why the chunk floor is above or below your A05 word floor.
 
 <!-- JD: fill the Homer chunk floor mean and 95th pct after a run; E2 is API-dependent. -->
 
@@ -386,7 +376,7 @@ uv run python search/search.py > search/run1.txt
 grep -c "^##" search/run1.txt
 ```
 
-*You should see* `12`: one `##` block per query. Under each are three `sem` lines (cosine score, chunk index in brackets, first 90 characters) interleaved with three `kw` lines (overlap count, index, preview), ranks 1 to 3.
+*You should see* `12`: one `##` block per query; paste that number under `## Extension E3` in `evidence/A06.md`. Under each are three `sem` lines (cosine score, chunk index in brackets, first 90 characters) interleaved with three `kw` lines (overlap count, index, preview), ranks 1 to 3.
 
 **A method got a query when at least one of its three chunks contains a sentence that answers the question.** You decide by reading the chunk, not by checking whether your expected phrase is in it. Ninety characters is not enough to read, so print any chunk in full by its index, with your number in place of 399:
 
@@ -399,17 +389,7 @@ print(chunks[399])                      # the chunk at index 399, in full
 "
 ```
 
-One row worked, on the Homer keyword results: for "Which prophet must be consulted in the house of Hades?" the top keyword chunk was `[399]` with overlap 5, and printed in full it says "You must go to the house of Hades ... to consult the ghost of the blind Theban prophet Teiresias", which answers the question, so keyword got it. Build this table in `RESULTS.md`, one row per answerable query:
-
-```markdown
-## Marked results
-
-| # | query | semantic top score | semantic got it | keyword top overlap | keyword got it |
-|---|---|---|---|---|---|
-| 5 | Which prophet must be consulted in the house of Hades? | <0.xxx> | <yes/no> | 5 | yes |
-
-Semantic got <X> of 10. Keyword got <Y> of 10.
-```
+One row worked, on the Homer keyword results: for "Which prophet must be consulted in the house of Hades?" the top keyword chunk was `[399]` with overlap 5, and printed in full it says "You must go to the house of Hades ... to consult the ghost of the blind Theban prophet Teiresias", which answers the question, so keyword got it. The table is already in `evidence/A06.md` under `## Extension E3`, one row per answerable query, in the order of `queries.txt`; fill the `<   >` cells (query, semantic top score, semantic got it as yes or no, keyword top overlap, keyword got it) and the two totals in the sentence under it. On Homer the prophet row ends `| 5 | yes |`.
 
 *You should see* the two methods agree on most queries and disagree on a few. On Homer, keyword got 6 of 10, and the four it missed were the queries whose paragraph the question avoids: the Cyclops, the veil, the nymph's island, the swineherd. If semantic gets ten of ten, your three no-shared-words queries were not honest; rewrite them and say so in the log. A keyword win is a real result: a rare name or number is something a 1,536-number summary of a paragraph holds on to badly.
 
@@ -427,14 +407,14 @@ The script reads the twelve top scores from `search/run1.txt`, lines them up wit
 
 *You should see* the twelve scores on one line, highest first, each tagged `g`, `m` or `n`, with a `|` where your predicted cutoff falls; the count of scores on the wrong side of it and which queries they were; a table of cutoff against mistakes; and the fewest-mistakes cutoff. The arithmetic, on two rows: suppose the Cyclops query scored 0.58 and was got, "What year was the Odyssey first printed in English?" scored 0.47 and is none, and your prediction was 0.45. Both are at or above 0.45, so the cutoff claims both have an answer; the first claim is right and the second is wrong: one mistake. Trying each score as the cutoff: at 0.47 the none is still at or above, one mistake; at 0.58 the got is at or above and the none is below, zero mistakes, so 0.58 wins. A tie goes to the lowest score, the gentlest cutoff that does the job.
 
-Paste the whole output into `RESULTS.md` under `## Cutoff`, then three numbers under it: your predicted cutoff and how many of the twelve were on its wrong side, the fewest-mistakes cutoff and its count, and how far the fewest-mistakes cutoff sits above your chunk floor from E2 (subtract). Then write the paragraph that ends `RESULTS.md`: where semantic search did worse than keyword, and where your cutoff got it wrong.
+Paste the whole output under `## Extension E4` in `evidence/A06.md`, then the three numbers in the slots under it: your predicted cutoff and how many of the twelve were on its wrong side, the fewest-mistakes cutoff and its count, and how far the fewest-mistakes cutoff sits above your chunk floor from E2 (subtract). Then write the paragraph that ends the section: where semantic search did worse than keyword, and where your cutoff got it wrong.
 
 <!-- JD: fill the Homer twelve-score line after a run. -->
 
-**E5. Commit, push, PR, sign off.**
+**E5. Commit, push, PR, sign off.** Fill `## Reflection` in `evidence/A06.md` (the questions are below) and run `uv run python scripts/check_evidence.py A06` until it says `all slots filled`. Then:
 
 ```bash
-git add search/search.py search/RESULTS.md search/run1.txt scratch/a06-cutoff.py
+git add search/search.py evidence/A06.md search/run1.txt scratch/a06-cutoff.py
 git commit -m "A06: semantic vs keyword on 10 queries, cutoff tested on 2 off-corpus"
 git push -u origin dev/semantic-search
 ```
@@ -448,9 +428,9 @@ git add logs && git commit && git push
 ```
 
 **Deliverable**
-`search/search.py` (about 100 lines, NumPy and stdlib only) + `search/queries.txt` + `search/RESULTS.md` (prediction, floors, marked table, totals, cutoff output and the three numbers, closing paragraph) + `search/run1.txt` + `scratch/a06-cutoff.py` with your marks in it + the `scratch/a06-video.py` output in your log.
+`search/search.py` (about 100 lines, NumPy and stdlib only) + `search/queries.txt` + `evidence/A06.md` with every slot filled (prediction, the Step 3, video-script, Step 5 and Step 6 output, the query check, floors, marked table and totals, cutoff output and the three numbers, closing paragraph, the three reflection answers) + `search/run1.txt` + `scratch/a06-cutoff.py` with your marks in it.
 
-**Reflection Questions**
+**Reflection Questions** (answer under `## Reflection` in `evidence/A06.md`)
 
 1. Paste the two lines from Step 3, `naive` and `chunk`, and the three lines from the second command: the shortest piece the naive split produced, the index of the chunk it ended up inside after `chunk()`, and that chunk's first 90 characters. Say what the piece is in your file (a heading, a line number, a stage direction, a page break), and whether that chunk appeared in any of your thirty semantic results.
 
@@ -462,7 +442,7 @@ git add logs && git commit && git push
 
 2. Your predicted cutoff, committed in E1, and the cutoff that made the fewest mistakes in E4: give both, with the commit hash of the prediction. Which off-corpus query scored highest, what was its top chunk, and why does a question your corpus cannot answer still land above the chunk floor you measured in E2?
 
-   *How to get it:* the predicted cutoff is under `## Prediction` in `search/RESULTS.md` and the fewest-mistakes cutoff is the last line `scratch/a06-cutoff.py` printed. The two off-corpus queries are the last two `##` blocks of `search/run1.txt`; report the higher of their first `sem` lines, with the chunk text on it. For the why, look at the E2 numbers: every chunk sits above the floor because they all come from one file on one subject, and an off-topic question phrased in that subject's words lands in the same neighborhood.
+   *How to get it:* the predicted cutoff is under `## Prediction` in `evidence/A06.md` and the fewest-mistakes cutoff is the last line `scratch/a06-cutoff.py` printed. The two off-corpus queries are the last two `##` blocks of `search/run1.txt`; report the higher of their first `sem` lines, with the chunk text on it. For the why, look at the E2 numbers: every chunk sits above the floor because they all come from one file on one subject, and an off-topic question phrased in that subject's words lands in the same neighborhood.
 
    ```bash
    git log --oneline --follow -- search/queries.txt | tail -1

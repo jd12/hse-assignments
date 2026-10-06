@@ -6,7 +6,7 @@
 
 **Day 1 — 26 min**
 [Attention in transformers, step-by-step, 3Blue1Brown Deep Learning Ch. 6](https://www.youtube.com/watch?v=eMlx5fFNoYc) (26m)
- · Paper, a pencil, and your A07 `SHAPES.md` beside you.
+ · Paper, a pencil, and your A07 `## Shapes` table from `evidence/A07.md` beside you.
 
 **Day 2 — 27 min**
 [Let's build GPT: from scratch, in code, spelled out, Andrej Karpathy](https://www.youtube.com/watch?v=kCc8FmEb1nY) · segment 01:02:00 → 01:19:11 (17m): self-attention v4, then his six notes, ending with scaled attention
@@ -47,7 +47,7 @@ git switch main && git pull
 git switch -c dev/attention
 ```
 
-Step 2 of A05b's template update, or the pull request I opened on your repo, put `a08-video.py` and `a08-table.py` in `scratch/`; `ls scratch` should show them.
+Step 2 of A05b's template update, or the pull request I opened on your repo, put `a08-video.py` and `a08-table.py` in `scratch/`, and `evidence/A08.md`; `ls scratch evidence` should show them.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>
@@ -58,11 +58,11 @@ Under the timestamp, write today's checklist:
 
 ```markdown
 - [ ] Day 1: 3B1B Ch. 6, which way the grid reads written in the log
-- [ ] Day 1: Steps 2–3, sentence with a pronoun and its referent chosen, a08-video.py run; Step 6 prompts 1 and 2 drafted
+- [ ] Day 1: Steps 2–3, sentence with a pronoun and its referent chosen, a08-video.py run, evidence/A08.md started; Step 6 prompts 1 and 2 drafted
 - [ ] Day 2: Karpathy 01:02:00 → 01:19:11 read along, six sentences in the log; DLAI lesson 9, one row written down
-- [ ] Day 2: Steps 4–6, head_on_corpus.py printing a labeled grid, four invariants checked, paragraph at 150 to 200 words
+- [ ] Day 2: Steps 4–6, head_on_corpus.py printing a labeled grid, four invariants checked, paragraph at 150 to 200 words in evidence/A08.md
 - [ ] Extension: prediction committed, five seeds, table printed and pasted
-- [ ] Push and open the PR
+- [ ] Fill every slot in evidence/A08.md (check_evidence.py: all slots filled); push and open the PR
 ```
 
 Two meetings, one branch. Push again each day; one PR, not two; one log entry per meeting.
@@ -97,7 +97,7 @@ print(len(cands), "candidates")
 uv run python scratch/a08-find.py
 ```
 
-*You should see* ten sentences and a candidate count in the hundreds or more. **You need a sentence where the pronoun's referent is in the same sentence, before it**: a name or a noun earlier in the sentence that the pronoun stands for. Change `random.seed(0)` to `1`, `2`, and so on until one of the ten fits. On Homer, seed 0 printed `664 candidates` and, among its ten, the sentence used in every example below: `But Apollo looked down from Pergamus and called aloud to the Trojans, for he was displeased.` The pronoun is `he`, the referent is `Apollo`. If your corpus is not in English, change `PRON` to that language's pronouns. Write the sentence in your log and underline the pronoun and its referent; Step 6 and the extension use this sentence and no other.
+*You should see* ten sentences and a candidate count in the hundreds or more. **You need a sentence where the pronoun's referent is in the same sentence, before it**: a name or a noun earlier in the sentence that the pronoun stands for. Change `random.seed(0)` to `1`, `2`, and so on until one of the ten fits. On Homer, seed 0 printed `664 candidates` and, among its ten, the sentence used in every example below: `But Apollo looked down from Pergamus and called aloud to the Trojans, for he was displeased.` The pronoun is `he`, the referent is `Apollo`. If your corpus is not in English, change `PRON` to that language's pronouns. Write the sentence under `## Step 2` in `evidence/A08.md`, with the pronoun and its referent on the line below it; Step 6 and the extension use this sentence and no other.
 
 **Step 3. Run `scratch/a08-video.py` once (Day 1, so it is ready for Day 2).**
 
@@ -133,7 +133,7 @@ PART 3: the six notes
    biggest weight in your last row, '.': with the scale 0.08, without it 0.28
 ```
 
-Paste the whole output into your log. Line 6's last line is the whole reason for the scale: without it, one token in your last row takes a quarter of the budget for no reason but the size of the numbers. *If it broke* with `ModuleNotFoundError`, A07's Step 2 did not finish. `FileNotFoundError: data/corpus.txt` means the terminal is not in the repo root; `pwd` should end in `foundations-<your-username>`. `PASTE YOUR SENTENCE HERE` still in the slot prints `6 tokens` in Part 2.
+Paste the whole output under `## Step 3` in `evidence/A08.md`. Line 6's last line is the whole reason for the scale: without it, one token in your last row takes a quarter of the budget for no reason but the size of the numbers. *If it broke* with `ModuleNotFoundError`, A07's Step 2 did not finish. `FileNotFoundError: data/corpus.txt` means the terminal is not in the repo root; `pwd` should end in `foundations-<your-username>`. `PASTE YOUR SENTENCE HERE` still in the slot prints `6 tokens` in Part 2.
 
 **Step 4. Run one head on it (Day 2, after the video).**
 
@@ -202,30 +202,24 @@ uv run python transformer/head_on_corpus.py
 | Every row sum prints as `1.0` | Softmax along the row. Attention is a budget: more on one token is less on another. |
 | From a few rows down, the weights in row `r` sit near `1/(r+1)`, none of them dominant | Random weights produce small, similar scores, and softmax of similar scores is close to even. The first two or three rows have too few cells to average out; `0.76 0.24` in row 1 is normal. |
 
-On Homer the first line is `T=23 seed=1337 out=(23, 16)`, the `he` row near the bottom has 19 nonzero cells, the biggest `0.10`, and the row-sums line is twenty-three `1.0`s. The fourth row of that table is the whole story of a random head: Karpathy's averaging version with some noise on it. Nothing in it knows what a pronoun is. *If it broke:* a `T` much larger than the word count is fine; count the labels and you will find the words that split: on Homer, `Pergamus` is `P`, `erg`, `amus` and `Trojans` is `Tro`, `j`, `ans`.
+On Homer the first line is `T=23 seed=1337 out=(23, 16)`, the `he` row near the bottom has 19 nonzero cells, the biggest `0.10`, and the row-sums line is twenty-three `1.0`s. Paste the whole output under `## Step 4` in `evidence/A08.md`. The fourth row of that table is the whole story of a random head: Karpathy's averaging version with some noise on it. Nothing in it knows what a pronoun is. *If it broke:* a `T` much larger than the word count is fine; count the labels and you will find the words that split: on Homer, `Pergamus` is `P`, `erg`, `amus` and `Trojans` is `Tro`, `j`, `ans`.
 
-**Step 6. Write the guided paragraph in `transformer/attention.md`.**
+**Step 6. Write the guided paragraph under `## Step 6` in `evidence/A08.md`.**
 
-Create `transformer/attention.md` and paste this in. One paragraph of 150 to 200 words, plain English, exactly one head, answering the four prompts in order, every one of them about your sentence from Step 2. **Zero notation**: no matrices, no softmax, no `d_k`, no square roots, no `Q`, `K` or `V`; the words query, key and value are allowed, as English, for what a token is asking for, what it advertises, and what it hands over when something matches. Prompts 1 and 2 can be drafted on Day 1 from the 3B1B video; prompts 3 and 4 need your grid.
+One paragraph of 150 to 200 words, plain English, exactly one head, answering these four prompts in order, every one of them about your sentence from Step 2. **Zero notation**: no matrices, no softmax, no `d_k`, no square roots, no `Q`, `K` or `V`; the words query, key and value are allowed, as English, for what a token is asking for, what it advertises, and what it hands over when something matches. Prompts 1 and 2 can be drafted on Day 1 from the 3B1B video; prompts 3 and 4 need your grid.
 
-```markdown
-# One head on my sentence: <your name>
+1. **What the pronoun asks for.** At the pronoun's position a head that resolves pronouns puts out a request; say in English what that request is in your sentence.
+2. **What the referent advertises.** Say what the referent's position announces that matches the request, what it hands over when they match, and whose vector changes because of it: the referent's or the pronoun's.
+3. **What the mask hides.** Name the words in your sentence after the pronoun that the pronoun cannot see, and say why a model that predicts the next token must not see them.
+4. **Why the weights sum to one and what that costs.** Every row of your grid adds up to one; say what that means for the referent when other tokens in the row also get some weight, and what a trained head would do about it.
 
-Sentence: <your sentence>
-Pronoun: <token> at position <p>. Referent: <token(s)> at position(s) <   >.
+The test: someone who has taken AP CS A and no machine learning reads it once and can say what would change if you removed the mask. Run that test on someone. Then count the words of that section, from its heading to the next one:
 
-<One paragraph, 150 to 200 words, answering these four in order. Delete the prompts when you are done.
-1. What the pronoun asks for. At the pronoun's position a head that resolves pronouns puts out a request;
-   say in English what that request is in your sentence.
-2. What the referent advertises. Say what the referent's position announces that matches the request, what
-   it hands over when they match, and whose vector changes because of it: the referent's or the pronoun's.
-3. What the mask hides. Name the words in your sentence after the pronoun that the pronoun cannot see, and
-   say why a model that predicts the next token must not see them.
-4. Why the weights sum to one and what that costs. Every row of your grid adds up to one; say what that means
-   for the referent when other tokens in the row also get some weight, and what a trained head would do about it.>
+```bash
+sed -n '/## Step 6/,/## Extension X2/p' evidence/A08.md | wc -w
 ```
 
-The test: someone who has taken AP CS A and no machine learning reads it once and can say what would change if you removed the mask. Run that test on someone. Then `wc -w transformer/attention.md`. *You should see* a count between about 185 and 235: your 150 to 200 words plus roughly 35 in the three header lines. Three hundred means you have not cut yet.
+*You should see* a count between about 160 and 210: your 150 to 200 words plus the eleven in the two heading lines. Three hundred means you have not cut yet.
 
 **Extension — what a random head does to your pronoun (ASSIGNED)**
 
@@ -239,28 +233,14 @@ for i, t in enumerate(enc.encode(SENTENCE)): print(i, repr(enc.decode([t])))   #
 "
 ```
 
-*You should see* one token per line, numbered from 0. On Homer, 23 lines: `0 'But'`, `1 ' Apollo'`, ..., `17 ' for'`, `18 ' he'`, `19 ' was'`, `20 ' disple'`, `21 'ased'`, `22 '.'`. So on Homer the pronoun is at position 18 and the referent at position 1. A referent that split into three tokens, like `Pergamus` at 5, 6, 7, is three positions, and its weight is the sum of three columns.
+*You should see* one token per line, numbered from 0. On Homer, 23 lines: `0 'But'`, `1 ' Apollo'`, ..., `17 ' for'`, `18 ' he'`, `19 ' was'`, `20 ' disple'`, `21 'ased'`, `22 '.'`. So on Homer the pronoun is at position 18 and the referent at position 1. A referent that split into three tokens, like `Pergamus` at 5, 6, 7, is three positions, and its weight is the sum of three columns. Paste the lines under `## Prediction` in `evidence/A08.md` and fill the position lines below them.
 
-Now the prediction. **The even share is the baseline**: if the pronoun is at position `p` (counting from 0) it can see `p + 1` tokens, so a head that spreads its budget evenly puts `1/(p+1)` on each, and `n/(p+1)` on a referent of `n` tokens. On Homer that is `1/19 = 0.0526`. Create `transformer/HEAD_RUN.md` and paste this in, filled:
-
-```markdown
-# A08 head run: <your name>
-
-Sentence: <your sentence>
-Pronoun: <token> at position <p>. Referent: <token(s)> at position(s) <   >, n = <   > token(s).
-Even share on the referent: n / (p + 1) = <   > / <   > = <0.xxxx>
-
-## Prediction (before any run)
-
-Weight this random head's pronoun row will put on the referent, summed over its tokens: <0.xx>
-Weight a trained pronoun head would put there: <0.xx>
-Why these two numbers: <one sentence each>
-```
+Now the prediction. **The even share is the baseline**: if the pronoun is at position `p` (counting from 0) it can see `p + 1` tokens, so a head that spreads its budget evenly puts `1/(p+1)` on each, and `n/(p+1)` on a referent of `n` tokens. On Homer that is `1/19 = 0.0526`. Fill the rest of `## Prediction`: the even share, the two weights and the one sentence for each.
 
 Commit before you run a single seed:
 
 ```bash
-git add transformer/head_on_corpus.py transformer/HEAD_RUN.md
+git add transformer/head_on_corpus.py evidence/A08.md
 git commit -m "A08: prediction for the pronoun row, before running seeds"
 ```
 
@@ -294,19 +274,19 @@ seed 1, the pronoun's row with its column labels (visible tokens only):
       he    0.08   0.06   0.03   0.07   0.13   0.06   0.03   0.03   0.02   0.03   0.08   0.03   0.03   0.09   0.02   0.03   0.07   0.07   0.03
 ```
 
-Seed 5 put its biggest weight on `Apollo`, and it is 0.08, half again the even share: that is what a lucky draw looks like, and seed 3 undoes it. Paste the table and the summary line into `HEAD_RUN.md` under `## X2. Five seeds`. *If it broke* with `AssertionError: the referent has to come before the pronoun`, your referent is after the pronoun and the mask hides it; choose a different sentence in Step 2. A `ValueError` on the `float(w)` line means `head_runs.txt` was written by a changed `head_on_corpus.py`; put the print lines back and re-run the `for` loop.
+Seed 5 put its biggest weight on `Apollo`, and it is 0.08, half again the even share: that is what a lucky draw looks like, and seed 3 undoes it. Paste the `wc -l` line, then the first line, the table and the summary line, under `## Extension X2` in `evidence/A08.md`. *If it broke* with `AssertionError: the referent has to come before the pronoun`, your referent is after the pronoun and the mask hides it; choose a different sentence in Step 2. A `ValueError` on the `float(w)` line means `head_runs.txt` was written by a changed `head_on_corpus.py`; put the print lines back and re-run the `for` loop.
 
-**X3. Say what it shows.** Under `## X3`, the mean and the range from the summary line, how many seeds put *less* than the even share on the referent, and then two or three plain sentences: what a random head shows and what a trained one would. A random head spreads its budget close to evenly and which token wins moves with the seed; a trained pronoun head would put most of the row on the referent and would do it the same way every time, because its weights were learned rather than drawn. Put your X1 prediction next to what happened.
+**X3. Say what it shows.** Under `## Extension X3` in `evidence/A08.md`, the mean and the range from the summary line, how many seeds put *less* than the even share on the referent, and then two or three plain sentences: what a random head shows and what a trained one would. A random head spreads its budget close to evenly and which token wins moves with the seed; a trained pronoun head would put most of the row on the referent and would do it the same way every time, because its weights were learned rather than drawn. Put your X1 prediction next to what happened.
 
-**X4. Commit, push, PR, sign off.**
+**X4. Commit, push, PR, sign off.** Fill `## Reflection` in `evidence/A08.md` (the questions are below) and run `uv run python scripts/check_evidence.py A08` until it says `all slots filled`. Then:
 
 ```bash
-git add transformer/attention.md transformer/HEAD_RUN.md transformer/head_runs.txt scratch/a08-video.py scratch/a08-find.py scratch/a08-table.py
+git add evidence/A08.md transformer/head_runs.txt scratch/a08-video.py scratch/a08-find.py scratch/a08-table.py
 git commit -m "A08: one head in 200 words, one random head on a corpus sentence over 5 seeds"
 git push -u origin dev/attention
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body names the sentence in `attention.md` you are least sure is true.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body names the sentence in your Step 6 paragraph you are least sure is true.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>
@@ -315,18 +295,18 @@ git add logs && git commit && git push
 ```
 
 **Deliverable**
-`transformer/attention.md` (150 to 200 words, four prompts in order, no notation, your sentence) + `transformer/head_on_corpus.py` + `transformer/HEAD_RUN.md` (prediction committed first, the printed table, X3) + `transformer/head_runs.txt` + `scratch/a08-find.py` + `scratch/a08-video.py` and `scratch/a08-table.py` with your slots filled.
+`evidence/A08.md` with every slot filled (your sentence, the a08-video.py and head_on_corpus.py output, the paragraph of 150 to 200 words with four prompts in order and no notation, the prediction committed before any seed, the five-seed table, X3, the three reflection answers) + `transformer/head_on_corpus.py` + `transformer/head_runs.txt` + `scratch/a08-find.py` + `scratch/a08-video.py` and `scratch/a08-table.py` with your slots filled.
 
-**Reflection Questions**
+**Reflection Questions** (answer under `## Reflection` in `evidence/A08.md`)
 
-1. Paste the pronoun's row from seed 1 with the column labels above it. Which token got the biggest weight, and by how much did it beat the even share for one token? Then quote the sentence in your `attention.md` that says what that row should look like in a trained head, and say which number in the pasted row it disagrees with.
+1. Paste the pronoun's row from seed 1 with the column labels above it. Which token got the biggest weight, and by how much did it beat the even share for one token? Then quote the sentence in your Step 6 paragraph that says what that row should look like in a trained head, and say which number in the pasted row it disagrees with.
 
    *How to get it:* the row and its labels are the last two lines `uv run python scratch/a08-table.py` prints; the biggest weight and its token are in the seed 1 row of the table above it. The even share for one token is `1/(p+1)`, printed on the script's first line as `even share ... each`; "beat it by" is the biggest weight minus that. On Homer: `0.13` on `from`, against `0.0526`, so by about `0.08`.
 
 2. Your X1 prediction for the random head, with the commit hash, next to the five-seed mean and range. How many seeds went below the even share? If your prediction was far off, say what you assumed about an untrained head that the run showed was wrong.
 
-   *How to get it:* the prediction is the number you wrote in `HEAD_RUN.md` before reading any run; the mean, range and below-the-share count are the script's summary line, pasted in X2. The hash is the first commit that touched the file: `git log --oneline --follow -- transformer/HEAD_RUN.md | tail -1`.
+   *How to get it:* the prediction is the number you wrote under `## Prediction` in `evidence/A08.md` before reading any run; the mean, range and below-the-share count are the script's summary line, pasted in X2. The hash is the commit whose message says prediction for the pronoun row: `git log --oneline --grep="prediction for the pronoun row" -- evidence/A08.md | tail -1`.
 
-3. Change `dim=-1` to `dim=0` in the softmax line of `transformer/head_on_corpus.py`, run seed 1, and paste the first three rows and the `row sums:` line. Say which invariant from the Step 5 table broke and which still held. Then name the claim in your `attention.md` that would be false for a head built that way. Put the line back before you commit.
+3. Change `dim=-1` to `dim=0` in the softmax line of `transformer/head_on_corpus.py`, run seed 1, and paste the first three rows and the `row sums:` line. Say which invariant from the Step 5 table broke and which still held. Then name the claim in your Step 6 paragraph that would be false for a head built that way. Put the line back before you commit.
 
    *How to get it:* change only the `F.softmax(wei, dim=-1)` line; the `wei.sum(dim=-1)` line below it stays, or the row-sums print will lie to you. Then `uv run python transformer/head_on_corpus.py 1 | sed -n '2,5p;$p'`, which prints lines 2 to 5 and the last line. *You should see* the first row no longer `1.00`, and row sums that start near zero and climb past one instead of all reading `1.0`; the zeros above the diagonal are still there, because the mask is applied before the softmax and does not care which way the softmax runs. On Homer the first row read `0.05` and the row sums ran from `0.053` up to `3.517`; it is the columns that sum to one now, and afterwards `git diff transformer/head_on_corpus.py` should show nothing but that one line until you put it back.

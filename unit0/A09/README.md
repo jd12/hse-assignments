@@ -19,7 +19,7 @@ He samples from a model he wrote, with a prompt he made up. `scratch/a09-video.p
 uv run python scratch/a09-video.py
 ```
 
-The script encodes your prompt, stacks it five times, and runs his `while` loop: softmax, `topk` of 50, `multinomial`, append, until each row is 50 tokens. *You should see* the device line, your prompt in quotes, `x (5, T)` with your `T` near 20, `x after the loop (5, 50): 30 new tokens per row`, and five continuations starting with `>`, all five different. Paste the five into your log. *If it broke* with `ModuleNotFoundError: No module named 'sampling'`, Step 3 is not done. `FileNotFoundError: data/corpus.txt` means the terminal is not in the repo root; `pwd` should end in `foundations-<your-username>`. <!-- JD: fill the Homer T and one of the five continuations after a run. -->
+The script encodes your prompt, stacks it five times, and runs his `while` loop: softmax, `topk` of 50, `multinomial`, append, until each row is 50 tokens. *You should see* the device line, your prompt in quotes, `x (5, T)` with your `T` near 20, `x after the loop (5, 50): 30 new tokens per row`, and five continuations starting with `>`, all five different. Paste the five under `## During the video` in `evidence/A09.md`. *If it broke* with `ModuleNotFoundError: No module named 'sampling'`, Step 3 is not done. `FileNotFoundError: data/corpus.txt` means the terminal is not in the repo root; `pwd` should end in `foundations-<your-username>`. <!-- JD: fill the Homer T and one of the five continuations after a run. -->
 
 **DLAI lesson 10 · write down the shapes.** No typing. Run the notebook in the DLAI page as he goes, and every time he prints a shape, write it in your log with what it is. The two that matter are what comes out of the body of the model and what comes out of the head on top of it; Step 4 prints the same two out of GPT-2. **Karpathy 00:33:31 → 00:45:50 · read along; the file has already run.** Five pause points, one line in your log each:
 
@@ -48,7 +48,7 @@ git switch main && git pull
 git switch -c dev/sampling
 ```
 
-Step 2 of A05b's template update, or the pull request I opened on your repo, put `a09-video.py` and `a09-mark.py` in `scratch/`; `ls scratch` should show them.
+Step 2 of A05b's template update, or the pull request I opened on your repo, put `a09-video.py` and `a09-mark.py` in `scratch/`, and `evidence/A09.md`; `ls scratch evidence` should show them.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>
@@ -59,11 +59,11 @@ Under the timestamp, write today's checklist:
 
 ```markdown
 - [ ] Steps 2–4, GPT-2 downloaded, lab.py started, three prompts from my corpus in PROMPTS, two shapes printed
-- [ ] a09-video.py run, five continuations in the log; DLAI shapes and five Karpathy pause-point lines in the log
+- [ ] a09-video.py run, five continuations in evidence/A09.md; DLAI shapes and five Karpathy pause-point lines in the log
 - [ ] Steps 5–6, sampler pasted and checked, snapshots saved
-- [ ] Step 7, twenty calls at temperature 0 on the API
-- [ ] Extension: predictions committed, table run, usable column filled, RESULTS.md finished
-- [ ] Push and open the PR
+- [ ] Step 7, twenty calls at temperature 0 on the API, output in evidence/A09.md
+- [ ] Extension: predictions committed, table run, usable column filled
+- [ ] Fill every slot in evidence/A09.md (check_evidence.py: all slots filled); push and open the PR
 ```
 
 **Step 2. Install and download.**
@@ -184,7 +184,7 @@ Paste the three strings into `PROMPTS`, between the square brackets, with commas
 uv run python sampling/lab.py shapes
 ```
 
-*You should see* `hidden state (1, T, 768)   logits (1, T, 50257)` with your `T` near 20, then `T = ... tokens in PROMPTS[0]`. **The first shape is one residual vector per position, 768 wide: the body. The second is one score for every token in GPT-2's vocabulary, at every position: the head.** `next_logits` takes the last row of the second, the only row that predicts a token you have not seen yet. Compare both with the two shapes from the lesson: same three dimensions, his width and vocabulary in place of 768 and 50,257. <!-- JD: fill the Homer T after a run; it is 20 unless decode-then-encode of the cut changes the token count. -->
+*You should see* `hidden state (1, T, 768)   logits (1, T, 50257)` with your `T` near 20, then `T = ... tokens in PROMPTS[0]`. **The first shape is one residual vector per position, 768 wide: the body. The second is one score for every token in GPT-2's vocabulary, at every position: the head.** `next_logits` takes the last row of the second, the only row that predicts a token you have not seen yet. Compare both with the two shapes from the lesson: same three dimensions, his width and vocabulary in place of 768 and 50,257. Paste both lines under `## Step 4` in `evidence/A09.md`. <!-- JD: fill the Homer T after a run; it is 20 unless decode-then-encode of the cut changes the token count. -->
 
 **Step 5. The sampler.**
 
@@ -226,7 +226,7 @@ def generate(prompt, n_new=30, seed=0, temperature=1.0, top_k=None, top_p=None):
 uv run python sampling/lab.py check
 ```
 
-*You should see* four quoted continuations of your first prompt, thirty tokens each: the first two identical (same seed, same top-k of 50), the third different (seed 2), and the fourth a plain, often repetitive continuation that would come out the same with any seed, because temperature 0 never asks the random number generator anything. The four take about a minute on a laptop CPU. *If it broke* with `NameError: name 'generate' is not defined`, the two functions landed below the `if __name__` block instead of above it. <!-- JD: fill the four Homer check lines after a run; shape only here. -->
+*You should see* four quoted continuations of your first prompt, thirty tokens each: the first two identical (same seed, same top-k of 50), the third different (seed 2), and the fourth a plain, often repetitive continuation that would come out the same with any seed, because temperature 0 never asks the random number generator anything. The four take about a minute on a laptop CPU. Paste them under `## Step 5` in `evidence/A09.md`. *If it broke* with `NameError: name 'generate' is not defined`, the two functions landed below the `if __name__` block instead of above it. <!-- JD: fill the four Homer check lines after a run; shape only here. -->
 
 **Step 6. Snapshot the distribution.**
 
@@ -276,40 +276,16 @@ uv run python sampling/lab.py snapshot | tee sampling/snapshots.txt
 uv run python sampling/lab.py api0
 ```
 
-Twenty calls of 30 tokens on your first prompt; every run is saved in `sampling/api_t0.json`. *You should see* `N distinct texts in 20; M distinct first-token top-5 lists`, then one line per distinct list: the five most likely first tokens with their log probabilities. Paste all of it into your log. Most people predict `N` of 1. **If `M` is above 1, the model computed a different distribution for the same input**, and temperature 0 faithfully took the top of a different thing; if `M` is 1 and `N` is not, the first distribution was identical and the divergence came later in the text. A count of 1 is a real result too; report it as twenty runs, not as "deterministic". *If it broke* with `HTTP Error 400`, a reasoning model refuses `temperature` or `logprobs`: change `MODEL` and write down which model you used. `KeyError: 'OPENAI_API_KEY'` means a new terminal, as in A05.
+Twenty calls of 30 tokens on your first prompt; every run is saved in `sampling/api_t0.json`. *You should see* `N distinct texts in 20; M distinct first-token top-5 lists`, then one line per distinct list: the five most likely first tokens with their log probabilities. Paste all of it under `## Step 7` in `evidence/A09.md`. Most people predict `N` of 1. **If `M` is above 1, the model computed a different distribution for the same input**, and temperature 0 faithfully took the top of a different thing; if `M` is 1 and `N` is not, the first distribution was identical and the divergence came later in the text. A count of 1 is a real result too; report it as twenty runs, not as "deterministic". *If it broke* with `HTTP Error 400`, a reasoning model refuses `temperature` or `logprobs`: change `MODEL` and write down which model you used. `KeyError: 'OPENAI_API_KEY'` means a new terminal, as in A05.
 
 **Extension — the same three prompts, three temperatures, five runs (ASSIGNED)**
 
-**X1. Predict first.** Create `sampling/RESULTS.md` and paste this in. Fill the prediction table and the two sentences; leave everything under `## Table` for later.
-
-```markdown
-# A09 results: <your name>
-
-## Prediction (before the table runs)
-
-| prompt | ends with | predicted distinct of 5 at T=0 | at T=0.7 | at T=1.2 |
-|---|---|---|---|---|
-| 1 | <last five words of PROMPTS[0]> | <n> | <n> | <n> |
-| 2 | <last five words of PROMPTS[1]> | <n> | <n> | <n> |
-| 3 | <last five words of PROMPTS[2]> | <n> | <n> | <n> |
-
-Why these numbers: <one sentence, using the tokens-for-90% counts from snapshots.txt>
-API at temperature 0, same prompt, twenty runs: I predict <n> distinct texts, because <one sentence>
-
-## Table
-<the table a09-mark.py prints, with the usable column filled>
-## Where it got worse
-<the three lines a09-mark.py prints; the continuation you would least want in a book, pasted with its ## prompt line; one or two sentences on what went wrong in it>
-## Temperature 0, local vs API
-<local sampler 1 of 5 (table.txt) next to the API's N and M of 20 (what api0 printed); one paragraph on the mechanism my evidence supports>
-## What temperature for an agent
-<one paragraph: the file and line where my v2 agent sets its temperature, and whether this table argues for changing it>
-```
+**X1. Predict first.** The prediction table is already in `evidence/A09.md` under `## Prediction`. Fill its `<   >` cells with whole numbers from 1 to 5, the three `ends with` cells, and the two sentences under it; leave every section below it for later.
 
 Commit it before the table runs:
 
 ```bash
-git add sampling/lab.py sampling/RESULTS.md sampling/snapshots.txt sampling/api_t0.json
+git add sampling/lab.py evidence/A09.md sampling/snapshots.txt sampling/api_t0.json
 git commit -m "A09: predicted distinct counts, before the temperature table runs"
 ```
 
@@ -330,16 +306,16 @@ Forty-five generations of thirty tokens; on a laptop CPU that is a few minutes, 
 uv run python scratch/a09-mark.py
 ```
 
-The script reads the nine headings out of `table.txt` and your prediction table out of `RESULTS.md`. *You should see* a nine-row Markdown table with `distinct of 5` filled, `usable of 5` empty, and `predicted distinct` copied from X1 (a `?` means that prediction cell did not hold a plain number; fix the cell, not the script). Paste the whole table into `RESULTS.md` under `## Table`, in place of the hint line.
+The script reads the nine headings out of `table.txt` and your prediction table out of `evidence/A09.md`. *You should see* a nine-row Markdown table with `distinct of 5` filled, `usable of 5` empty, and `predicted distinct` copied from X1 (a `?` means that prediction cell did not hold a plain number; fix the cell, not the script). Paste the whole table under `## Extension X3` in `evidence/A09.md`, in place of the first slot there.
 
 Now the one column that is yours. Open `sampling/table.txt` and read all forty-five continuations. **A continuation is usable when all three of these hold:** every word in it is a real word of your corpus's language, spelled the way your corpus spells it; it continues the prompt's sentence grammatically and then stays in your corpus's register (prose stays prose, verse stays verse, a list stays a list, code stays code); and no phrase of three or more words appears in it twice. One miss and it is not usable. Two shapes. Usable: `<the rest of the prompt's sentence, ending in a period> <a new sentence that could sit in the same paragraph of your corpus>`. Not usable: `<the rest of the sentence> <three words> <the same three words> <the same three words again>` (a loop, the usual temperature-0 failure), or `<the sentence finishes> Copyright <year> <a web address>` (a switch of register toward something GPT-2 read more of than your corpus).
 
-Count the usable ones in each block, write the count in that row's `usable of 5` cell, and run `uv run python scratch/a09-mark.py` again. *You should see* the same table with the usable column filled, then three `where it got worse` lines, one per prompt, naming the first temperature at which usable dropped below 5, and a totals line. Whatever your corpus, **`distinct of 5` is 1 at temperature 0 for every prompt** (argmax asks nothing of the seed) and rises with temperature. The usable column is where your corpus shows: plain modern prose survives 1.2 better than verse, code or a list, and temperature 0 often fails on usability the other way, by looping. <!-- JD: fill the Homer nine-row table and the three where-it-got-worse lines after a run. -->
+Count the usable ones in each block, write the count in that row's `usable of 5` cell, and run `uv run python scratch/a09-mark.py` again. *You should see* the same table with the usable column filled, then three `where it got worse` lines, one per prompt, naming the first temperature at which usable dropped below 5, and a totals line. Paste those four lines into the fence under the table in `evidence/A09.md`. Whatever your corpus, **`distinct of 5` is 1 at temperature 0 for every prompt** (argmax asks nothing of the seed) and rises with temperature. The usable column is where your corpus shows: plain modern prose survives 1.2 better than verse, code or a list, and temperature 0 often fails on usability the other way, by looping. <!-- JD: fill the Homer nine-row table and the three where-it-got-worse lines after a run. -->
 
-**X4. Commit, push, PR, sign off.**
+**X4. Commit, push, PR, sign off.** Fill `## Reflection` in `evidence/A09.md` (the questions are below) and run `uv run python scripts/check_evidence.py A09` until it says `all slots filled`. Then:
 
 ```bash
-git add sampling/ pyproject.toml uv.lock
+git add sampling/ evidence/A09.md pyproject.toml uv.lock
 git commit -m "A09: sampler by hand, snapshots, API temp-0 x20, 3x3x5 table marked"
 git push -u origin dev/sampling
 ```
@@ -353,9 +329,9 @@ git add logs && git commit && git push
 ```
 
 **Deliverable**
-`sampling/lab.py` (sampler in NumPy, six commands) + `sampling/RESULTS.md` (predictions, table with the usable column, where it got worse, local vs API, agent paragraph) + `sampling/snapshots.txt` + `sampling/api_t0.json` + `sampling/table.txt`.
+`sampling/lab.py` (sampler in NumPy, six commands) + `evidence/A09.md` with every slot filled (the predictions committed before the table runs, the five video continuations, the Step 4, 5 and 7 output, the table with the usable column, where it got worse, the three reflection answers: snapshots compared, local vs API, the worst continuation and the agent paragraph) + `sampling/snapshots.txt` + `sampling/api_t0.json` + `sampling/table.txt`.
 
-**Reflection Questions**
+**Reflection Questions** (answer under `## Reflection` in `evidence/A09.md`)
 
 1. From `sampling/snapshots.txt`, paste the top three tokens and the tokens-for-90% count for your most concentrated prompt and your least concentrated one, both at `T=1.0`. Quote the last few words of each prompt and say what about where your corpus chunk was cut explains the difference.
 
@@ -363,8 +339,8 @@ git add logs && git commit && git push
 
 2. From `sampling/api_t0.json`: how many distinct texts in twenty, and did the first-token `top_logprobs` differ between any two runs? Paste two lists if they did. Your local sampler gave 1 of 5 at temperature 0 on the same prompt. Name the one mechanism your evidence supports for the gap, and the observation you would need to rule it out.
 
-   *How to get it:* both counts and the distinct lists are what `api0` printed, pasted in your log; `sampling/api_t0.json` holds all twenty runs if you need more. Several lists is the batching-and-floating-point mechanism: on shared hardware your request is computed alongside other people's, the order of floating-point additions changes with the batch, and a near-tie at the top can flip. One list and one text says the serving stack was, for those twenty runs, deterministic.
+   *How to get it:* both counts and the distinct lists are what `api0` printed, pasted under `## Step 7` in `evidence/A09.md`; `sampling/api_t0.json` holds all twenty runs if you need more. Several lists is the batching-and-floating-point mechanism: on shared hardware your request is computed alongside other people's, the order of floating-point additions changes with the batch, and a near-tie at the top can flip. One list and one text says the serving stack was, for those twenty runs, deterministic.
 
 3. Your X1 prediction row for `T=1.2` (with the commit hash) next to what happened. Paste the worst continuation in your table and say what went wrong in it against the three-part definition of usable. Then give your v2 agent's sampling temperature with the file and line, and say whether this table argues for changing it.
 
-   *How to get it:* the prediction is the `at T=1.2` column of the X1 table; what happened is the `distinct of 5` cell of each `T=1.2` row, which `a09-mark.py` printed beside it, and the hash is `git log --oneline --follow -- sampling/RESULTS.md | tail -1`. The worst continuation is the one under `## Where it got worse`; name which of the three conditions it failed (a made-up word, a register switch, a repeated phrase). For the agent's temperature, `grep -rn -i temperature src/` in the v2 repo; in the reference agent it is `TEMPERATURE = 0.2` in `src/llm.ts`, and the argument runs through your usable column: an agent's output is parsed by a program, so the question is at which temperature your table stopped giving five usable out of five.
+   *How to get it:* the prediction is the `at T=1.2` column of the X1 table; what happened is the `distinct of 5` cell of each `T=1.2` row, which `a09-mark.py` printed beside it, and the hash is the commit whose message says predicted distinct counts: `git log --oneline --grep="predicted distinct counts" -- evidence/A09.md | tail -1`. The worst continuation is the one in `sampling/table.txt` you would least want in a book, pasted with its `## prompt` line; name which of the three conditions it failed (a made-up word, a register switch, a repeated phrase). For the agent's temperature, `grep -rn -i temperature src/` in the v2 repo; in the reference agent it is `TEMPERATURE = 0.2` in `src/llm.ts`, and the argument runs through your usable column: an agent's output is parsed by a program, so the question is at which temperature your table stopped giving five usable out of five.

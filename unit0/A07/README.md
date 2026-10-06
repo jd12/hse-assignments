@@ -42,7 +42,7 @@ git switch main && git pull
 git switch -c dev/transformer-block
 ```
 
-Step 2 of A05b's template update, or the pull request I opened on your repo, put `block_shapes.py` in `transformer/`; `ls transformer` should show it.
+Step 2 of A05b's template update, or the pull request I opened on your repo, put `block_shapes.py` in `transformer/`, and `evidence/A07.md`; `ls transformer evidence` should show them.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>
@@ -53,11 +53,11 @@ Under the timestamp, write today's checklist:
 
 ```markdown
 - [ ] Day 1: 3B1B Ch. 5, GPT-3's three numbers in the log
-- [ ] Day 1: Steps 2–5, torch and tiktoken installed, sentence chosen, block_shapes.py run, SHAPES.md started
+- [ ] Day 1: Steps 2–5, torch and tiktoken installed, sentence chosen, block_shapes.py run, evidence/A07.md started
 - [ ] Day 2: DLAI lessons 7–8 and Karpathy 01:21:59 → 01:37:49, read along in block_shapes.py
 - [ ] Day 2: Step 6, every row annotated, both + rows say what was added
 - [ ] Extension: hand count committed, then run and checked
-- [ ] Push and open the PR
+- [ ] Fill every slot in evidence/A07.md (check_evidence.py: all slots filled); push and open the PR
 ```
 
 Two meetings, one branch. Push again each day; one PR, not two; one log entry per meeting.
@@ -172,55 +172,17 @@ total                                       49,792   (34 tensors)
 not parameters: 8 mask buffers tril, each (32, 32), never trained
 ```
 
-The `...` line is mine; your output has all 34 lines, one per tensor, in the order `sa.heads.*`, `sa.proj.*`, `ffwd.net.*`, `ln1.*`, `ln2.*`. Note `(B, h, T, T)`, the attention scores of every head at once: `T × T` per head, which is why context length costs what it costs. Paste the whole output into your log. *If it broke:* `ModuleNotFoundError: No module named 'torch'` or `'tiktoken'` means Step 2 did not finish, or you typed `python` instead of `uv run python`. A second line reading `sentence: 6 tokens from 4 words` means `PASTE YOUR SENTENCE HERE` is still in the slot. A `KeyError` on the `CONFIGS[CONFIG]` line means the config word is misspelled; the three names are `walkthrough`, `gpt2` and `tiny`. A `RuntimeError` about tensor sizes means your sentence is longer than 32 tokens; pick a shorter one in Step 3.
+The `...` line is mine; your output has all 34 lines, one per tensor, in the order `sa.heads.*`, `sa.proj.*`, `ffwd.net.*`, `ln1.*`, `ln2.*`. Note `(B, h, T, T)`, the attention scores of every head at once: `T × T` per head, which is why context length costs what it costs. Paste the whole output under `## Step 4` in `evidence/A07.md`. *If it broke:* `ModuleNotFoundError: No module named 'torch'` or `'tiktoken'` means Step 2 did not finish, or you typed `python` instead of `uv run python`. A second line reading `sentence: 6 tokens from 4 words` means `PASTE YOUR SENTENCE HERE` is still in the slot. A `KeyError` on the `CONFIGS[CONFIG]` line means the config word is misspelled; the three names are `walkthrough`, `gpt2` and `tiny`. A `RuntimeError` about tensor sizes means your sentence is longer than 32 tokens; pick a shorter one in Step 3.
 
-**Step 5. Start `transformer/SHAPES.md` (Day 1).**
+**Step 5. Start the shapes section (Day 1).**
 
-Create `transformer/SHAPES.md` and paste this in. Fill what you can today: the sentence, `T`, the pasted table, and the three GPT-3 numbers from your log. The annotation rows wait for Day 2; two of them are filled in as the standard, one sentence, in words, that says what the numbers in that row are.
-
-```markdown
-# A07 shapes: <your name>
-
-Sentence: <your sentence>. T = <   > tokens from <   > words. Config: walkthrough, d = 64, h = 8, d_head = 8, block_size = 32.
-
-## Three numbers, three jobs
-
-| | my script | GPT-3, from 3B1B |
-|---|---|---|
-| vocabulary size | 100277 | <   > |
-| d, the embedding dimension | 64 | <   > |
-| context length | 32 | <   > |
-
-## The printed table
-
-    <paste the SHAPE TABLE exactly as printed, indented four spaces, header line included>
-
-## One line per arrow, in my words
-
-| arrow | what this arrow carries |
-|---|---|
-| x in | <   > |
-| ln1(x) | <   > |
-| q, k, v (one head) | <   > |
-| scores q @ k^T (one head) | <   > |
-| mask tril[:T, :T] | a T x T triangle of ones cut from the 32 x 32 buffer; the zeros above the diagonal are the positions each token is not allowed to see |
-| softmax weights (one head) | <   > |
-| wei @ v (one head out) | <   > |
-| scores, all heads stacked | <   > |
-| heads concat | the 8 head outputs laid side by side, 8 numbers each, back to width 64 |
-| proj | <   > |
-| + residual 1 | <what was added to the stream, and where it came from> |
-| ln2(x) | <   > |
-| ffwd hidden (before ReLU) | <   > |
-| ffwd out | <   > |
-| + residual 2 = x out | <what was added to the stream, and where it came from> |
-```
+The shapes section is already in `evidence/A07.md` under `## Shapes`. Fill what you can today: the sentence, `T`, and the three GPT-3 numbers from your log, in the `<   >` cells. The annotation rows wait for Day 2; two of them are filled in as the standard, one sentence, in words, that says what the numbers in that row are.
 
 <!-- JD: GPT-3 from 3B1B: vocabulary 50,257; d 12,288; context 2,048. -->
 
 **Step 6. Annotate every row (Day 2, after the videos).**
 
-Fill the thirteen empty rows of the annotation table, one line each, in your own words. The test for a line: a reader who has your printed table but not the code could say, from your line alone, why the shape is what it is. `(1, 23, 8)` on `q, k, v (one head)` is not explained by "the query"; it is explained by "my 23 tokens, each shrunk from 64 numbers to 8, because `d_head = d / h = 64 / 8`". **`x in` and `x out` have the same shape** because block 2 takes what block 1 hands it; say that on one of those two lines. The two diagrams in `transformer/examples/` draw A05's probe, not this block, but they show the standard: a shape on every arrow, letters first with the real numbers beside them, and a note wherever the shape changes.
+Fill the thirteen empty rows of the annotation table under `## Shapes` in `evidence/A07.md`, one line each, in your own words. The test for a line: a reader who has your printed table but not the code could say, from your line alone, why the shape is what it is. `(1, 23, 8)` on `q, k, v (one head)` is not explained by "the query"; it is explained by "my 23 tokens, each shrunk from 64 numbers to 8, because `d_head = d / h = 64 / 8`". **`x in` and `x out` have the same shape** because block 2 takes what block 1 hands it; say that on one of those two lines. The two diagrams in `transformer/examples/` draw A05's probe, not this block, but they show the standard: a shape on every arrow, letters first with the real numbers beside them, and a note wherever the shape changes.
 
 The rows tagged `residual stream` are the line running straight through the block. **Nothing ever replaces it**; two things are added to it. On the `+ residual 1` line, write what was added and where it came from: attention writes into each position from other positions, so on Homer the thing added at position 18, `he`, was built from positions 0 to 18, `But` through `he`. On the `+ residual 2` line: the feedforward layer sees one position at a time, so the thing added at position 18 was built from `he` alone, after attention had already written into it. Name a position in your own sentence in each line, with the token that sits there; this prints the positions:
 
@@ -236,7 +198,7 @@ for i, t in enumerate(enc.encode(SENTENCE)): print(i, repr(enc.decode([t])))   #
 
 **Extension — count the block before PyTorch does (CHOOSE)**
 
-Pick one and say which in your log. Each option is the same script with a different config word on the command line; no code changes.
+Pick one and say which on the `Option:` line under `## Prediction` in `evidence/A07.md`. Each option is the same script with a different config word on the command line; no code changes.
 
 | Option | Command | Config |
 |---|---|---|
@@ -244,40 +206,22 @@ Pick one and say which in your log. Each option is the same script with a differ
 | **B. Tiny** | `uv run python transformer/block_shapes.py tiny` | d 32, h 4, d_head 8, block_size 32: Karpathy's width and head count during the segment |
 | **C. Both** | both commands | both tables, and the ratio between them |
 
-**X1. Count by hand, commit, then run.** Do not run your option's command yet. Create `transformer/COUNT.md`, paste this in, and fill it from the config numbers in the table above and nothing else. Option C fills the template twice.
-
-```markdown
-# A07 hand count: <your name>, option <A / B / C>
-
-Config <gpt2 / tiny>: d = <   >   h = <   >   d_head = d / h = <   >   4d = <   >
-
-## X1. Hand count, before running
-
-| sublayer | tensors | arithmetic | parameters |
-|---|---|---|---|
-| heads: key, query, value, no bias | h x 3 matrices, each d_head x d | <h> x 3 x <d_head> x <d> = | <   > |
-| projection: weight and bias | d x d, plus d | <d> x <d> + <d> = | <   > |
-| feedforward layer 1: weight and bias | 4d x d, plus 4d | <4d> x <d> + <4d> = | <   > |
-| feedforward layer 2: weight and bias | d x 4d, plus d | <d> x <4d> + <d> = | <   > |
-| LayerNorm 1: weight and bias | d, plus d | <d> + <d> = | <   > |
-| LayerNorm 2: weight and bias | d, plus d | <d> + <d> = | <   > |
-| **hand count** | | sum of the column | **<   >** |
-```
+**X1. Count by hand, commit, then run.** Do not run your option's command yet. The hand-count table is already in `evidence/A07.md` under `## Prediction`; fill its `<   >` cells from the config numbers in the table above and nothing else, the arithmetic in numbers and then the result. Option C copies the config line and the table once more below them and fills them for the second config.
 
 Check your arithmetic against the walkthrough config, where you know the answer: at `d = 64, h = 8` the six rows read 12,288; 4,160; 16,640; 16,448; 128; 128; sum 49,792 from 34 tensors, which is what Step 4 printed. Then:
 
 ```bash
-git add transformer/COUNT.md
+git add evidence/A07.md
 git commit -m "A07: hand count of one block, before running it"
 ```
 
 I will check your commit timestamps.
 
-**X2. Run it.** Your option's command from the table. Paste the PARAMETERS list and the total under `## X2. PyTorch's count` in `COUNT.md`, then one line: `Hand count <   > · PyTorch <   > · difference <   >`.
+**X2. Run it.** Your option's command from the table. Paste the PARAMETERS list and the total under `## Extension X2` in `evidence/A07.md`, then fill the line under it: `Hand count <   > · PyTorch <   > · difference <   >`.
 
 *You should see* the two agree, or disagree by an amount that is exactly one row of your table: a missing bias is `d` or `4d`, a missing LayerNorm is `2d`, a missing projection is `d × d + d`. On Homer, `gpt2` printed a total of `7,085,568   (46 tensors)` and `tiny` printed `12,608   (22 tensors)`; the shape table changed in the third column only, and in no row did the `T` of 23 move.
 
-**X3. The comparison.** One paragraph under `## X3`, by option, ending with one line: where your hand count was wrong and by how many parameters, or, if it was right, which single printed line you would most likely have missed and why.
+**X3. The comparison.** The command line (or, for option A, the subtraction) and one paragraph under `## Extension X3` in `evidence/A07.md`, by option, ending with one line: where your hand count was wrong and by how many parameters, or, if it was right, which single printed line you would most likely have missed and why.
 
 *Option A.* The real GPT-2 small block, one layer of the published weights (`h.0.*`), has 7,087,872 parameters: `attn.c_attn` 768 × 2304 plus a bias of 2304 (1,771,776), `attn.c_proj` 768 × 768 plus 768 (590,592), `mlp.c_fc` 768 × 3072 plus 3072 (2,362,368), `mlp.c_proj` 3072 × 768 plus 768 (2,360,064), and `ln_1` and `ln_2` at 768 + 768 each (3,072). Subtract your PyTorch total from 7,087,872 and write the gap. Then say which GPT-2 tensor has no match in your printed list, and which word in `transformer/block_shapes.py` is the reason. The gap is three times `d`, and it is one `bias=False`.
 
@@ -290,15 +234,15 @@ uv run python -c "h, bs = 4, 32; print('weights per block at block_size', bs, '=
 uv run python -c "print('predicted', (768/32)**2, ' actual', 7085568/12608)"   # option C
 ```
 
-**X4. Commit, push, PR, sign off.**
+**X4. Commit, push, PR, sign off.** Fill `## Reflection` in `evidence/A07.md` (the questions are below) and run `uv run python scripts/check_evidence.py A07` until it says `all slots filled`. Then:
 
 ```bash
-git add transformer/block_shapes.py transformer/SHAPES.md transformer/COUNT.md pyproject.toml uv.lock
+git add transformer/block_shapes.py evidence/A07.md pyproject.toml uv.lock
 git commit -m "A07: decoder block on one corpus sentence, shape table annotated, parameter count checked"
 git push -u origin dev/transformer-block
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body names the row of your SHAPES.md annotation table you are least sure of.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body names the row of your `## Shapes` annotation table you are least sure of.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>
@@ -307,17 +251,17 @@ git add logs && git commit && git push
 ```
 
 **Deliverable**
-`transformer/SHAPES.md` (the printed table, every row annotated, both `+` rows saying what was added to the residual stream, the three-number table) + `transformer/COUNT.md` (hand count committed before the run, PyTorch's count, the comparison) + `transformer/block_shapes.py` with your sentence in it.
+`evidence/A07.md` with every slot filled (the hand count committed before the run, the printed table, every annotation row, both `+` rows saying what was added to the residual stream, the three-number table, PyTorch's count, the comparison, the three reflection answers) + `transformer/block_shapes.py` with your sentence in it.
 
-**Reflection Questions**
+**Reflection Questions** (answer under `## Reflection` in `evidence/A07.md`)
 
 1. Paste the seven rows of your SHAPE TABLE whose shape in numbers is not the shape of `x in`. For each, name the number in it that is neither `1` nor your `T`, and give the arithmetic that produced it: `d_head = d / h`, `4d`, `h` itself, or `T` a second time. Then name the one row you would have guessed wrong on Day 1 if you had been asked to write the table before running it, and say what you would have written.
 
    *How to get it:* `uv run python transformer/block_shapes.py` prints the table again; the seven rows are `q, k, v (one head)`, `scores q @ k^T (one head)`, `mask tril[:T, :T]`, `softmax weights (one head)`, `wei @ v (one head out)`, `scores, all heads stacked` and `ffwd hidden (before ReLU)`. The second header line prints `d_head` and `4d` for your config, so the arithmetic is `d_head = 64 / 8 = 8` and `4d = 4 × 64 = 256`, and the `T × T` rows have `T` twice because every token scores every token. The row most people would have guessed wrong is the stacked scores, `(B, h, T, T)`, because `h` sits in front and nothing else in the table has four dimensions.
 
-2. From `COUNT.md`: your hand count, PyTorch's count, and the hash of the commit that holds the hand count. Name the row where you were wrong and by how many parameters, and say what you had forgotten. If you were exactly right, give the one printed tensor line you would most likely have missed, and why.
+2. From `## Prediction` and `## Extension X2` in `evidence/A07.md`: your hand count, PyTorch's count, and the hash of the commit that holds the hand count. Name the row where you were wrong and by how many parameters, and say what you had forgotten. If you were exactly right, give the one printed tensor line you would most likely have missed, and why.
 
-   *How to get it:* both counts are in your `COUNT.md` under X2, and the tensor lines are the PARAMETERS section of your X2 run. The two lines most often forgotten are `sa.proj.bias`, because the heads have no bias and the habit carries over, and the four LayerNorm lines, because a picture draws LayerNorm as a line, not a box. The hash is the first commit that touched the file: `git log --oneline --follow -- transformer/COUNT.md | tail -1`.
+   *How to get it:* both counts are on the `Hand count` line under `## Extension X2` in `evidence/A07.md`, and the tensor lines are the PARAMETERS section of your X2 run. The two lines most often forgotten are `sa.proj.bias`, because the heads have no bias and the habit carries over, and the four LayerNorm lines, because a picture draws LayerNorm as a line, not a box. The hash is the commit whose message says hand count: `git log --oneline --grep="hand count" -- evidence/A07.md | tail -1`.
 
 3. Make the context length too short for your sentence: in `CONFIGS`, change the walkthrough line's `"block_size": 32` to a number smaller than your `T` (on Homer `T` is 23, so `16` works), run the script, and paste the last line of the error. Say which line of `Head` raised it. Then give the context length of GPT-3 from your log, and say how many attention weights one head computes at that length versus at half of it. Put the `32` back before you commit.
 
