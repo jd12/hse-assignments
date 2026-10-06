@@ -6,7 +6,7 @@
 
 **Day 1 — 27 min**
 [Transformers, the tech behind LLMs, 3Blue1Brown Deep Learning Ch. 5](https://www.youtube.com/watch?v=wjZofJX0v4M) (27m)
- · Paper and a pencil beside you for the tally. Nothing to type during this one; Steps 2–5 come after it.
+ · Nothing to type during this one; Steps 2–5 come after it.
 
 **Day 2 — 28 min**
 [How Transformer LLMs Work](https://www.deeplearning.ai/short-courses/how-transformer-llms-work/) · lesson 7, Architectural Overview (6m) · lesson 8, The Transformer Block (6m)
@@ -17,9 +17,9 @@ Reference, not assigned: [The Illustrated Transformer, Jay Alammar](https://jala
 
 **During the video**
 
-**3B1B Ch. 5 · write down the tally.** Each time he adds a matrix to GPT-3's running total, pause and write its name and its shape in your log, with his numbers. When he finishes, mark which number is the vocabulary size, which is the embedding dimension, and which is the context length. **Three numbers, three jobs**; Step 5 puts them next to the three your script prints.
+**3B1B Ch. 5 · three numbers.** He gives GPT-3's vocabulary size, embedding dimension and context length as he goes. Write the three down in your log with which is which. **Three numbers, three jobs**; Step 5 puts them next to the three your script prints, and confusing them is the most common mistake on this assignment.
 
-**DLAI lessons 7–8 · compare, do not copy.** No code. When lesson 8 puts the block on screen, pause and hold your printed SHAPE TABLE next to it. Write down one row of your table the picture has no box for, and one box in the picture your table has no row for.
+**DLAI lessons 7–8 · watch.** No code, nothing to write. Lesson 8's block on screen is your SHAPE TABLE as a picture; lesson 7's stack of blocks is why the `x in` and `x out` rows have to match.
 
 **Karpathy 01:21:59 → 01:37:49 · read along; the file is already on disk.** All four classes he types are in `transformer/block_shapes.py`, so you type nothing. Each time he adds a piece, pause and find it in the file, then find its row in your SHAPE TABLE: `MultiHeadAttention`, `FeedFoward` (his spelling; the file keeps it), `Block`, then the four things he goes back to add: the `proj` linear after the concat, the four-times-wider hidden layer, the residual `x = x + ...`, and the two `LayerNorm`s. Skip his training runs and loss numbers. Stop at 01:37:49.
 
@@ -52,7 +52,7 @@ bash scripts/start-entry.sh
 Under the timestamp, write today's checklist:
 
 ```markdown
-- [ ] Day 1: 3B1B Ch. 5, weight tally written in the log
+- [ ] Day 1: 3B1B Ch. 5, GPT-3's three numbers in the log
 - [ ] Day 1: Steps 2–5, torch and tiktoken installed, sentence chosen, block_shapes.py run, SHAPES.md started
 - [ ] Day 2: DLAI lessons 7–8 and Karpathy 01:21:59 → 01:37:49, read along in block_shapes.py
 - [ ] Day 2: Step 6, every row annotated, both + rows say what was added
@@ -176,7 +176,7 @@ The `...` line is mine; your output has all 34 lines, one per tensor, in the ord
 
 **Step 5. Start `transformer/SHAPES.md` (Day 1).**
 
-Create `transformer/SHAPES.md` and paste this in. Fill what you can today: the sentence, `T`, the pasted table, and the three GPT-3 numbers from your tally. The annotation rows wait for Day 2; two of them are filled in as the standard, one sentence, in words, that says what the numbers in that row are.
+Create `transformer/SHAPES.md` and paste this in. Fill what you can today: the sentence, `T`, the pasted table, and the three GPT-3 numbers from your log. The annotation rows wait for Day 2; two of them are filled in as the standard, one sentence, in words, that says what the numbers in that row are.
 
 ```markdown
 # A07 shapes: <your name>
@@ -185,7 +185,7 @@ Sentence: <your sentence>. T = <   > tokens from <   > words. Config: walkthroug
 
 ## Three numbers, three jobs
 
-| | my script | GPT-3, from the 3B1B tally |
+| | my script | GPT-3, from 3B1B |
 |---|---|---|
 | vocabulary size | 100277 | <   > |
 | d, the embedding dimension | 64 | <   > |
@@ -214,12 +214,9 @@ Sentence: <your sentence>. T = <   > tokens from <   > words. Config: walkthroug
 | ffwd hidden (before ReLU) | <   > |
 | ffwd out | <   > |
 | + residual 2 = x out | <what was added to the stream, and where it came from> |
-
-From DLAI lesson 8, one row of my table the picture has no box for: <   >
-From DLAI lesson 8, one box in the picture my table has no row for: <   >
 ```
 
-<!-- JD: GPT-3 from the 3B1B tally: vocabulary 50,257; d 12,288; context 2,048. -->
+<!-- JD: GPT-3 from 3B1B: vocabulary 50,257; d 12,288; context 2,048. -->
 
 **Step 6. Annotate every row (Day 2, after the videos).**
 
@@ -322,6 +319,6 @@ git add logs && git commit && git push
 
    *How to get it:* both counts are in your `COUNT.md` under X2, and the tensor lines are the PARAMETERS section of your X2 run. The two lines most often forgotten are `sa.proj.bias`, because the heads have no bias and the habit carries over, and the four LayerNorm lines, because a picture draws LayerNorm as a line, not a box. The hash is the first commit that touched the file: `git log --oneline --follow -- transformer/COUNT.md | tail -1`.
 
-3. Make the context length too short for your sentence: in `CONFIGS`, change the walkthrough line's `"block_size": 32` to a number smaller than your `T` (on Homer `T` is 23, so `16` works), run the script, and paste the last line of the error. Say which line of `Head` raised it. Then give the context length of GPT-3 from your 3B1B tally, and say how many attention weights one head computes at that length versus at half of it. Put the `32` back before you commit.
+3. Make the context length too short for your sentence: in `CONFIGS`, change the walkthrough line's `"block_size": 32` to a number smaller than your `T` (on Homer `T` is 23, so `16` works), run the script, and paste the last line of the error. Say which line of `Head` raised it. Then give the context length of GPT-3 from your log, and say how many attention weights one head computes at that length versus at half of it. Put the `32` back before you commit.
 
    *How to get it:* `T` is in the second line the script prints, `sentence: 23 tokens`. After the change, `uv run python transformer/block_shapes.py` prints its own warning line first, then the traceback ends with `RuntimeError: The size of tensor a (16) must match the size of tensor b (23) at non-singleton dimension 2`, with your `T` in place of 23, and the frame above it is `in forward`, pointing at the `masked_fill` line of `Head.forward`, line 65 of the file. One head's attention matrix is `T × T` (your table printed `(1, 8, 23, 23)` for all eight heads at `T = 23`), so the count at the context length is that length squared, and at half of it a quarter as many. Afterwards put the `32` back; `git diff transformer/block_shapes.py` should print no line containing `block_size`.
