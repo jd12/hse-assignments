@@ -19,7 +19,7 @@ He samples from a model he wrote, with a prompt he made up. `scratch/a09-video.p
 uv run python scratch/a09-video.py
 ```
 
-The script encodes your prompt, stacks it five times, and runs his `while` loop: softmax, `topk` of 50, `multinomial`, append, until each row is 50 tokens. *You should see* the device line, your prompt in quotes, `x (5, T)` with your `T` near 20, `x after the loop (5, 50): 30 new tokens per row`, and five continuations starting with `>`, all five different. Paste the five under `## During the video` in `evidence/A09.md`. *If it broke* with `ModuleNotFoundError: No module named 'sampling'`, Step 3 is not done. `FileNotFoundError: data/corpus.txt` means the terminal is not in the repo root; `pwd` should end in `foundations-<your-username>`. <!-- JD: fill the Homer T and one of the five continuations after a run. -->
+The script encodes your prompt, stacks it five times, and runs his `while` loop: softmax, `topk` of 50, `multinomial`, append, until each row is 50 tokens. *You should see* a `Loading weights` progress bar (every run of GPT-2 prints one first; ignore it), the device line, your prompt in quotes, `x (5, T)` with your `T` near 20, `x after the loop (5, 50): 30 new tokens per row`, and five continuations starting with `>`, all five different. On Homer, `T` is 20 and one of the five reads `> 'Hector hurried from the house when she had done speaking, and went down the streets by the same road. After walking a while, she found a strange room of men at the gate of the house, and, finding he could not help asking Hector'`. Paste the five under `## During the video` in `evidence/A09.md`. *If it broke* with `ModuleNotFoundError: No module named 'sampling'`, Step 3 is not done. `FileNotFoundError: data/corpus.txt` means the terminal is not in the repo root; `pwd` should end in `foundations-<your-username>`.
 
 **DLAI lesson 10 · write down the shapes.** No typing. Run the notebook in the DLAI page as he goes, and every time he prints a shape, write it in your log with what it is. The two that matter are what comes out of the body of the model and what comes out of the head on top of it; Step 4 prints the same two out of GPT-2. **Karpathy 00:33:31 → 00:45:50 · read along; the file has already run.** Five pause points, one line in your log each:
 
@@ -48,7 +48,7 @@ git switch main && git pull
 git switch -c dev/sampling
 ```
 
-Step 2 of A05b's template update, or the pull request I opened on your repo, put `a09-video.py` and `a09-mark.py` in `scratch/`, and `evidence/A09.md`; `ls scratch evidence` should show them.
+The template-update pull request on your repo put `a09-video.py` and `a09-mark.py` in `scratch/`, and `evidence/A09.md`; `ls scratch evidence` should show them.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>
@@ -71,11 +71,10 @@ Under the timestamp, write today's checklist:
 ```bash
 cd ~/version_control/hse-2026-2027-foundations-<your-username>
 uv add --dev transformers
-mkdir -p sampling
 uv run python -c "from transformers import GPT2LMHeadModel; GPT2LMHeadModel.from_pretrained('gpt2')"
 ```
 
-*You should see* a download progress bar and then nothing. The weights are cached in your home folder; the next load takes seconds.
+*You should see* download progress bars, then a `Loading weights: 100%` bar, then nothing. The weights are cached in your home folder; the next load takes seconds, and every script that loads GPT-2 from here on prints that `Loading weights` bar before its own output.
 
 **Step 3. Make `sampling/lab.py` and pick three prompts from your corpus.**
 
@@ -172,7 +171,13 @@ if __name__ == "__main__":
 uv run python sampling/lab.py pick
 ```
 
-*You should see* three quoted strings, each the opening twenty GPT-2 tokens of a chunk of your corpus, chosen by a fixed seed, so everyone with your corpus gets the same three. On Homer the seed picks chunks 1363, 1094 and 1820 of 2142, which open `Hector hurried from the house when she had done speaking, ...`, `These, then, went on board and sailed their ways over the sea. ...` and `The Trojans with Hector at their head charged in a body. ...`, cut at twenty tokens, often mid-sentence. <!-- JD: fill the three exact Homer strings after a run; the chunk indices and openings are exact (computed offline), the 20-token cut needs the gpt2 tokenizer. -->
+*You should see* three quoted strings, each the opening twenty GPT-2 tokens of a chunk of your corpus, chosen by a fixed seed, so everyone with your corpus gets the same three. On Homer the seed picks chunks 1363, 1094 and 1820 of 2142, cut at twenty tokens, often mid-sentence or mid-name:
+
+```text
+'Hector hurried from the house when she had done speaking, and went down the streets by the same'
+'These, then, went on board and sailed their ways over the sea. But the son of At'
+'The Trojans with Hector at their head charged in a body. As a great wave that comes'
+```
 
 Paste the three strings into `PROMPTS`, between the square brackets, with commas between them, so the line reads `PROMPTS = ['...', '...', '...']`. **Every experiment from here on uses those three**, and they cannot drift, because they are constants.
 
@@ -184,7 +189,7 @@ Paste the three strings into `PROMPTS`, between the square brackets, with commas
 uv run python sampling/lab.py shapes
 ```
 
-*You should see* `hidden state (1, T, 768)   logits (1, T, 50257)` with your `T` near 20, then `T = ... tokens in PROMPTS[0]`. **The first shape is one residual vector per position, 768 wide: the body. The second is one score for every token in GPT-2's vocabulary, at every position: the head.** `next_logits` takes the last row of the second, the only row that predicts a token you have not seen yet. Compare both with the two shapes from the lesson: same three dimensions, his width and vocabulary in place of 768 and 50,257. Paste both lines under `## Step 4` in `evidence/A09.md`. <!-- JD: fill the Homer T after a run; it is 20 unless decode-then-encode of the cut changes the token count. -->
+*You should see* `hidden state (1, T, 768)   logits (1, T, 50257)` with your `T` near 20, then `T = ... tokens in PROMPTS[0]`. **The first shape is one residual vector per position, 768 wide: the body. The second is one score for every token in GPT-2's vocabulary, at every position: the head.** `next_logits` takes the last row of the second, the only row that predicts a token you have not seen yet. Compare both with the two shapes from the lesson: same three dimensions, his width and vocabulary in place of 768 and 50,257. Paste both lines under `## Step 4` in `evidence/A09.md`. On Homer: `hidden state (1, 20, 768)   logits (1, 20, 50257)` and `T = 20 tokens in PROMPTS[0]; next_logits keeps the last of the 20 rows of logits, 50257 numbers`.
 
 **Step 5. The sampler.**
 
@@ -226,7 +231,7 @@ def generate(prompt, n_new=30, seed=0, temperature=1.0, top_k=None, top_p=None):
 uv run python sampling/lab.py check
 ```
 
-*You should see* four quoted continuations of your first prompt, thirty tokens each: the first two identical (same seed, same top-k of 50), the third different (seed 2), and the fourth a plain, often repetitive continuation that would come out the same with any seed, because temperature 0 never asks the random number generator anything. The four take about a minute on a laptop CPU. Paste them under `## Step 5` in `evidence/A09.md`. *If it broke* with `NameError: name 'generate' is not defined`, the two functions landed below the `if __name__` block instead of above it. <!-- JD: fill the four Homer check lines after a run; shape only here. -->
+*You should see* four quoted continuations of your first prompt, thirty tokens each: the first two identical (same seed, same top-k of 50), the third different (seed 2), and the fourth a plain, often repetitive continuation that would come out the same with any seed, because temperature 0 never asks the random number generator anything. The four take about a minute on a laptop CPU. On Homer the first two were `' route."\n\nThe report read: "The three girls were reported to have been sleeping in the bushes. ...'` twice, the third began `' road, not knowing how he came to be at that place.'` and the temperature-0 line began `' road.\n\n"I am afraid I am not going to be able to go to the place where I was last seen," she said.'`; the text you get will differ, the pattern will not. Paste them under `## Step 5` in `evidence/A09.md`. *If it broke* with `NameError: name 'generate' is not defined`, the two functions landed below the `if __name__` block instead of above it.
 
 **Step 6. Snapshot the distribution.**
 
@@ -268,7 +273,7 @@ def api(prompt, temperature, n_tokens=30):
 uv run python sampling/lab.py snapshot | tee sampling/snapshots.txt
 ```
 
-*You should see* three blocks, one per prompt, each headed `## prompt k  ends '...'` and holding three `T=` lines with a `tokens for 90% of the mass` line under each. Whatever your corpus, in every block: **the same ten tokens in the same order at all three temperatures**; the first token's probability highest at 0.7 and lowest at 1.2; the tokens-for-90% count rising with temperature, never falling. **The tokens-for-90% count is how concentrated the distribution is**: a prompt that ends mid-name can have a count of 1 or 2; a prompt that ends after a full stop can need hundreds, because almost any word can start a sentence. Reflection Question 1 asks which of your three is which. <!-- JD: fill one Homer block after a run (the T=1.0 line and its n90 for each of the three prompts). -->
+*You should see* three blocks, one per prompt, each headed `## prompt k  ends '...'` and holding three `T=` lines with a `tokens for 90% of the mass` line under each. Whatever your corpus, in every block: **the same ten tokens in the same order at all three temperatures**; the first token's probability highest at 0.7 and lowest at 1.2; the tokens-for-90% count rising with temperature, never falling. **The tokens-for-90% count is how concentrated the distribution is**: a prompt cut where only a few tokens can follow needs a handful; a prompt cut where almost anything can come next, after a full stop or inside a name the model does not know, needs hundreds. On Homer at `T=1.0`: `... As a great wave that comes` needs 43 (`' from' 0.365` first), `... by the same` needs 259 (`' road' 0.210`, `' route' 0.203`), and `... But the son of At` needs 556, because GPT-2 has no idea the name is Atreus and spreads its budget over `re`, `al`, `a`, `as`, `um`, `ch`, none above 0.05. Reflection Question 1 asks which of your three cuts did what.
 
 **Step 7. Temperature 0 on the API, twenty times.**
 
@@ -285,7 +290,7 @@ Twenty calls of 30 tokens on your first prompt; every run is saved in `sampling/
 Commit it before the table runs:
 
 ```bash
-git add sampling/lab.py evidence/A09.md sampling/snapshots.txt sampling/api_t0.json
+git add sampling evidence/A09.md
 git commit -m "A09: predicted distinct counts, before the temperature table runs"
 ```
 
@@ -310,7 +315,7 @@ The script reads the nine headings out of `table.txt` and your prediction table 
 
 Now the one column that is yours. Open `sampling/table.txt` and read all forty-five continuations. **A continuation is usable when all three of these hold:** every word in it is a real word of your corpus's language, spelled the way your corpus spells it; it continues the prompt's sentence grammatically and then stays in your corpus's register (prose stays prose, verse stays verse, a list stays a list, code stays code); and no phrase of three or more words appears in it twice. One miss and it is not usable. Two shapes. Usable: `<the rest of the prompt's sentence, ending in a period> <a new sentence that could sit in the same paragraph of your corpus>`. Not usable: `<the rest of the sentence> <three words> <the same three words> <the same three words again>` (a loop, the usual temperature-0 failure), or `<the sentence finishes> Copyright <year> <a web address>` (a switch of register toward something GPT-2 read more of than your corpus).
 
-Count the usable ones in each block, write the count in that row's `usable of 5` cell, and run `uv run python scratch/a09-mark.py` again. *You should see* the same table with the usable column filled, then three `where it got worse` lines, one per prompt, naming the first temperature at which usable dropped below 5, and a totals line. Paste those four lines into the fence under the table in `evidence/A09.md`. Whatever your corpus, **`distinct of 5` is 1 at temperature 0 for every prompt** (argmax asks nothing of the seed) and rises with temperature. The usable column is where your corpus shows: plain modern prose survives 1.2 better than verse, code or a list, and temperature 0 often fails on usability the other way, by looping. <!-- JD: fill the Homer nine-row table and the three where-it-got-worse lines after a run. -->
+Count the usable ones in each block, write the count in that row's `usable of 5` cell, and run `uv run python scratch/a09-mark.py` again. *You should see* the same table with the usable column filled, then a `where it got worse` heading with three lines under it, one per prompt, naming the first temperature at which usable dropped below 5, and a totals line. Paste those five lines into the fence under the table in `evidence/A09.md`. Whatever your corpus, **`distinct of 5` is 1 at temperature 0 for every prompt** (argmax asks nothing of the seed) and rises with temperature. The usable column is where your corpus shows: plain modern prose survives 1.2 better than verse, code or a list, and temperature 0 often fails on usability the other way, by looping. On Homer, `distinct of 5` was `1, 5, 5` for every prompt; usable was `5, 4, 0` for prompt 1, `0, 4, 0` for prompt 2 (temperature 0 looped on `who was a man of great wealth, and who was a man of great wealth`) and `0, 4, 0` for prompt 3, so the lines read `prompt 1: T=0.7, usable 4 of 5`, `prompt 2: T=0, usable 0 of 5`, `prompt 3: T=0, usable 0 of 5`, `usable in all: 17 of 45; distinct in all: 33 of 45`.
 
 **X4. Commit, push, PR, sign off.** Fill `## Reflection` in `evidence/A09.md` (the questions are below) and run `uv run python scripts/check_evidence.py A09` until it says `all slots filled`. Then:
 
@@ -335,7 +340,7 @@ git add logs && git commit && git push
 
 1. From `sampling/snapshots.txt`, paste the top three tokens and the tokens-for-90% count for your most concentrated prompt and your least concentrated one, both at `T=1.0`. Quote the last few words of each prompt and say what about where your corpus chunk was cut explains the difference.
 
-   *How to get it:* `grep -n "T=1.0" -A1 sampling/snapshots.txt` prints the three `T=1.0` lines with their `tokens for 90% of the mass` lines; the smallest count is your most concentrated prompt, the largest your least. Each `## prompt` heading ends with that prompt's last forty characters. A prompt cut mid-word or mid-name is concentrated because only a few tokens can finish it; a prompt cut after a period is spread because almost anything can start a sentence.
+   *How to get it:* `grep -n "T=1.0" -A1 sampling/snapshots.txt` prints the three `T=1.0` lines with their `tokens for 90% of the mass` lines; the smallest count is your most concentrated prompt, the largest your least. Each `## prompt` heading ends with that prompt's last forty characters. Then say what about each cut explains its count: a cut where only a few tokens can follow is concentrated; a cut after a period, or inside a name the model has not seen, is spread, because almost anything, or any syllable, can come next.
 
 2. From `sampling/api_t0.json`: how many distinct texts in twenty, and did the first-token `top_logprobs` differ between any two runs? Paste two lists if they did. Your local sampler gave 1 of 5 at temperature 0 on the same prompt. Name the one mechanism your evidence supports for the gap, and the observation you would need to rule it out.
 

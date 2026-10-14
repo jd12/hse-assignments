@@ -69,10 +69,10 @@ Question 5 is the one people answer with what they meant to do. Check it:
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>
-git log --date=format:'%a %H' --format='%ad' -- logs | sort | uniq -c | sort -rn | head -10
+git log <your-username>-unit0 --date=format:'%a %H' --format='%ad' -- logs | sort | uniq -c | sort -rn | head -10
 ```
 
-*You should see* up to ten lines, each a count of log commits at a day and hour. Paste them under heading 5 of `SELF_Q1.md`, and add one sentence: does it match what you wrote above it?
+*You should see* up to ten lines, each a count of log commits at a day and hour, from your unit0 branch (on `main` the log holds one merged entry and the table is one line). On one Homer-corpus clone it began `3 Wed 12`, `3 Tue 09`, `3 Tue 08`, `3 Thu 13`. Paste them under heading 5 of `SELF_Q1.md`, and add one sentence: does it match what you wrote above it?
 
 Then:
 
@@ -98,6 +98,6 @@ git add logs && git commit && git push
 
 1. Paste the first line of your first September log entry and the first line of your latest one. What does the difference say that your answer to heading 3 does not?
 
-2. From the log-hours count: the day and hour with the most commits. Is that during Period C, the afternoon after, or late at night, and does heading 5 say so?
+2. From the log-hours count: the day and hour with the most commits. Is that during the class period, the afternoon after, or late at night, and does heading 5 say so?
 
 3. Name the assignment in your answer to heading 2 and paste one line from its reflection answers that you would now rewrite. Say what you would change.

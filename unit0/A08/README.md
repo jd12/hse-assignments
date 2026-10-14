@@ -47,7 +47,7 @@ git switch main && git pull
 git switch -c dev/attention
 ```
 
-Step 2 of A05b's template update, or the pull request I opened on your repo, put `a08-video.py` and `a08-table.py` in `scratch/`, and `evidence/A08.md`; `ls scratch evidence` should show them.
+The template-update pull request on your repo put `a08-find.py`, `a08-video.py` and `a08-table.py` in `scratch/`, and `evidence/A08.md`; `ls scratch evidence` should show them.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>
@@ -69,7 +69,7 @@ Two meetings, one branch. Push again each day; one PR, not two; one log entry pe
 
 **Step 2. Choose the sentence from your corpus (Day 1).**
 
-`torch` and `tiktoken` are installed from A07. Create `scratch/a08-find.py` (right-click `scratch`, **New File**) and paste this in. It splits your corpus into sentences and prints ten of eight to sixteen words that contain a pronoun.
+`torch` and `tiktoken` are installed from A07. `scratch/a08-find.py` splits your corpus into sentences and prints ten of eight to sixteen words that contain a pronoun; read it once, it is twenty lines:
 
 ```python
 # scratch/a08-find.py
@@ -107,7 +107,7 @@ Open `scratch/a08-video.py` and put your sentence from Step 2 inside the quotes 
 uv run python scratch/a08-video.py
 ```
 
-The script does three things. Part 1 is Karpathy's head as he types it in the segment, on his toy tensor of four random sequences. Part 2 runs the same three matrices on your sentence, with your tokens on the rows. Part 3 prints one block per note, each block headed by a comment in the file saying which of his six notes it demonstrates. *You should see* three parts. Part 1: four shapes and an 8 × 8 grid with `1.00` in the top-left corner and zeros above the diagonal. Part 2: three shapes with your `T`, and the first four rows of your grid with your tokens on them, `1.00` first. Part 3: six numbered lines. Whatever your sentence, line 1 counts up from 1 to your `T`, lines 2 and 3 say `True`, line 4's row sums to `1.00` over all `T` tokens, line 5's shape is not square, and line 6's unscaled variance is near `head_size`, 16, while the scaled one is near 1. On Homer:
+The script does three things. Part 1 is Karpathy's head as he types it in the segment, on his toy tensor of four random sequences. Part 2 runs the same three matrices on your sentence, with your tokens on the rows. Part 3 prints one block per note, each block headed by a comment in the file saying which of his six notes it demonstrates. *You should see* three parts. Part 1: four shapes and an 8 × 8 grid with `1.00` in the top-left corner and zeros above the diagonal. Part 2: three shapes with your `T`, and the first four rows of your grid with your tokens on them, `1.00` first. Part 3: six numbered lines. Whatever your sentence, line 1 counts up from 1 to your `T`, lines 2 and 3 say `True`, line 4's row sums to `1.00` over all `T` tokens, line 5's shape is not square, and line 6's unscaled variance is near `head_size`, 16 (on Homer it is 18.00), while the scaled one is near 1. On Homer:
 
 ```text
 PART 2: the same head on your sentence, 23 tokens
@@ -137,7 +137,7 @@ Paste the whole output under `## Step 3` in `evidence/A08.md`. Line 6's last lin
 
 **Step 4. Run one head on it (Day 2, after the video).**
 
-Create `transformer/head_on_corpus.py` and paste this in. It is the head from Part 1, with the toy tensor replaced by your sentence and a seed on the command line. The only line that is new against Part 1 is `tok_emb`: a table with one random row per token in `cl100k_base`, which is how a token id becomes a vector before any training has happened. A07's `block_shapes.py` used the same line.
+Create `transformer/head_on_corpus.py` and paste this in. It is the head from Part 1, with the toy tensor replaced by your sentence and a seed on the command line. What is new against Part 1: `tok_emb`, a table with one random row per token in `cl100k_base`, which is how a token id becomes a vector before any training has happened (A07's `block_shapes.py` used the same line); the batch axis is gone, so `x` is `(T, C)`; `SEED` comes from the command line; and `labels` names the rows and columns of the grid.
 
 ```python
 # transformer/head_on_corpus.py
@@ -202,7 +202,7 @@ uv run python transformer/head_on_corpus.py
 | Every row sum prints as `1.0` | Softmax along the row. Attention is a budget: more on one token is less on another. |
 | From a few rows down, the weights in row `r` sit near `1/(r+1)`, none of them dominant | Random weights produce small, similar scores, and softmax of similar scores is close to even. The first two or three rows have too few cells to average out; `0.76 0.24` in row 1 is normal. |
 
-On Homer the first line is `T=23 seed=1337 out=(23, 16)`, the `he` row near the bottom has 19 nonzero cells, the biggest `0.10`, and the row-sums line is twenty-three `1.0`s. Paste the whole output under `## Step 4` in `evidence/A08.md`. The fourth row of that table is the whole story of a random head: Karpathy's averaging version with some noise on it. Nothing in it knows what a pronoun is. *If it broke:* a `T` much larger than the word count is fine; count the labels and you will find the words that split: on Homer, `Pergamus` is `P`, `erg`, `amus` and `Trojans` is `Tro`, `j`, `ans`.
+On Homer the first line is `T=23 seed=1337 out=(23, 16)`, the `he` row near the bottom has 19 nonzero cells, the biggest `0.10`, and the row-sums line is twenty-three `1.0`s. Paste the whole output under `## Step 4` in `evidence/A08.md`. The fourth row of that table is the whole story of a random head: Karpathy's averaging version with some noise on it. Nothing in it knows what a pronoun is. A `T` well above the word count is not a breakage: count the labels and you will find the words that split; on Homer, `Pergamus` is `P`, `erg`, `amus` and `Trojans` is `Tro`, `j`, `ans`.
 
 **Step 6. Write the guided paragraph under `## Step 6` in `evidence/A08.md`.**
 
@@ -235,7 +235,7 @@ for i, t in enumerate(enc.encode(SENTENCE)): print(i, repr(enc.decode([t])))   #
 
 *You should see* one token per line, numbered from 0. On Homer, 23 lines: `0 'But'`, `1 ' Apollo'`, ..., `17 ' for'`, `18 ' he'`, `19 ' was'`, `20 ' disple'`, `21 'ased'`, `22 '.'`. So on Homer the pronoun is at position 18 and the referent at position 1. A referent that split into three tokens, like `Pergamus` at 5, 6, 7, is three positions, and its weight is the sum of three columns. Paste the lines under `## Prediction` in `evidence/A08.md` and fill the position lines below them.
 
-Now the prediction. **The even share is the baseline**: if the pronoun is at position `p` (counting from 0) it can see `p + 1` tokens, so a head that spreads its budget evenly puts `1/(p+1)` on each, and `n/(p+1)` on a referent of `n` tokens. On Homer that is `1/19 = 0.0526`. Fill the rest of `## Prediction`: the even share, the two weights and the one sentence for each.
+Now the prediction. **The even share is the baseline**: if the pronoun is at position `p` (counting from 0) it can see `p + 1` tokens, so a head that spreads its budget evenly puts `1/(p+1)` on each, and `n/(p+1)` on a referent of `n` tokens. On Homer that is `n / (p + 1) = 1 / 19 = 0.0526`: `n` is 1 because `Apollo` is one token, and `p + 1` is 19 because the pronoun sits at position 18. Fill the rest of `## Prediction`: the even share, the two weights and the one sentence for each.
 
 Commit before you run a single seed:
 
@@ -309,4 +309,4 @@ git add logs && git commit && git push
 
 3. Change `dim=-1` to `dim=0` in the softmax line of `transformer/head_on_corpus.py`, run seed 1, and paste the first three rows and the `row sums:` line. Say which invariant from the Step 5 table broke and which still held. Then name the claim in your Step 6 paragraph that would be false for a head built that way. Put the line back before you commit.
 
-   *How to get it:* change only the `F.softmax(wei, dim=-1)` line; the `wei.sum(dim=-1)` line below it stays, or the row-sums print will lie to you. Then `uv run python transformer/head_on_corpus.py 1 | sed -n '2,5p;$p'`, which prints lines 2 to 5 and the last line. *You should see* the first row no longer `1.00`, and row sums that start near zero and climb past one instead of all reading `1.0`; the zeros above the diagonal are still there, because the mask is applied before the softmax and does not care which way the softmax runs. On Homer the first row read `0.05` and the row sums ran from `0.053` up to `3.517`; it is the columns that sum to one now, and afterwards `git diff transformer/head_on_corpus.py` should show nothing but that one line until you put it back.
+   *How to get it:* change only the `F.softmax(wei, dim=-1)` line, and leave the `wei.sum(dim=-1)` line below it alone: it is what shows the breakage. Then `uv run python transformer/head_on_corpus.py 1 | sed -n '2,5p;$p'`, which prints lines 2 to 5 and the last line. *You should see* the first row no longer `1.00`, and row sums that start near zero and climb past one instead of all reading `1.0`; the zeros above the diagonal are still there, because the mask is applied before the softmax and does not care which way the softmax runs. On Homer the first row read `0.05` and the row sums ran from `0.053` up to `3.517`; it is the columns that sum to one now, and afterwards `git diff transformer/head_on_corpus.py` should show nothing but that one line until you put it back.
