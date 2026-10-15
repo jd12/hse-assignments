@@ -93,7 +93,7 @@ printf 'data/\n' >> .gitignore
 git status --short
 ```
 
-*You should see* `.gitignore` modified, the nine new files as `??`, and nothing under `data/`. `evals/traces/` is committed later with the spans in it; the corpus is not committed, because it is already in the foundations repo. On Windows, run these in Git Bash, where `$F` and `~` work as written.
+*You should see* `.gitignore` modified, the new files as `??` (`scripts/` shows as one folder line, since it is new), and nothing under `data/`. `evals/traces/` is committed later with the spans in it; the corpus is not committed, because it is already in the foundations repo. On Windows, run these in Git Bash, where `$F` and `~` work as written.
 
 **Step 3. Map the agent.**
 
@@ -101,7 +101,7 @@ git status --short
 grep -rn "tool_calls\|toolCalls\|tools:" --include=*.ts . | grep -v node_modules | head -20
 ```
 
-*You should see* the lines where your loop reads the model's tool calls and where the tool list is built; on the reference agent, four lines in `src/agent.ts`, `src/llm.ts`, `src/tools/index.ts` and `evals/run.ts`. Open those files and fill the table under `## Step 3` in `evidence/A11.md`: the router (the model call whose response says which tool to use next), the loop (where it decides to call the model again or stop), the approval gate, and one row per tool with its file and line. On the reference agent the router is the `callModel` line in `src/agent.ts`, the loop is the `for (let step = 0; ...)` above it, the gate is `approve()` in `src/approval.ts`, and the tools are the five in `src/tools/index.ts`. Add a row for each tool the Lab 1 agent has that yours does not, or say there is none.
+*You should see* the lines where your loop reads the model's tool calls and where the tool list is built; on the reference agent, five lines across `src/agent.ts`, `src/llm.ts`, `src/tools/index.ts` and `evals/run.ts`. Open those files and fill the table under `## Step 3` in `evidence/A11.md`: the router (the model call whose response says which tool to use next), the loop (where it decides to call the model again or stop), the approval gate, and one row per tool with its file and line. On the reference agent the router is the `callModel` line in `src/agent.ts`, the loop is the `for (let step = 0; ...)` above it, the gate is `approve()` in `src/approval.ts`, and the tools are the five in `src/tools/index.ts`. Add a row for each tool the Lab 1 agent has that yours does not, or say there is none.
 
 **Step 4. Give the agent a grep tool.**
 
