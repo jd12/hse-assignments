@@ -13,7 +13,7 @@ It goes in the foundations repo, not the log.
 **Walkthrough — SELF_Q1.md**
 
 **Step 1. Merge, branch, log.**
-Open the repo on GitHub and merge the pull request for the last assignment if I have approved it; click **Delete branch**. Then:
+A11's pull request stays open through A12; branch from `main` anyway:
 
 ```bash
 cd ~/version_control/hse-2026-2027-foundations-<your-username>
@@ -21,12 +21,7 @@ git switch main && git pull
 git switch -c dev/self-assessment
 ```
 
-```bash
-cd ~/version_control/hse-2026-2027-student-log-<your-username>
-bash scripts/start-entry.sh
-```
-
-Under the timestamp, add these to the day's checklist:
+You already started today's log entry for A11; add these lines to its checklist:
 
 ```markdown
 - [ ] Read my first September entry next to my latest one
@@ -61,6 +56,8 @@ At the top of the foundations repo, with these eight headings, each answered in 
 ## 6. When I got stuck, what did I do first, and how long before I asked anyone?
 ## 7. One thing I did this quarter that nobody graded and nobody saw.
 ## 8. What should you know about me as a student that the assignments don't show?
+
+## Reflection
 ```
 
 **Extension — when you actually worked (ASSIGNED)**
@@ -83,18 +80,12 @@ git commit -m "A11b: Q1 self-assessment"
 git push -u origin dev/self-assessment
 ```
 
-Open the pull request, **jd12** under **Reviewers**, **Create pull request**. This is the one assignment you merge without waiting for approval: it is ungraded and there is nothing for me to block on.
-
-```bash
-cd ~/version_control/hse-2026-2027-student-log-<your-username>
-bash scripts/sign-off.sh
-git add logs && git commit && git push
-```
+Open the pull request, **jd12** under **Reviewers**, **Create pull request**. This is the one assignment you merge without waiting for approval: it is ungraded and there is nothing for me to block on. A11's sign-off covers the log; do not run `sign-off.sh` twice.
 
 **Deliverable**
-`SELF_Q1.md` at the top of the foundations repo, eight answers and the log-hours count.
+`SELF_Q1.md` at the top of the foundations repo, eight answers, the log-hours count and the three reflection answers.
 
-**Reflection Questions**
+**Reflection Questions** (answer under `## Reflection` at the bottom of `SELF_Q1.md`)
 
 1. Paste the first line of your first September log entry and the first line of your latest one. What does the difference say that your answer to heading 3 does not?
 

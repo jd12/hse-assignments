@@ -69,7 +69,7 @@ Two meetings, one branch. Push again each day; one PR, not two; one log entry pe
 
 **Step 2. Choose the sentence from your corpus (Day 1).**
 
-`torch` and `tiktoken` are installed from A07. `scratch/a08-find.py` splits your corpus into sentences and prints ten of eight to sixteen words that contain a pronoun; read it once, it is twenty lines:
+`torch` and `tiktoken` are installed from A07. `scratch/a08-find.py` splits your corpus into sentences and prints ten of eight to sixteen words that contain a pronoun; read it once, it is nineteen lines:
 
 ```python
 # scratch/a08-find.py
@@ -97,7 +97,7 @@ print(len(cands), "candidates")
 uv run python scratch/a08-find.py
 ```
 
-*You should see* ten sentences and a candidate count in the hundreds or more. **You need a sentence where the pronoun's referent is in the same sentence, before it**: a name or a noun earlier in the sentence that the pronoun stands for. Change `random.seed(0)` to `1`, `2`, and so on until one of the ten fits. On Homer, seed 0 printed `664 candidates` and, among its ten, the sentence used in every example below: `But Apollo looked down from Pergamus and called aloud to the Trojans, for he was displeased.` The pronoun is `he`, the referent is `Apollo`. If your corpus is not in English, change `PRON` to that language's pronouns. Write the sentence under `## Step 2` in `evidence/A08.md`, with the pronoun and its referent on the line below it; Step 6 and the extension use this sentence and no other.
+*You should see* ten sentences and a candidate count in the hundreds or more. **You need a sentence where the pronoun's referent is in the same sentence, before it**: a name or a noun earlier in the sentence that the pronoun stands for. Change `random.seed(0)` to `1`, `2`, and so on until one of the ten fits. On Homer, seed 0 printed `664 candidates` and, among its ten, the sentence used in every example below: `But Apollo looked down from Pergamus and called aloud to the Trojans, for he was displeased.` The pronoun is `he`, the referent is `Apollo`. If your corpus is not in English, change `PRON` to that language's pronouns. Write the sentence under `## Step 2` in `evidence/A08.md`, with the pronoun and its referent on the line below it; Step 6 and the extension use this sentence and no other. Avoid a sentence with a straight `'` or `"` in it: it sits inside quotes in three scripts, and either character ends the quote early. Curly ones are fine.
 
 **Step 3. Run `scratch/a08-video.py` once (Day 1, so it is ready for Day 2).**
 
@@ -107,7 +107,7 @@ Open `scratch/a08-video.py` and put your sentence from Step 2 inside the quotes 
 uv run python scratch/a08-video.py
 ```
 
-The script does three things. Part 1 is Karpathy's head as he types it in the segment, on his toy tensor of four random sequences. Part 2 runs the same three matrices on your sentence, with your tokens on the rows. Part 3 prints one block per note, each block headed by a comment in the file saying which of his six notes it demonstrates. *You should see* three parts. Part 1: four shapes and an 8 × 8 grid with `1.00` in the top-left corner and zeros above the diagonal. Part 2: three shapes with your `T`, and the first four rows of your grid with your tokens on them, `1.00` first. Part 3: six numbered lines. Whatever your sentence, line 1 counts up from 1 to your `T`, lines 2 and 3 say `True`, line 4's row sums to `1.00` over all `T` tokens, line 5's shape is not square, and line 6's unscaled variance is near `head_size`, 16 (on Homer it is 18.00), while the scaled one is near 1. On Homer:
+The script does three things. Part 1 is Karpathy's head as he types it in the segment, on his toy tensor of four random sequences. Part 2 runs the same three matrices on your sentence, with your tokens on the rows. Part 3 prints one block per note, each block headed by a comment in the file saying which of his six notes it demonstrates. *You should see* three parts. Part 1: four shapes and an 8 × 8 grid with `1.00` in the top-left corner and zeros above the diagonal. Part 2: three shapes with your `T`, and the first four rows of your grid with your tokens on them, `1.00` first. Part 3: six numbered blocks, one per note. Whatever your sentence, line 1 counts up from 1 to your `T`, lines 2 and 3 say `True`, line 4's row sums to `1.00` over all `T` tokens, line 5's shape is not square, and line 6's unscaled variance is near `head_size`, 16 (on Homer it is 18.00), while the scaled one is near 1. On Homer:
 
 ```text
 PART 2: the same head on your sentence, 23 tokens
@@ -274,7 +274,7 @@ seed 1, the pronoun's row with its column labels (visible tokens only):
       he    0.08   0.06   0.03   0.07   0.13   0.06   0.03   0.03   0.02   0.03   0.08   0.03   0.03   0.09   0.02   0.03   0.07   0.07   0.03
 ```
 
-Seed 5 put its biggest weight on `Apollo`, and it is 0.08, half again the even share: that is what a lucky draw looks like, and seed 3 undoes it. Paste the `wc -l` line, then the first line, the table and the summary line, under `## Extension X2` in `evidence/A08.md`. *If it broke* with `AssertionError: the referent has to come before the pronoun`, your referent is after the pronoun and the mask hides it; choose a different sentence in Step 2. A `ValueError` on the `float(w)` line means `head_runs.txt` was written by a changed `head_on_corpus.py`; put the print lines back and re-run the `for` loop.
+Seed 5 put its biggest weight on `Apollo`, and it is 0.08, half again the even share: that is what a lucky draw looks like, and seed 3 undoes it. Paste the `wc -l` line, then the first line, the table and the summary line, under `## Extension X2` in `evidence/A08.md`. *If it broke* with `AssertionError: the referent has to come before the pronoun, or the mask hides it`, your referent is after the pronoun and the mask hides it; choose a different sentence in Step 2. A `ValueError` on the `float(w)` line means `head_runs.txt` was written by a changed `head_on_corpus.py`; put the print lines back and re-run the `for` loop.
 
 **X3. Say what it shows.** Under `## Extension X3` in `evidence/A08.md`, the mean and the range from the summary line, how many seeds put *less* than the even share on the referent, and then two or three plain sentences: what a random head shows and what a trained one would. A random head spreads its budget close to evenly and which token wins moves with the seed; a trained pronoun head would put most of the row on the referent and would do it the same way every time, because its weights were learned rather than drawn. Put your X1 prediction next to what happened.
 

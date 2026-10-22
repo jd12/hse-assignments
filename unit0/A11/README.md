@@ -71,7 +71,7 @@ Under the timestamp, write today's checklist:
 - [ ] Day 2: lesson 5, Lab 2 run, Phoenix tree in evidence/A11.md
 - [ ] Day 2: Steps 5–8, trace.ts read, loop wrapped, one tree printed and pasted
 - [ ] Extension: 25 questions and the prediction committed, then base-1 run, STEPS.md pasted
-- [ ] Fill every slot in evidence/A11.md (check_evidence.py: all slots filled); push both repos and open both PRs
+- [ ] Fill every slot in evidence/A11.md (check_evidence.py: all slots filled); push both repos, open both PRs, jd12 as collaborator on the v2 repo
 ```
 
 On GitHub, add **jd12** as a collaborator on the v2 repo if I am not one already. It is your repository, so I cannot review it otherwise.
@@ -89,11 +89,15 @@ cp $F/evals/trace.ts src/trace.ts
 cp $F/evals/grepFile.ts src/tools/grepFile.ts
 cp $F/evals/ask.ts scripts/ask.ts
 cp $F/evals/show_trace.py $F/evals/run_all.py $F/evals/steps.py $F/evals/evals.py $F/evals/judge.py $F/evals/agreement.py evals/
-printf 'data/\n' >> .gitignore
+```
+
+Then open `.gitignore`. `data/` is already in it, so the corpus stays out of git (it is in the foundations repo already). Delete the two lines `evals/runs/` and `evals/traces/`: this assignment and A12 commit both folders, and git would otherwise drop them from every commit without a word. Then:
+
+```bash
 git status --short
 ```
 
-*You should see* `.gitignore` modified, the new files as `??` (`scripts/` shows as one folder line, since it is new), and nothing under `data/`. `evals/traces/` is committed later with the spans in it; the corpus is not committed, because it is already in the foundations repo. On Windows, run these in Git Bash, where `$F` and `~` work as written.
+*You should see* `.gitignore` modified, the new files as `??` (`scripts/` shows as one folder line, since it is new), and nothing under `data/`. On Windows, run these in Git Bash, where `$F` and `~` work as written.
 
 **Step 3. Map the agent.**
 
@@ -137,18 +141,19 @@ const result = await span(`tool:${name}`, "TOOL", { tool: name, args },
   () => runTool({ name, args }));
 ```
 
-On the reference agent, `const { message } = await callModel(messages, tools);` becomes `const { message } = await span("llm", "LLM", { step, n_messages: messages.length }, () => callModel(messages, tools));` and `result = await runTool({ name, args });` becomes `result = await span(\`tool:${name}\`, "TOOL", { tool: name, args }, () => runTool({ name, args }));`. *If your loop is inside a library call* (one function that runs several steps for you), wrap each tool's own execute function in a `TOOL` span instead, and wrap the library call in one `LLM` span. You lose one `LLM` span per step and keep everything A12 needs.
+On the reference agent, `const { message } = await callModel(messages, tools);` becomes `const { message } = await span("llm", "LLM", { step, n_messages: messages.length }, () => callModel(messages, tools));` and `result = await runTool({ name, args });` becomes `` result = await span(`tool:${name}`, "TOOL", { tool: name, args }, () => runTool({ name, args })); ``. *If your loop is inside a library call* (one function that runs several steps for you), wrap each tool's own execute function in a `TOOL` span instead, and wrap the library call in one `LLM` span. You lose one `LLM` span per step and keep everything A12 needs.
 
 **Step 7. One question, one trace.**
 
 `scripts/ask.ts` answers one question inside one `AGENT` span named `agent_run` and prints a JSON line. Open it: its import of `runAgent` is the name and path of your loop's entry point, and `.answer` at the end is the field of its result that holds the answer text; change either if yours differ. `PREFIX` is part of every experiment from here to the end of A12. Do not change it between runs you compare.
 
 ```bash
+rm -f evals/traces/spans.jsonl
 EVAL_MODE=1 npx tsx scripts/ask.ts "Who is the first person named in the file?"
 wc -l evals/traces/spans.jsonl
 ```
 
-*You should see* your agent's usual output, then a single JSON line last with a `trace_id`, the question and the answer, and then the line count: with one tool call, `4 evals/traces/spans.jsonl` (an `LLM` span, a `TOOL` span, the final `LLM` span, then the `AGENT` span that wraps them). Paste the JSON line and the `wc -l` line under `## Step 7` in `evidence/A11.md`. *If it broke:* a count of 1 means only `agent_run` was written, so the edit in Step 6 is on a path your entry point does not take. A hang means your approval gate is still asking. An error about top-level `await` means your repo compiles to CommonJS; put everything in `ask.ts` after the imports inside `async function main() { ... }` and call `main()`.
+`spans.jsonl` only grows: every run appends, a failed one too, which is what the `rm -f` is for; run it again before any rerun, or the count below means nothing. *You should see* possibly a `DeprecationWarning` about `punycode` (harmless; the reference agent prints nothing else in this mode), then a single JSON line with a `trace_id`, the question and the answer, and then the line count: with one tool call, `4 evals/traces/spans.jsonl` (an `LLM` span, a `TOOL` span, the final `LLM` span, then the `AGENT` span that wraps them). Paste the JSON line and the `wc -l` line under `## Step 7` in `evidence/A11.md`. *If it broke:* a count of 1 means only `agent_run` was written, so the edit in Step 6 is on a path your entry point does not take. A count of 2 with `"status": "error"` on both lines means the model call itself failed (key, network); the error is above the JSON line. A hang means your approval gate is still asking. An error about top-level `await` means your repo compiles to CommonJS; put everything in `ask.ts` after the imports inside `async function main() { ... }` and call `main()`.
 
 **Step 8. Print the tree.**
 
@@ -169,7 +174,7 @@ The `LLM` count is one more than the number of rounds of tool calls, and the roo
 
 **Extension — twenty-five questions and the shortest path (ASSIGNED)**
 
-**X1. Write the suite, and your prediction, first.** In the v2 repo, create `evals/questions.jsonl`, 25 lines, over your corpus:
+**X1. Write the suite, and your prediction, first.** In the v2 repo, replace the eight questions already in `evals/questions.jsonl` (they belong to `evals/run.ts`, which nothing from here on uses; `npm run eval` stops working, and that is fine) with 25 lines over your corpus:
 
 ```json
 {"id": "e01", "question": "What false name does Ulysses give the Cyclops?", "answer": "Noman", "quote": "my name is Noman", "expected_tool": "grep_file", "min_steps": 1}

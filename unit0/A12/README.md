@@ -52,6 +52,7 @@ Open the foundations repo on GitHub and merge the pull request for A10 if I have
 ```bash
 cd ~/version_control/<your-v2-agent-repo>
 git switch dev/instrumentation && git pull
+grep -n 'evals/' .gitignore          # prints nothing: A11 Step 2 removed evals/runs/ and evals/traces/; if a line prints, delete it now
 git branch --show-current     # dev/instrumentation, not main
 cd ~/version_control/hse-2026-2027-foundations-<your-username>
 git switch dev/agent-evals && git pull
