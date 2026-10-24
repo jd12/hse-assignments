@@ -4,15 +4,15 @@
 
 **Watch — 11 min**
 [3Blue1Brown, Essence of Linear Algebra, Ch. 3: Linear transformations and matrices](https://www.youtube.com/watch?v=kYB8IZa5AuE) · whole video (10:59, 11m)
- · Paper, and your T01 Ch. 2 page beside it.
+ · Paper.
 
 **During the video**
 
-**Ch. 3 · compute before he does.** He works an example in which he tells you where î and ĵ land and then asks where some other vector ends up. Pause before he answers. Write that vector as `x · (where î lands) + y · (where ĵ lands)`, with his numbers, and do the arithmetic on paper. Unpause and check. That one line of arithmetic is the whole chapter, and Step 3 checks it in code on your own chapter vectors. Commit the page with the rest as `linear/video-notes-t02.jpg`.
+**Ch. 3 · compute before he does.** He works an example in which he tells you where î and ĵ land and then asks where some other vector ends up. Pause before he answers. Write that vector as `x · (where î lands) + y · (where ĵ lands)`, with his numbers, and do the arithmetic on paper. Unpause and check. That one line of arithmetic is the whole chapter, and Step 3 checks it in code on your own chapter vectors. Photograph the page and save it as `linear/video-notes-t02.jpg`; it goes in with the final commit.
 
 **Notes**
 
-**A matrix is a function that moves space, and its columns are where the basis vectors land.** To find the matrix for a transformation, ask where î = (1, 0) goes and where ĵ = (0, 1) goes. Those two answers, written as columns, are the matrix. Written as rows, they are the transpose, and the picture you get is a different transformation. This is the usual mistake on today's hand page; your `NOTATION.md` exists for it.
+**A matrix is a function that moves space, and its columns are where the basis vectors land.** To find the matrix for a transformation, ask where î = (1, 0) goes and where ĵ = (0, 1) goes. Those two answers, written as columns, are the matrix. Written as rows, they are the transpose, and the picture you get is a different transformation. This is the usual mistake on today's hand matrices; your `NOTATION.md` exists for it.
 
 **"Linear" has a precise meaning:** grid lines stay parallel and evenly spaced, and the origin does not move. In symbols, `f(u + v) = f(u) + f(v)` and `f(c·u) = c·f(u)`. A transformation that shifts everything two units right is not linear, because the origin moves. The extension tests four things people do to word counts, and one of them is exactly that.
 
@@ -41,15 +41,15 @@ Under the timestamp, write today's checklist:
 
 ```markdown
 - [ ] Ch. 3 watched, his example computed before he did
-- [ ] Step 2: three matrices by hand, committed before any code runs
-- [ ] Step 3: landing.py checks the page and moves my chapters
+- [ ] Step 2: three matrices by hand, in evidence/T02.md before any code runs
+- [ ] Step 3: landing.py checks them and moves my chapters
 - [ ] Extension: four predictions in the log, linearity.py run
 - [ ] Fill every slot in evidence/T02.md (check_evidence.py: all slots filled); push, open the PR, sign off
 ```
 
-**Step 2. Three matrices, by hand, committed first.**
+**Step 2. Three matrices, by hand, written down first.**
 
-No code. In `linear/MATRICES.md` (typed) or `linear/matrices.jpg` (photographed), give the 2×2 matrix for each of these, and for each one write where î lands, where ĵ lands, and one sentence on what happens to areas:
+No code. On paper, give the 2×2 matrix for each of these by asking where î lands and where ĵ lands:
 
 | | Transformation |
 |---|---|
@@ -57,25 +57,17 @@ No code. In `linear/MATRICES.md` (typed) or `linear/matrices.jpg` (photographed)
 | (b) | horizontal shear that sends ĵ to (1, 1) and leaves î alone |
 | (c) | scale by 3 in x and by 0.5 in y |
 
-Commit this page by itself before you write any code, and paste the commit hash under `## Step 2` in `evidence/T02.md`:
+Type the three matrices under `## Step 2` in `evidence/T02.md` before you open any code. Step 3 checks them, and a matrix written after the check is a copy of the check.
 
-```bash
-git add linear/MATRICES.md       # or linear/matrices.jpg
-git commit -m "T02: three matrices by hand"
-git log --oneline -1
-```
+**Step 3. The code checks your matrices, then moves your chapters.**
 
-Step 3 checks the page, and a hand page committed after the check is a copy of the check. I will check your commit timestamps.
-
-**Step 3. The code checks your page, then moves your chapters.**
-
-Open `linear/landing.py`. The three `np.array(...)` rows under `MATRICES` are zeros; fill them in from your page, as rows of the matrix, which is how NumPy writes it. The fourth, a 45° rotation, is given. Then:
+Open `linear/landing.py` and read it down to `if __name__`; the rest runs the checks. The three `np.array(...)` rows under `MATRICES` are zeros; fill them in from your Step 2 matrices, as rows of the matrix, which is how NumPy writes it. The fourth, a 45° rotation, is given. Then:
 
 ```bash
 uv run python linear/landing.py
 ```
 
-*You should see*, for each of the four matrices, a line saying where î and ĵ land, and under it a `chapter 2:` line with three before-and-after numbers: the L2 length of chapter 2's arrow, its L1 length (the sum of the absolute values), and the angle between your two furthest-apart chapters from T01's extension. The landing points have to equal the columns on your page. If they do not, the page is wrong or you typed columns as rows: fix the code, not the committed page, and say which it was in `evidence/T02.md`. On Homer, with `jove`:
+*You should see*, for each of the four matrices, a line saying where î and ĵ land, and under it a `chapter 2:` line with three before-and-after numbers: the L2 length of chapter 2's arrow, its L1 length (the sum of the absolute values), and the angle between your two furthest-apart chapters from T01's extension. `landing.py` first scales every chapter arrow to length 1 (the `U = ...` line), so L2 starts at `1.0000` for every corpus and L1 starts a little above 1. The landing points have to equal the columns of your Step 2 matrices. If they do not, the matrix is wrong or you typed columns as rows: fix the code, leave the Step 2 slot as you wrote it, and say which it was in `evidence/T02.md`. On Homer, with `jove`:
 
 ```text
 rotate 90  i lands at [0. 1.]   j lands at [-1.  0.]
@@ -90,11 +82,11 @@ M @ v                     [1477.   58.]
 v[0]*col0 + v[1]*col1     [1477.   58.]
 ```
 
-Whatever your corpus: both rotations keep the angle and keep L2 at `1.0000`; the shear and the scale change both, and the scale squeezes your fan to a sliver, because it multiplies the `WORD2` direction by 0.5 and the `WORD1` direction by 3. L1 is the odd one. The 90° rotation keeps it, because a quarter turn only swaps the two coordinates, and the 45° rotation changes it. Only L2 survives every rotation, which is why L2 is the one called length.
+Whatever your corpus: both rotations keep the angle and keep L2 at `1.0000`; the shear and the scale change both, and the scale squeezes your bundle of arrows to a sliver, because it multiplies the `WORD2` direction by 0.5 and the `WORD1` direction by 3. L1 is the odd one. The 90° rotation keeps it, because a quarter turn only swaps the two coordinates, and the 45° rotation changes it. Only L2 survives every rotation, which is why L2 is the one called length.
 
-The last two lines are the Ch. 3 example on your corpus: `M @ v` and `v[0]` copies of column 0 plus `v[1]` copies of column 1 print the same two numbers, with your chapter 2 counts in them. Open `linear/transforms.png`: the gray fan of your ten chapter arrows turns a quarter circle under the rotation, leans under the shear, and flattens under the scale. Paste everything it printed under `## Step 3`.
+The last two lines are the Ch. 3 example on your corpus: `M @ v` and `v[0]` copies of column 0 plus `v[1]` copies of column 1 print the same two numbers, with your chapter 2 counts in them. Open `linear/transforms.png`. Your ten arrows are within a couple of degrees of each other, so the gray "fan" looks like one arrow; what you can see is the whole bundle turning a quarter circle under the rotation, stretching along the x axis under the scale, and barely moving under the shear, which is the point: a shear that sends ĵ to (1, 1) hardly touches arrows that lie almost along î. Paste everything it printed under `## Step 3`.
 
-*If it broke:* a picture where the rotation turns the fan clockwise is the transpose of the matrix you meant. `U @ M.T` applies `M` to every row of `U`; `U @ M` applies the transpose.
+*If it broke:* `i lands at [ 0. -1.]` for the rotation, or a picture where it turns clockwise, means you typed the matrix down its columns instead of across its rows; `np.array([[0, -1], [1, 0]])` is the first row then the second.
 
 **Extension — which ways of processing a count vector are linear? (ASSIGNED)**
 
@@ -111,18 +103,18 @@ Four things people do to word counts before a model sees them. Before you run an
 uv run python linear/linearity.py
 ```
 
-*You should see* the mean chapter vector, then one row per function with three gaps: `f(u + v)` against `f(u) + f(v)`, `f(3u)` against `3 f(u)`, and the matrix built from where î and ĵ land against `f` itself. Two functions have all three gaps at zero, and two have gaps nowhere near zero. On Homer:
+*You should see* the mean chapter vector, then one row per function with three gaps: `f(u + v)` against `f(u) + f(v)`, `f(3u)` against `3 f(u)`, and the matrix built from where î and ĵ land against `f` itself. Two functions have all three gaps at zero, and two have gaps that are not zero. On Homer:
 
 ```text
 mean chapter vector: [1691.2   66.3]
 function                  add gap  scale gap  matrix gap
-per 1000 words                  0          0           0
+per 1000 words                0.0        0.0         0.0
                        matrix from where i and j land: [[0.0352, 0.0], [0.0, 0.0352]]
-total and difference            0          0           0
+total and difference          0.0        0.0         0.0
                        matrix from where i and j land: [[1.0, 1.0], [1.0, -1.0]]
-centered                     1691       3382   2.496e+06
+centered                   1691.2     3382.4   2496211.2
                        matrix from where i and j land: [[-1690.2, -1691.2], [-66.3, -65.3]]
-log counts                  6.709      13.42       976.3
+log counts                    6.7       13.4       976.3
                        matrix from where i and j land: [[0.6931, 0.0], [0.0, 0.6931]]
 ```
 
@@ -145,11 +137,11 @@ git add logs && git commit && git push
 ```
 
 **Deliverable**
-`evidence/T02.md` with every slot filled + `linear/MATRICES.md` (or `matrices.jpg`, committed before the code) + `linear/landing.py` with your three matrices + `linear/transforms.png` + `linear/video-notes-t02.jpg`.
+`evidence/T02.md` with every slot filled + `linear/landing.py` with your three matrices + `linear/transforms.png` + `linear/video-notes-t02.jpg`.
 
 **Reflection Questions** (answer under `## Reflection` in `evidence/T02.md`)
 
-1. Paste the four `chapter 2:` lines. Give the before and after angle for the scale, and explain from your own counts why that matrix narrowed your fan by that much while both rotations left it alone.
+1. Paste the four `chapter 2:` lines. Give the before and after angle for the scale, and explain from your own counts why that matrix narrowed your bundle of arrows by that much while both rotations left it alone.
 
    *How to get it:* the angle is the last number pair on each `chapter 2:` line. The scale multiplies every arrow's `WORD2` coordinate by 0.5 and its `WORD1` coordinate by 3, so every slope from T01's extension is divided by 6, and arrows whose slopes were close to begin with end up closer still. A rotation turns every arrow by the same amount, so the angle between any two of them cannot change.
 

@@ -32,7 +32,9 @@ go install github.com/bootdotdev/bootdev@latest
 bootdev login
 ```
 
-`bootdev login` prints a URL; open it, copy the token it shows, paste it back. *You should see* `Logged in successfully!`. *If it broke* with `bootdev: command not found` after the install, `$(go env GOPATH)/bin` is not on your PATH: add `export PATH="$PATH:$(go env GOPATH)/bin"` to `~/.bash_profile` and open a new terminal.
+On Windows, in Git Bash: `winget install GoLang.Go`, open a new Git Bash, then the same `go install` and `bootdev login` lines.
+
+`bootdev login` prints a URL; open it, copy the token it shows, paste it back. *You should see* `Logged in successfully!`. *If it broke* with `bootdev: command not found` after the install, `$(go env GOPATH)/bin` is not on your PATH: add `export PATH="$PATH:$(go env GOPATH)/bin"` to `~/.bash_profile` (`~/.bashrc` on Windows) and open a new terminal.
 
 **Step 3. Accept the rag repo.**
 
@@ -48,7 +50,7 @@ cd hse-2026-2027-rag-<your-username>
 git switch -c dev/setup
 ```
 
-Hooks do not travel with a clone, so `setup.sh` again. *You should see* it end by asking you to try committing a fake key; do it and watch it get refused. Its environment check now has two lines it did not have in the foundations repo, `Go toolchain` and `Boot.dev CLI`, and both have to say `OK`. Paste those two lines under `## Step 2` in `evidence/P01.md`.
+Hooks do not travel with a clone, so `setup.sh` again. *You should see* it end by asking you to try committing a fake key; do it and watch it get refused. Its environment check now has two lines it did not have in the foundations repo, `Go toolchain` and `Boot.dev CLI`, and both have to show `[  ok  ]`. Paste those two lines under `## Step 2` in `evidence/P01.md`.
 
 Then close the Unit 0 log and open the track log. On GitHub, merge your student log's `<your-username>-unit0` pull request and delete the branch, then:
 
@@ -62,7 +64,7 @@ bash scripts/start-entry.sh
 That branch stays open for every applied assignment until Wed Dec 9. Under the timestamp, write today's checklist:
 
 ```markdown
-- [ ] Seat bought, bootdev login done, check_env says OK twice
+- [ ] Seat bought, bootdev login done, check_env says ok twice
 - [ ] rag repo accepted, setup.sh run, corpus fetched and the sha256 matches
 - [ ] Chapter 1, first half, every lesson run locally before it is submitted
 - [ ] Fill every slot in evidence/P01.md (check_evidence.py: all slots filled); push, open the PR, sign off
@@ -81,7 +83,7 @@ shasum -a 256 data/corpus.txt
 grep -i sha256 data/SOURCE.md
 ```
 
-*You should see* the same 64 hex characters twice. Paste both lines under `## Step 4`. *If it broke* with different hashes, the source changed since September; do not edit the hash to match. Run the script in the foundations repo too, `diff` the two files, and tell me which one moved. `git status` shows `scripts/fetch_corpus.sh` and `data/SOURCE.md` as new and nothing else under `data/`.
+*You should see* the same 64 hex characters twice. Paste both lines under `## Step 4`, and put the `Title:` line from `data/SOURCE.md` on the `Corpus:` line at the top of `evidence/P01.md`. *If it broke* with a `curl` error or a `data/corpus.txt` of 0 bytes, the download was blocked; copy `data/corpus.txt` from the foundations repo instead and run the hash check again. *If it broke* with different hashes, the source changed since September; do not edit the hash to match. Run the script in the foundations repo too, `diff` the two files, and tell me which one moved. `git status` shows `scripts/fetch_corpus.sh` and `data/SOURCE.md` as new and nothing else under `data/`.
 
 **Step 5. Chapter 1, first half.**
 
@@ -89,12 +91,12 @@ grep -i sha256 data/SOURCE.md
 mkdir -p ~/version_control/bootdev-rag && cd ~/version_control/bootdev-rag
 ```
 
-Work through chapter 1, Preprocessing, lesson by lesson, in that folder, for the rest of the period: read, write the function, `bootdev run <id>`, fix, `bootdev run <id> -s`. Stop when the period ends, wherever you are; P02 finishes the chapter. Before you stop, save a screenshot of the chapter page showing which lessons are green as `evidence/p01-bootdev.png` in the rag repo.
+Work through chapter 1, Preprocessing, lesson by lesson, in that folder, for the rest of the period: read, write the function, `bootdev run <id>`, fix, `bootdev run <id> -s`. Today's setup eats most of the period, so one or two lessons is a normal day. Stop when the period ends, wherever you are; P02 finishes the chapter. Before you stop, save a screenshot of the chapter page showing which lessons are green as `evidence/p01-bootdev.png` in the rag repo.
 
 **Commit, push, PR, sign off.** Fill `## Reflection` in `evidence/P01.md` (the questions are below) and run `uv run python scripts/check_evidence.py P01` until it says `all slots filled`. Then:
 
 ```bash
-git add scripts/fetch_corpus.sh data/SOURCE.md evidence/
+git add scripts/ data/SOURCE.md evidence/ scratch/
 git status                      # data/corpus.txt must NOT be listed
 git commit -m "P01: seat, CLI, corpus, chapter 1 started"
 git push -u origin dev/setup
@@ -119,7 +121,7 @@ git add logs && git commit && git push -u origin <your-username>-track
 
 2. `bootdev run <id>` without `-s` runs the tests on your machine. Paste one test's output from a lesson that failed before it passed, and say what the test was checking.
 
-   *How to get it:* the CLI prints each test's input and expected output above the pass or fail line. Copy the lines for the one that failed, not the whole run.
+   *How to get it:* the CLI prints each test's input and expected output above the pass or fail line. Copy the lines for the one that failed, not the whole run. If every lesson passed first time, break one on purpose (return the wrong thing), run `bootdev run <id>` once without `-s`, paste that, and put it back.
 
 3. The course grades on its own dataset. Name one thing about your corpus that the chapter's preprocessing would handle differently from the course's text, and why.
 

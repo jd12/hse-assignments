@@ -16,7 +16,7 @@
 
 **`string.punctuation` is ASCII only.** It does not contain the curly apostrophe `’`, the em dash `—` or curly quotes, and a lot of real text is full of them. If your corpus came from a modern source, `“Ithaca”` with curly quotes survives an ASCII strip as a different term from `ithaca`. The walkthrough strips by Unicode category instead, which catches all of them.
 
-**`-m rag.preprocess`, not `rag/preprocess.py`.** Running a file as a module is what lets `rag/tfidf.py` say `from rag.corpus import ...` on Friday. Every command in this track uses `-m`.
+**`-m rag.preprocess`, not `rag/preprocess.py`.** Running a file as a module is what lets `rag/tfidf.py` say `from rag.corpus import ...` on Friday. Every command that runs something in `rag/` uses `-m`; scripts in `scratch/` run by path.
 
 **Walkthrough — the same pipeline on your corpus**
 
@@ -44,8 +44,8 @@ Under the timestamp, write today's checklist:
 ```markdown
 - [ ] Chapter 1 finished, every lesson green, scratch/p02-order.md written
 - [ ] Step 3: rag.corpus run, passages counted
-- [ ] Step 4: rag/preprocess.py pasted and run, the two lines match
-- [ ] Extension: prediction in the log, five sentences from my corpus through the pipeline
+- [ ] Step 4: tokenize and preprocess typed into rag/preprocess.py, the two lines match
+- [ ] Extension: prediction written first, three sentences from my corpus through the pipeline
 - [ ] Fill every slot in evidence/P02.md (check_evidence.py: all slots filled); push, open the PR, sign off
 ```
 
@@ -65,37 +65,9 @@ uv run python -m rag.corpus
 
 **Step 4. `rag/preprocess.py`.**
 
-```bash
-uv add nltk
-```
-
-NLTK is here only for its Porter stemmer. If the chapter had you use a different stemmer, use that one instead, so the two implementations agree. This is the file you type rather than run, because the pipeline is the lesson. Create `rag/preprocess.py` and type it:
+NLTK is already installed by `setup.sh`; it is here only for its Porter stemmer. If the chapter had you use a different stemmer, use that one instead, so the two implementations agree. Open `rag/preprocess.py`. The top half is shipped: the docstring that states the order of operations, the stopword list, and `strip_punctuation`, which turns every punctuation mark and symbol into a space by its Unicode category rather than an ASCII list. Read those lines. The two functions that are the pipeline you type yourself, under the `# ---- P02 Step 4` line, because the pipeline is the lesson:
 
 ```python
-# rag/preprocess.py  (P02)
-"""Turn text into search terms.
-
-Order: lowercase -> punctuation and symbols to spaces -> split on whitespace
--> drop one-letter tokens -> drop stopwords -> stem -> drop corpus stems.
-"""
-import unicodedata
-
-from nltk.stem import PorterStemmer
-
-STOPWORDS = frozenset("""
-a about after all also an and any are as at be been but by can could did do does
-for from had has have he her him his how i if in into is it its me my no not of on
-or our out she so than that the their them then there these they this those to up
-was we were what when where which who why will with would you your
-""".split())
-
-_stemmer = PorterStemmer()
-
-# In: text.  Out: the same text with every punctuation mark and symbol replaced by a space.
-def strip_punctuation(text):
-    # unicodedata.category names what a character is: "P..." is punctuation, "S..." is a symbol. Curly quotes and em dashes count; an ASCII list would miss them.
-    return "".join(" " if unicodedata.category(ch).startswith(("P", "S")) else ch for ch in text)
-
 # In: text.  Out: lowercased words of two or more characters, punctuation gone.
 def tokenize(text):
     return [t for t in strip_punctuation(text.lower()).split() if len(t) > 1]
@@ -112,6 +84,8 @@ if __name__ == "__main__":
     print(preprocess("The ships were sailing to Ithaca, and the sailors rowed."))
 ```
 
+The first test line has a curly apostrophe and an em dash on purpose. On a Mac, `’` is option-shift-`]` and `—` is option-shift-hyphen; on Windows, copy that one line from here. A straight `'` and a `-` print the same two lists, and then nothing about this file has tested the Unicode strip.
+
 Punctuation becomes a space rather than vanishing, so `well-known` is two terms and the em dash does not glue two words together. The possessive `'s` leaves a stray `s`, which the one-letter rule drops. That is a decision, and the docstring states it. If the chapter's order differs from the docstring's, change the docstring to the chapter's order or keep yours, and say which in `evidence/P02.md`. The deliverable is the docstring as much as the code.
 
 ```bash
@@ -127,20 +101,20 @@ uv run python -m rag.preprocess
 
 Paste both lines under `## Step 4`. *If it broke:* `don’t` surviving with its curly apostrophe means your strip is ASCII only. `ulyssess` means you deleted punctuation instead of turning it into a space.
 
-**Extension — five sentences from your corpus (ASSIGNED)**
+**Extension — three sentences from your corpus (ASSIGNED)**
 
-Pick five sentences from `data/corpus.txt`, select-and-copy, never retyped: one with a name, one with a number, one with punctuation the chapter's examples did not have, and two you like. Before you run anything, write in your log which of the five you expect the pipeline to damage most, and how. Commit the log. I will check your commit timestamps. Then put the five in `scratch/p02-sentences.txt`, one per line, and:
+Pick three sentences from `data/corpus.txt`, select-and-copy, never retyped: one with a name, one with a number, and one with punctuation the chapter's examples did not have. Put them in `scratch/p02-sentences.txt` with a blank line between them; the corpus file wraps its lines, so a copied sentence arrives on two or three lines, and that is fine, the blank line is what separates one sentence from the next. Before you run anything, write under `## Extension` in `evidence/P02.md` which of the three you expect the pipeline to damage most, and how. Then:
 
 ```bash
 uv run python scratch/p02-sentences.py
 ```
 
-*You should see* each sentence followed by its tokens and its terms. On Homer, `Euryclea, daughter of Ops, the son of Pisenor` comes out as `['euryclea', 'daughter', 'op', 'son', 'pisenor', ...]`: the stemmer took the `s` off `Ops`, so a search for `ops` finds it and a search for the name as written does not. Paste the five pairs under `## Extension` in `evidence/P02.md` and name the term that came out wrong or lost meaning, and which operation did it.
+*You should see* each sentence followed by its tokens and its terms. On Homer, `Euryclea, daughter of Ops, the son of Pisenor` comes out as `['euryclea', 'daughter', 'op', 'son', 'pisenor', ...]`: the stemmer took the `s` off `Ops`, so a search for `ops` finds it and a search for the name as written does not. Paste the three pairs under your prediction and name the term that came out wrong or lost meaning, and which operation did it.
 
 **Commit, push, PR, sign off.** Fill `## Reflection` in `evidence/P02.md` (the questions are below) and run `uv run python scripts/check_evidence.py P02` until it says `all slots filled`. Then:
 
 ```bash
-git add rag/ scratch/ evidence/ pyproject.toml uv.lock
+git add rag/ scratch/ evidence/
 git commit -m "P02: corpus passages and the preprocessing pipeline"
 git push -u origin dev/preprocess
 ```
@@ -164,7 +138,7 @@ git add logs && git commit && git push
 
 2. Your `shortest` passage is exactly `MIN_CHARS` or longer. Say why the loop in `load_passages` cannot produce a shorter one, and what happens to the text left over at the end of the file.
 
-   *How to get it:* read the `if len(buf) >= min_chars` line and the two `if buf` lines after the loop in `rag/corpus.py`.
+   *How to get it:* read the `if len(buf) >= min_chars` line and the `if buf and passages:` / `elif buf:` lines after the loop in `rag/corpus.py`.
 
 3. The chapter stems after it removes stopwords. Say what goes wrong if you stem first, with one stopword from the list that would stop matching.
 

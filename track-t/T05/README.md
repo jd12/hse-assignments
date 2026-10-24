@@ -2,16 +2,16 @@
 
 **Meetings:** D28 · **Points:** 10 pts
 
-**Watch — 19 min**
+**Watch — 17 min**
+[3Blue1Brown, Essence of Linear Algebra, Ch. 7: Inverse matrices, column space and null space](https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab) · whole video (12:09, 12m)
 [3Blue1Brown, Essence of Linear Algebra, Ch. 8: Nonsquare matrices as transformations between dimensions](https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab) · whole video (4:27, 5m)
-[3Blue1Brown, Essence of Linear Algebra, Ch. 9: Dot products and duality](https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab) · whole video (14:12, 14m)
- · Paper.
+ · Paper, and your T04 `span.py` paste.
 
 **During the video**
 
-**Ch. 8 · write the rule.** A 2×3 matrix takes a vector with three coordinates and lands it in two. Write the dimension rule on your page before Step 2 needs it: `(n × m) @ (m × p) → (n × p)`. The inner dimensions must match, and they vanish.
+**Ch. 7 · one word.** When he says a system `A x = b` has a solution only if `b` is in the column space of `A`, write on your page which of his two pictures your T04 singular system is: `b` off the line (no solution) or `b` on it (infinitely many). The column space is the span of the columns, Ch. 2's word for the same set.
 
-**Ch. 9 · draw.** When he projects one vector onto another, stop and do it with your T01 pair: `v = (2, 1)` and `w = (-1, 3)`. Draw both from the origin, drop the perpendicular from `w` onto the line through `v`, and write the dot product next to it: `2·(-1) + 1·3 = 1`. Write whether the angle between them is under or over 90°, and check that the sign of `1` agrees. Commit the page as `linear/video-notes-t05.jpg`. The duality half of the chapter, where a 1×2 matrix becomes a projection, has nothing to draw; it comes back in Step 5 as the reason `dot` and a one-row `matmul` give the same number.
+**Ch. 8 · write the rule.** A 2×3 matrix takes a vector with three coordinates and lands it in two. Write the dimension rule on your page before Step 2 needs it: `(n × m) @ (m × p) → (n × p)`. The inner dimensions must match, and they vanish. Photograph the page and save it as `linear/video-notes-t05.jpg`; it goes in with the final commit.
 
 **Notes**
 
@@ -21,7 +21,7 @@
 
 **Raise a clear `ValueError` on a dimension mismatch** instead of letting Python throw an `IndexError` twelve frames deep. The mismatch test is the one people skip and the one that catches their bugs.
 
-**`pytest` finds `linear/linalg.py` because it puts the test file's own folder on the import path.** That works only from the repo root, as `uv run pytest linear -q`. `python linear/test_linalg.py` runs nothing and prints nothing, which looks like success.
+**`pytest` finds `linear/linalg.py` because it puts the test file's own folder on the import path.** Run it from the repo root, as `uv run pytest linear -q`. `python linear/test_linalg.py` runs nothing and prints nothing, which looks like success.
 
 **Walkthrough — `dot` and `matmul` from nothing, then on your chapters**
 
@@ -45,10 +45,10 @@ bash scripts/start-entry.sh
 Under the timestamp, write today's checklist:
 
 ```markdown
-- [ ] Ch. 8 watched, the dimension rule written; Ch. 9 watched, the projection drawn
+- [ ] Ch. 7 watched, my singular system named; Ch. 8 watched, the dimension rule written
 - [ ] Step 2: dot and matmul typed into linear/linalg.py
 - [ ] Step 3: five tests green
-- [ ] Step 4: prediction in the log, the transposed bug, which test caught it
+- [ ] Step 4: prediction written first, the transposed bug, which test caught it
 - [ ] Step 5: gram.py, two chapters, one number
 - [ ] Fill every slot in evidence/T05.md (check_evidence.py: all slots filled); push, open the PR, sign off
 ```
@@ -86,7 +86,7 @@ def matmul(A, B):
     return C
 ```
 
-`dot` is the whole algebraic definition: multiply matching coordinates and add. Ch. 9 spent fourteen minutes showing that this sum is also a projection, which is why `matmul` can be built from nothing but `dot`: every entry of the product is row `i` of `A` against column `j` of `B`. The loop variable `k` is the inner dimension, and it never appears in the shape of `C`.
+`dot` is the whole algebraic definition: multiply matching coordinates and add. `matmul` is built from nothing but `dot`: every entry of the product is row `i` of `A` against column `j` of `B`, which is Ch. 8's rule with the arithmetic filled in. The loop variable `k` is the inner dimension, and it never appears in the shape of `C`. Tomorrow's Ch. 9 is about what that sum means geometrically.
 
 **Step 3. Five tests against NumPy.**
 
@@ -96,11 +96,11 @@ def matmul(A, B):
 uv run pytest linear -q
 ```
 
-*You should see* `5 passed`. Paste the last line under `## Step 3` in `evidence/T05.md`. *If it broke* with `ModuleNotFoundError: No module named 'linalg'`, you ran it from somewhere other than the repo root, or you put an `__init__.py` in `linear/`; delete it, the folder is not a package.
+*You should see* `5 passed`. Paste the last line under `## Step 3` in `evidence/T05.md`. *If it broke* with `ERROR: file or directory not found: linear`, you are not in the repo root; `cd` back to it. *If it broke* with `ModuleNotFoundError: No module named 'linalg'`, you put an `__init__.py` in `linear/`; delete it, the folder is not a package.
 
 **Step 4. Break it on purpose.**
 
-In `matmul`, change `col = [B[k][j] for k in range(m)]` to `col = [B[j][k] for k in range(m)]`, the transposed bug. Before you run the tests, write in your log which of the five you expect to fail. Commit the log. Then run `uv run pytest linear -q`.
+In `matmul`, change `col = [B[k][j] for k in range(m)]` to `col = [B[j][k] for k in range(m)]`, the transposed bug. Before you run the tests, write under `## Step 4` in `evidence/T05.md` which of the five you expect to fail. Then run `uv run pytest linear -q`.
 
 *You should see* `2 failed, 3 passed`: the square test fails on a wrong answer (`assert False`), the non-square test fails with `IndexError: list index out of range`, and the two `dot` tests and the mismatch test pass, because they never reach the bad line. Paste the `FAILED` lines and the summary line under `## Step 4`. Put the line back, run again to `5 passed`, and commit with a message that names the test that caught it. *If it broke* with the tests still failing after you put the line back, delete `linear/__pycache__`; Python kept the old compiled file because the edit landed within the same second.
 
@@ -110,7 +110,7 @@ In `matmul`, change `col = [B[k][j] for k in range(m)]` to `col = [B[j][k] for k
 uv run python linear/gram.py
 ```
 
-`gram.py` takes chapters 2 and 7 over the 50 most common words of your corpus and calls your `dot` on them. *You should see* a dot product in the millions, a cosine above 0.9, and a one-row `matmul` that prints the same dot product wrapped as `[[...]]`. On Homer: `chapter 2 . chapter 7 = 7,470,275   cosine = 0.9538` and `one-row matmul: [[7470275.0]]`. The dot product is in the millions because `the` alone appears a thousand or two times in each chapter and contributes its count squared. The last line is the duality half of Ch. 9 on your own data: a 1×50 matrix times a 50×1 matrix is a dot product. Paste both lines under `## Step 5`.
+`gram.py` takes chapters 2 and 7 over the 50 most common words of your corpus and calls your `dot` on them. *You should see* a dot product in the millions, a cosine above 0.9, a one-row `matmul` that prints the same dot product wrapped as `[[...]]`, and the first ten of the fifty words. On Homer: `chapter 2 . chapter 7 = 7,470,275   cosine = 0.9538`, `one-row matmul: [[7470275.0]]` and `top 10 of the 50: ['the', 'and', 'of', 'to', 'he', 'in', 'his', 'a', 'you', 'i']`. The dot product is in the millions because `the` alone appears a thousand or two times in each chapter and contributes the product of its two counts, `1419 × 1935` on Homer, over a third of the total. The `matmul` line is Ch. 8's rule at its smallest: a 1×50 matrix times a 50×1 matrix is a 1×1 matrix, and the one entry is a dot product. Paste all three lines under `## Step 5`.
 
 **Commit, push, PR, sign off.** Fill `## Reflection` in `evidence/T05.md` (the questions are below) and run `uv run python scripts/check_evidence.py T05` until it says `all slots filled`. Then:
 
@@ -143,4 +143,4 @@ git add logs && git commit && git push
 
 3. Your cosine between chapters 2 and 7 is above 0.9. Say what in the 50 most common words makes two slices of one text look that alike, and what you would have to change about the vocabulary to tell them apart. T06 checks your answer.
 
-   *How to get it:* `gram.py` builds `vocab` from `Counter(words).most_common()`; print the first ten and look at them. They are the words every chapter of any book uses in about the same proportions.
+   *How to get it:* the `top 10 of the 50` line in your Step 5 paste. They are the words every chapter of any book uses in about the same proportions, so any two chapters agree on most of the fifty coordinates before a single content word is counted.

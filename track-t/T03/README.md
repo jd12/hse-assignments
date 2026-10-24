@@ -5,11 +5,11 @@
 **Watch — 15 min**
 [3Blue1Brown, Essence of Linear Algebra, Ch. 4: Matrix multiplication as composition](https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab) · whole video (10:04, 10m)
 [3Blue1Brown, Essence of Linear Algebra, Ch. 5: Three-dimensional linear transformations](https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab) · whole video (4:46, 5m)
- · Paper, and your T02 hand page open next to it, because you are about to compose those matrices.
+ · Paper, and your T02 matrices beside it, because you are about to compose them.
 
 **During the video**
 
-**Ch. 4 · multiply before he does.** He composes two transformations and then works out the single matrix that does both. Pause when he sets it up. Using only "where does î land, then where does that land", write the composed matrix yourself, then unpause and check. Then take your T02 rotation and shear and do the same thing both ways round: rotation first then shear, and shear first then rotation. You now have two matrices on paper that Step 3 draws, and they are not equal. Commit the page as `linear/video-notes-t03.jpg`.
+**Ch. 4 · multiply before he does.** He composes two transformations and then works out the single matrix that does both. Pause when he sets it up. Using only "where does î land, then where does that land", write the composed matrix yourself, then unpause and check. Then take your T02 rotation and shear and do the same thing both ways round: rotation first then shear, and shear first then rotation. You now have two matrices on paper that Step 3 draws, and they are not equal. Photograph the page and save it as `linear/video-notes-t03.jpg`; it goes in with the final commit.
 
 **Ch. 5 · nothing to draw.** The point of the five minutes is that everything from Ch. 3 and 4 holds with three coordinates instead of two: a 3×3 matrix is three columns, each saying where a basis vector lands. Your count vectors in T05 have fifty coordinates; nothing changes but the size.
 
@@ -17,7 +17,7 @@
 
 **Matrix multiplication is function composition.** `AB` means "apply `B` first, then `A`". Read right to left, like `f(g(x))`. That is why order matters, and it is why micrograd's backward pass runs in reverse.
 
-**The visualizer draws the grid with `line @ M.T`.** `line` is a stack of points as rows, and `@ M.T` applies `M` to each row. `@ M` would draw the transpose, and for a rotation that means turning the wrong way. If your 90° rotation turns clockwise, that is the bug.
+**The visualizer draws the grid with `line @ M.T`.** `line` is a stack of points as rows, and `@ M.T` applies `M` to each row. The file is shipped and has nothing to edit. If your 90° rotation turns clockwise, you typed the four numbers in the wrong order: the command takes the matrix across its rows, `0 -1 1 0`, not down its columns.
 
 **`transform_viz.py` saves a picture rather than opening a window.** `plt.show()` in a script blocks until you close the window, and a script that never finishes looks like a hang.
 
