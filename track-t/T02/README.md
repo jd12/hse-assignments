@@ -14,6 +14,8 @@
 
 **A matrix is a function that moves space, and its columns are where the basis vectors land.** To find the matrix for a transformation, ask where î = (1, 0) goes and where ĵ = (0, 1) goes. Those two answers, written as columns, are the matrix. Written as rows, they are the transpose, and the picture you get is a different transformation. This is the usual mistake on today's hand matrices; your `NOTATION.md` exists for it.
 
+**A shear slides every point sideways by an amount set by its height.** Points on the x axis do not move, and the higher a point sits the further it is pushed, so vertical grid lines lean and horizontal ones stay put. Ask the two questions: î = (1, 0) is on the x axis, so it stays; ĵ = (0, 1) is at height 1, so it slides to (1, 1). That is row (b) in Step 2, and the one he draws at the end of Ch. 3.
+
 **"Linear" has a precise meaning:** grid lines stay parallel and evenly spaced, and the origin does not move. In symbols, `f(u + v) = f(u) + f(v)` and `f(c·u) = c·f(u)`. A transformation that shifts everything two units right is not linear, because the origin moves. The extension tests four things people do to word counts, and one of them is exactly that.
 
 **`np.column_stack([a, b])` puts `a` and `b` in as columns. `np.array([a, b])` puts them in as rows.** They are transposes of each other. When a result looks rotated the wrong way, check which one you used.
