@@ -1,6 +1,6 @@
 # T05 · Dot Product and Matrix Multiplication, Built From Nothing
 
-**Meetings:** D28 · **Points:** 10 pts
+**Meetings:** D28 · **Points:** 15 pts
 
 **Watch — 17 min**
 [3Blue1Brown, Essence of Linear Algebra, Ch. 7: Inverse matrices, column space and null space](https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab) · whole video (12:09, 12m)

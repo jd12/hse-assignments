@@ -1,6 +1,6 @@
 # T02 · Matrices Are Functions
 
-**Meetings:** D25 · **Points:** 10 pts
+**Meetings:** D25 · **Points:** 15 pts
 
 **Watch — 11 min**
 [3Blue1Brown, Essence of Linear Algebra, Ch. 3: Linear transformations and matrices](https://www.youtube.com/watch?v=kYB8IZa5AuE) · whole video (10:59, 11m)

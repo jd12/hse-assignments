@@ -1,6 +1,6 @@
 # T04 · Span, the Determinant, and a Singular System You Built Yourself
 
-**Meetings:** D27 · **Points:** 10 pts
+**Meetings:** D27 · **Points:** 15 pts
 
 **Watch — 20 min**
 [3Blue1Brown, Essence of Linear Algebra, Ch. 2: Linear combinations, span, and basis vectors](https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab) · whole video (9:59, 10m)

@@ -1,6 +1,6 @@
 # T06 · Which of Your Chapters Are Alike, and What the Common Words Hid
 
-**Meetings:** D29 · **Points:** 10 pts
+**Meetings:** D29 · **Points:** 15 pts
 
 **Watch — 14 min**
 [3Blue1Brown, Essence of Linear Algebra, Ch. 9: Dot products and duality](https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab) · whole video (14:12, 14m)
