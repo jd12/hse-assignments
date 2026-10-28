@@ -1,6 +1,6 @@
 # T01 · Vectors, and Your Corpus in Two Words
 
-**Meetings:** D24 · **Points:** 10 pts
+**Meetings:** D24 · **Points:** 15 pts
 
 **Watch — 10 min**
 [3Blue1Brown, Essence of Linear Algebra, Ch. 1: Vectors, what even are they?](https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab) · whole video (9:52, 10m)
