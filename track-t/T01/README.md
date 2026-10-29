@@ -8,7 +8,7 @@
 
 **During the video**
 
-**Ch. 1 · draw.** When he adds two vectors tip to tail, stop the video and draw your own pair: `(2, 1)` and `(-1, 3)`, the second one starting at the tip of the first, and the sum from the origin to where you ended up. Label the sum with its coordinates. When he gets to scalar multiplication, draw `2 · (2, 1)` on the same axes. Keep the page; Reflection 1 is about the arrows on it.
+**Ch. 1 · draw.** When he adds two vectors tip to tail, stop the video and draw your own pair: `(2, 1)` and `(-1, 3)`, the second one starting at the tip of the first, and the sum from the origin to where you ended up. Label the sum with its coordinates. When he gets to scalar multiplication, draw `2 · (2, 1)` on the same axes. Keep the page: Reflection 1 is about the arrows on it.
 
 **Notes**
 
