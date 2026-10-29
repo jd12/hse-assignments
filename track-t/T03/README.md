@@ -9,7 +9,7 @@
 
 **During the video**
 
-**Ch. 4 · multiply before he does.** He composes two transformations and then works out the single matrix that does both. Pause when he sets it up. Using only "where does î land, then where does that land", write the composed matrix yourself, then unpause and check. Then take your T02 rotation and shear and do the same thing both ways round: rotation first then shear, and shear first then rotation. You now have two matrices on paper that Step 3 draws, and they are not equal. Photograph the page and save it as `linear/video-notes-t03.jpg`; it goes in with the final commit.
+**Ch. 4 · multiply before he does.** He composes two transformations and then works out the single matrix that does both. Pause when he sets it up. Using only "where does î land, then where does that land", write the composed matrix yourself, then unpause and check. Then take your T02 rotation and shear and do the same thing both ways round: rotation first then shear, and shear first then rotation. You now have two matrices on paper that Step 3 draws, and they are not equal. Step 2 starts by committing them.
 
 **Ch. 5 · nothing to draw.** The point of the five minutes is that everything from Ch. 3 and 4 holds with three coordinates instead of two: a 3×3 matrix is three columns, each saying where a basis vector lands. Your count vectors in T05 have fifty coordinates; nothing changes but the size.
 
@@ -51,6 +51,12 @@ Under the timestamp, write today's checklist:
 ```
 
 **Step 2. One matrix at a time.**
+
+First, the two matrices from your page, before any code runs: type them under `## During the video` in `evidence/T03.md` as rows, and commit that file on its own, so the timestamp shows the paper came first:
+
+```bash
+git add evidence/T03.md && git commit -m "T03: two compositions by hand"
+```
 
 Open `linear/transform_viz.py` and read `draw`: thirteen grid lines each way, drawn gray before and blue after `M`; the unit square after `M` in gold; green and red arrows for where î and ĵ land. Then run it on your three T02 matrices, one at a time, and look at `linear/viz.png` after each. The four numbers are the matrix read across its rows: `a b c d` is `[[a, b], [c, d]]`.
 
@@ -109,7 +115,7 @@ git add logs && git commit && git push
 ```
 
 **Deliverable**
-`evidence/T03.md` with every slot filled + `linear/viz.png` + `linear/composition.png` + `linear/video-notes-t03.jpg`.
+`evidence/T03.md` with every slot filled + `linear/viz.png` + `linear/composition.png`.
 
 **Reflection Questions** (answer under `## Reflection` in `evidence/T03.md`)
 

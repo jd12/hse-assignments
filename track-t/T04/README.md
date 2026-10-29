@@ -11,7 +11,7 @@
 
 **Ch. 2 · draw.** When he talks about the span of two vectors, draw three small sets of axes side by side and fill in the span for each case: two vectors pointing in different directions, two vectors on the same line, and both vectors zero. Write under each one "whole plane", "a line" or "a point". Reflection 1 asks which picture your chapters are.
 
-**Ch. 6 · draw the square.** When he shows what a transformation does to the unit square, sketch the square and the shape it becomes for your T02 scale matrix and your shear, and write the area next to each shape: T03's `det =` lines told you the numbers, today's drawings are why. Photograph the page and save it as `linear/video-notes-t04.jpg`; it goes in with the final commit.
+**Ch. 6 · draw the square.** When he shows what a transformation does to the unit square, sketch the square and the shape it becomes for your T02 scale matrix and your shear, and write the area next to each shape: T03's `det =` lines told you the numbers, today's drawings are why. Put the two areas under `## During the video` in `evidence/T04.md`.
 
 **Notes**
 
@@ -45,7 +45,7 @@ bash scripts/start-entry.sh
 Under the timestamp, write today's checklist:
 
 ```markdown
-- [ ] Ch. 2 watched, the three span pictures drawn; Ch. 6 watched, my three squares drawn with their areas
+- [ ] Ch. 2 watched, the three span pictures drawn; Ch. 6 watched, my two squares drawn with their areas
 - [ ] Step 2: span.py, chapter 5 in the span of 2 and 7, the singular system
 - [ ] Extension: prediction in the log, dependent.py run
 - [ ] Fill every slot in evidence/T04.md (check_evidence.py: all slots filled); push, open the PR, sign off
@@ -73,7 +73,7 @@ singular system
  solve returned [ 1.13651225e+15 -5.68256124e+14]
 ```
 
-First, with two words the check prints back exactly chapter 5's vector: two chapter vectors that are not on the same line span the whole plane, so every chapter is reachable, and this line is true for everyone. Second, the signs and sizes of the two coefficients. If chapter 5's slope lies between chapter 2's and chapter 7's, both coefficients are positive and under 1, and chapter 5 is a blend of the other two; if it lies outside, one coefficient is negative and both can be large, because reaching a direction beyond two near-parallel arrows takes a lot of one minus a lot of the other. Third, from three words on, the relative miss is not zero: two vectors span a plane, and a point in fifty dimensions is almost never in it. Fourth, the singular system, chapter 2 beside chapter 2 twice: `rank 1`, because the two columns span one line, and then one of two endings. Either `LinAlgError: Singular matrix`, or a `det` like `-2e-11` instead of `0.0` and a "solution" with entries around `1e15`. Which one you get depends on how rounding falls on your particular counts. They mean the same thing: the exact answer is "no solution", and floating point sometimes cannot tell zero from almost zero. A coefficient of a quadrillion is how that looks when it does not raise. Paste all of it under `## Step 2`.
+First, with two words the check prints back exactly chapter 5's vector: two chapter vectors that are not on the same line span the whole plane, so every chapter is reachable, and this line is true for everyone. Second, the signs and sizes of the two coefficients. If chapter 5's slope lies between chapter 2's and chapter 7's, both coefficients are positive and under 1, and chapter 5 is a blend of the other two; if it lies outside, one coefficient is negative and both can be large, because reaching a direction beyond two near-parallel arrows takes a lot of one minus a lot of the other. Third, from three words on, the relative miss is not zero: two vectors span a plane, and a point in fifty dimensions is almost never in it. Fourth, the singular system, chapter 2 beside double chapter 2, so the second column is twice the first: `rank 1`, because the two columns span one line, and then one of two endings. Either `LinAlgError: Singular matrix`, or a `det` like `-2e-11` instead of `0.0` and a "solution" with entries around `1e15`. Which one you get depends on how rounding falls on your particular counts. They mean the same thing: the exact answer is "no solution", and floating point sometimes cannot tell zero from almost zero. A coefficient of a quadrillion is how that looks when it does not raise. Paste all of it under `## Step 2`.
 
 *If it broke:* a `LinAlgError` on the 2-word solve itself means two of your chapter rows are exactly proportional, which happens only with tiny counts. Go back to T01 Step 4 and pick a more frequent `WORD2`.
 
@@ -104,7 +104,7 @@ git add logs && git commit && git push
 ```
 
 **Deliverable**
-`evidence/T04.md` with every slot filled + `linear/dependent.png` + `linear/video-notes-t04.jpg`.
+`evidence/T04.md` with every slot filled + `linear/dependent.png`.
 
 **Reflection Questions** (answer under `## Reflection` in `evidence/T04.md`)
 

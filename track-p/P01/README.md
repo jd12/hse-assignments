@@ -50,7 +50,7 @@ cd hse-2026-2027-rag-<your-username>
 git switch -c dev/setup
 ```
 
-Hooks do not travel with a clone, so `setup.sh` again. *You should see* it end by asking you to try committing a fake key; do it and watch it get refused. Its environment check now has two lines it did not have in the foundations repo, `Go toolchain` and `Boot.dev CLI`, and both have to show `[  ok  ]`. Paste those two lines under `## Step 2` in `evidence/P01.md`.
+Hooks do not travel with a clone, so `setup.sh` again. *You should see* it end by asking you to try committing a fake key; do it and watch it get refused. Its environment check now has two lines it did not have in the foundations repo, `Go toolchain` and `Boot.dev CLI`, and both have to show `[  ok  ]`. Paste those two lines under `## Step 2: the CLI` in `evidence/P01.md`; the slot is named for the CLI, not for the step you are on.
 
 Then close the Unit 0 log and open the track log. On GitHub, merge your student log's `<your-username>-unit0` pull request and delete the branch, then:
 

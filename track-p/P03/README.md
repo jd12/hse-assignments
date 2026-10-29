@@ -85,6 +85,6 @@ git add logs && git commit && git push
 
    *How to get it:* the lesson that introduces it shows the data structure; its keys are one thing and its values are lists of another. For the second half, count your passages from P02 and imagine a query of three terms.
 
-3. Paste one tf-idf value the chapter's tests checked for its dataset, with the term, the count, the df and, if the chapter's tf divides by it, the document length that went into it, and show the arithmetic.
+3. Paste one tf-idf value the chapter's tests checked for its dataset, with the term, the count, the document length and the df that went into it, and show the arithmetic.
 
    *How to get it:* `bootdev run <id>` without `-s` prints the test's input and expected output for the tf-idf lesson; the numbers are in the input, and the formula from Step 2 turns them into the expected output.

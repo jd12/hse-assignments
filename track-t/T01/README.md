@@ -8,7 +8,7 @@
 
 **During the video**
 
-**Ch. 1 · draw.** When he adds two vectors tip to tail, stop the video and draw your own pair: `(2, 1)` and `(-1, 3)`, the second one starting at the tip of the first, and the sum from the origin to where you ended up. Label the sum with its coordinates. When he gets to scalar multiplication, draw `2 · (2, 1)` on the same axes. Photograph the page and save it as `linear/video-notes-t01.jpg`; it goes in with the final commit.
+**Ch. 1 · draw.** When he adds two vectors tip to tail, stop the video and draw your own pair: `(2, 1)` and `(-1, 3)`, the second one starting at the tip of the first, and the sum from the origin to where you ended up. Label the sum with its coordinates. When he gets to scalar multiplication, draw `2 · (2, 1)` on the same axes. Keep the page; Reflection 1 is about the arrows on it.
 
 **Notes**
 
@@ -50,7 +50,7 @@ bash scripts/start-entry.sh
 That branch stays open for every theory assignment until Wed Dec 9. Under the timestamp, write today's checklist:
 
 ```markdown
-- [ ] Ch. 1 watched, the page drawn and photographed
+- [ ] Ch. 1 watched, the page drawn
 - [ ] gpt repo accepted, setup.sh run, corpus fetched and the sha256 matches
 - [ ] Step 4: WORD2 chosen, chapter_vectors.py run, output in evidence/T01.md
 - [ ] Extension: prediction written first, ratios run
@@ -74,7 +74,7 @@ grep -i sha256 data/SOURCE.md
 
 **Step 4. Cut the corpus into chapters and count two words.**
 
-Your corpus may not have chapters, so `linear/chapter_vectors.py` makes them: ten equal slices by word count, numbered 0 to 9 the way Python counts, so "chapter 3" means slice 3 and the first row of anything it prints is chapter 0. Open it and read the top half, down to the `if __name__` line; the bottom half runs the checks. `count_vector` turns a chapter into a vector by counting each word in a vocabulary, and `V2` is the ten chapters as vectors over a vocabulary of two words: `WORD1` is `the`, and `WORD2` is yours. Pick a content word that matters in your corpus (a name, a place, a topic) and appears in all ten chapters, put it in the `WORD2 =` line, and run it:
+Your corpus may not have chapters, so `linear/chapter_vectors.py` makes them: ten equal slices by word count, numbered 0 to 9 the way Python counts, so "chapter 3" means slice 3 and the first row of anything it prints is chapter 0. Open it and read the top half, down to the `if __name__` line; the bottom half runs the checks. `count_vector` turns a chapter into a vector by counting each word in a vocabulary, and `V2` is the ten chapters as vectors over a vocabulary of two words: `WORD1` is `the`, and `WORD2` is yours. Pick a content word that matters in your corpus (a name, a place, a topic) and appears in all ten chapters, put it in the `WORD2 =` line and on the `WORD2:` slot at the top of `evidence/T01.md`, and run it:
 
 ```bash
 uv run python linear/chapter_vectors.py
@@ -112,7 +112,7 @@ git add logs && git commit && git push -u origin <your-username>-track
 ```
 
 **Deliverable**
-`evidence/T01.md` with every slot filled + `linear/chapter_vectors.py` with your `WORD2` + `linear/video-notes-t01.jpg` + `linear/NOTATION.md` + `scripts/fetch_corpus.sh` and `data/SOURCE.md` committed. `data/corpus.txt` is never committed.
+`evidence/T01.md` with every slot filled + `linear/chapter_vectors.py` with your `WORD2` + `linear/NOTATION.md` + `scripts/fetch_corpus.sh` and `data/SOURCE.md` committed. `data/corpus.txt` is never committed.
 
 **Reflection Questions** (answer under `## Reflection` in `evidence/T01.md`)
 
@@ -124,6 +124,6 @@ git add logs && git commit && git push -u origin <your-username>-track
 
    *How to get it:* `A + B` on two lists is the second list appended to the first (open `chapter_vectors.py`: `chapters[2]` and `chapters[7]` are lists of words); `vA + vB` on two NumPy arrays adds matching coordinates. Counting is a sum over the words, and the sum over a glued list is the sum over each part.
 
-3. Your ten slopes all came out small, and they came out close to each other. Say why, from what both numbers in every row are counting.
+3. Your ten slopes all came out small. Say why, from what both numbers in every row are counting. Then say whether yours came out close to each other, and what about your corpus makes that so.
 
-   *How to get it:* look at the ten slope lines. Every chapter of any book says `the` far more often than it says any content word, so every slope is small, and two slices of one text use `the` at about the same rate, so the slopes are close. On Homer they run from 0.02 to 0.05.
+   *How to get it:* look at the ten slope lines. Every chapter of any book says `the` far more often than it says any content word, so every slope is small. Whether they are close depends on the file: ten slices of one story use a name at about the same rate, and Homer's run from 0.02 to 0.05, but a file that is really several texts on different subjects, or two books glued together, spreads out, because `WORD2` belongs to some slices and not others.

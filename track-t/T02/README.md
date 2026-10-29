@@ -8,7 +8,7 @@
 
 **During the video**
 
-**Ch. 3 · compute before he does.** He works an example in which he tells you where î and ĵ land and then asks where some other vector ends up. Pause before he answers. Write that vector as `x · (where î lands) + y · (where ĵ lands)`, with his numbers, and do the arithmetic on paper. Unpause and check. That one line of arithmetic is the whole chapter, and Step 3 checks it in code on your own chapter vectors. Photograph the page and save it as `linear/video-notes-t02.jpg`; it goes in with the final commit.
+**Ch. 3 · compute before he does.** He works an example in which he tells you where î and ĵ land and then asks where some other vector ends up. Pause before he answers. Write that vector as `x · (where î lands) + y · (where ĵ lands)`, with his numbers, and do the arithmetic on paper. Unpause and check. That one line of arithmetic is the whole chapter, and Step 3 checks it in code on your own chapter vectors.
 
 **Notes**
 
@@ -43,7 +43,7 @@ Under the timestamp, write today's checklist:
 
 ```markdown
 - [ ] Ch. 3 watched, his example computed before he did
-- [ ] Step 2: three matrices by hand, in evidence/T02.md before any code runs
+- [ ] Step 2: three matrices by hand, in evidence/T02.md and committed before any code runs
 - [ ] Step 3: landing.py checks them and moves my chapters
 - [ ] Extension: four predictions in the log, linearity.py run
 - [ ] Fill every slot in evidence/T02.md (check_evidence.py: all slots filled); push, open the PR, sign off
@@ -59,7 +59,13 @@ No code. On paper, give the 2×2 matrix for each of these by asking where î lan
 | (b) | horizontal shear that sends ĵ to (1, 1) and leaves î alone |
 | (c) | scale by 3 in x and by 0.5 in y |
 
-Type the three matrices under `## Step 2` in `evidence/T02.md` before you open any code. Step 3 checks them, and a matrix written after the check is a copy of the check.
+Type the three matrices under `## Step 2` in `evidence/T02.md` before you open any code, and commit that file now:
+
+```bash
+git add evidence/T02.md && git commit -m "T02: three matrices by hand"
+```
+
+Step 3 checks them, and a matrix written after the check is a copy of the check. The commit is how I can tell which came first.
 
 **Step 3. The code checks your matrices, then moves your chapters.**
 
@@ -86,7 +92,7 @@ v[0]*col0 + v[1]*col1     [1477.   58.]
 
 Whatever your corpus: both rotations keep the angle and keep L2 at `1.0000`; the shear and the scale change both, and the scale squeezes your bundle of arrows to a sliver, because it multiplies the `WORD2` direction by 0.5 and the `WORD1` direction by 3. L1 is the odd one. The 90° rotation keeps it, because a quarter turn only swaps the two coordinates, and the 45° rotation changes it. Only L2 survives every rotation, which is why L2 is the one called length.
 
-The last two lines are the Ch. 3 example on your corpus: `M @ v` and `v[0]` copies of column 0 plus `v[1]` copies of column 1 print the same two numbers, with your chapter 2 counts in them. Open `linear/transforms.png`. Your ten arrows are within a couple of degrees of each other, so the gray "fan" looks like one arrow; what you can see is the whole bundle turning a quarter circle under the rotation, stretching along the x axis under the scale, and barely moving under the shear, which is the point: a shear that sends ĵ to (1, 1) hardly touches arrows that lie almost along î. Paste everything it printed under `## Step 3`.
+The last two lines are the Ch. 3 example on your corpus: `M @ v` and `v[0]` copies of column 0 plus `v[1]` copies of column 1 print the same two numbers, with your chapter 2 counts in them. Open `linear/transforms.png`. On Homer the ten arrows are within two degrees of each other, so the gray "fan" looks like one arrow; on a corpus whose chapters differ in subject (your T01 slopes told you), the fan is visibly open. Either way, what you can see is the whole bundle turning a quarter circle under the rotation, stretching along the x axis under the scale, and barely moving under the shear, which is the point: a shear that sends ĵ to (1, 1) hardly touches arrows that lie almost along î. Paste everything it printed under `## Step 3`.
 
 *If it broke:* `i lands at [ 0. -1.]` for the rotation, or a picture where it turns clockwise, means you typed the matrix down its columns instead of across its rows; `np.array([[0, -1], [1, 0]])` is the first row then the second.
 
@@ -139,7 +145,7 @@ git add logs && git commit && git push
 ```
 
 **Deliverable**
-`evidence/T02.md` with every slot filled + `linear/landing.py` with your three matrices + `linear/transforms.png` + `linear/video-notes-t02.jpg`.
+`evidence/T02.md` with every slot filled + `linear/landing.py` with your three matrices + `linear/transforms.png`.
 
 **Reflection Questions** (answer under `## Reflection` in `evidence/T02.md`)
 

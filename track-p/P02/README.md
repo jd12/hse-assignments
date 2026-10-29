@@ -65,7 +65,7 @@ uv run python -m rag.corpus
 
 **Step 4. `rag/preprocess.py`.**
 
-NLTK is already installed by `setup.sh`; it is here only for its Porter stemmer. If the chapter had you use a different stemmer, use that one instead, so the two implementations agree. Open `rag/preprocess.py`. The top half is shipped: the docstring that states the order of operations, the stopword list, and `strip_punctuation`, which turns every punctuation mark and symbol into a space by its Unicode category rather than an ASCII list. Read those lines. The two functions that are the pipeline you type yourself, under the `# ---- P02 Step 4` line, because the pipeline is the lesson:
+NLTK is already installed by `setup.sh`; it is here only for its Porter stemmer, which is the one the file uses whatever the chapter used, so that the test lines below come out the same for everyone. If the chapter's stemmer differs, say so in `evidence/P02.md` and keep Porter here. Open `rag/preprocess.py`. The top half is shipped: the docstring that states the order of operations, the stopword list, and `strip_punctuation`, which turns every punctuation mark and symbol into a space by its Unicode category rather than an ASCII list. Read those lines. The two functions that are the pipeline you type yourself, under the `# ---- P02 Step 4` line, because the pipeline is the lesson:
 
 ```python
 # In: text.  Out: lowercased words of two or more characters, punctuation gone.
@@ -140,6 +140,6 @@ git add logs && git commit && git push
 
    *How to get it:* read the `if len(buf) >= min_chars` line and the `if buf and passages:` / `elif buf:` lines after the loop in `rag/corpus.py`.
 
-3. The chapter stems after it removes stopwords. Say what goes wrong if you stem first, with one stopword from the list that would stop matching.
+3. Check `scratch/p02-order.md`: does the chapter stem before or after it removes stopwords? Say what goes wrong if you stem first, with one stopword from the list that would stop matching.
 
    *How to get it:* `uv run python -c "from nltk.stem import PorterStemmer; print(PorterStemmer().stem('was'), PorterStemmer().stem('this'))"` prints what those two become.
