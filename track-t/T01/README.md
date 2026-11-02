@@ -86,7 +86,7 @@ Paste everything it printed under `## Step 4` in `evidence/T01.md`. *If it broke
 
 **Extension — how far apart do your ten arrows point? (ASSIGNED)**
 
-Every chapter arrow has a slope: the count of `WORD2` over the count of `WORD1`. Before you run anything, write under `## Extension` in `evidence/T01.md` which two chapters you expect to have the most different slopes, and why, from what you know about your corpus. Then:
+Every chapter arrow has a slope: the count of `WORD2` over the count of `WORD1`. Before you run anything, write under `## Extension` in `evidence/T01.md` which two chapters you expect to have the most different slopes, and why, from what you know about your corpus. Commit that file. I will check your commit timestamps. Then:
 
 ```bash
 uv run python linear/chapter_vectors.py ratios

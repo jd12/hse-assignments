@@ -47,7 +47,7 @@ Under the timestamp, write today's checklist:
 ```markdown
 - [ ] Ch. 2 watched, the three span pictures drawn; Ch. 6 watched, my two squares drawn with their areas
 - [ ] Step 2: span.py, chapter 5 in the span of 2 and 7, the singular system
-- [ ] Extension: prediction in the log, dependent.py run
+- [ ] Extension: prediction in evidence/T04.md and committed, then dependent.py run
 - [ ] Fill every slot in evidence/T04.md (check_evidence.py: all slots filled); push, open the PR, sign off
 ```
 
@@ -79,7 +79,7 @@ First, with two words the check prints back exactly chapter 5's vector: two chap
 
 **Extension — the most nearly dependent pair (ASSIGNED)**
 
-Two chapter vectors as the columns of a matrix have a determinant, and for arrows scaled to length 1 that determinant is the sine of the angle between them: 0 means parallel, which is "dependent", and 1 means perpendicular. Before you run anything, write in your log which pair of your ten chapters you expect to be closest to parallel. Commit the log. I will check your commit timestamps.
+Two chapter vectors as the columns of a matrix have a determinant, and for arrows scaled to length 1 that determinant is the sine of the angle between them: 0 means parallel, which is "dependent", and 1 means perpendicular. Before you run anything, write under `## Extension` in `evidence/T04.md` which pair of your ten chapters you expect to be closest to parallel. Commit that file. I will check your commit timestamps.
 
 ```bash
 uv run python linear/dependent.py

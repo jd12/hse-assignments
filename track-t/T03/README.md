@@ -46,7 +46,7 @@ Under the timestamp, write today's checklist:
 - [ ] Ch. 4 watched, his example and my two compositions done by hand; Ch. 5 watched
 - [ ] Step 2: transform_viz.py on my three matrices and the swap
 - [ ] Step 3: AB against BA
-- [ ] Extension: prediction in the log, compose3.py run
+- [ ] Extension: prediction in evidence/T03.md and committed, then compose3.py run
 - [ ] Fill every slot in evidence/T03.md (check_evidence.py: all slots filled); push, open the PR, sign off
 ```
 
@@ -90,7 +90,7 @@ Those two matrices are the two you wrote on paper during Ch. 4, if you composed 
 
 **Extension — three in a row (ASSIGNED)**
 
-Your rotation, shear and scale can be multiplied in six orders. Before you run anything, write in your log how many different matrices you expect from the six, and whether their determinants differ. Commit the log. I will check your commit timestamps.
+Your rotation, shear and scale can be multiplied in six orders. Before you run anything, write under `## Extension` in `evidence/T03.md` how many different matrices you expect from the six, and whether their determinants differ. Commit that file. I will check your commit timestamps.
 
 ```bash
 uv run python linear/compose3.py

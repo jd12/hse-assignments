@@ -8,7 +8,7 @@
 
 **During the video**
 
-**Ch. 9 · draw.** When he projects one vector onto another, stop and do it with your T01 pair: `v = (2, 1)` and `w = (-1, 3)`. Draw both from the origin, drop the perpendicular from `w` onto the line through `v`, and write the dot product next to it: `2·(-1) + 1·3 = 1`. Write whether the angle between them is under or over 90°, and check that the sign of `1` agrees. The duality half of the chapter, where a 1×2 matrix becomes a projection, has nothing to draw; it is why T05's `dot` and one-row `matmul` gave the same number. Photograph the page and save it as `linear/video-notes-t06.jpg`; it goes in with the final commit.
+**Ch. 9 · draw.** When he projects one vector onto another, stop and do it with your T01 pair: `v = (2, 1)` and `w = (-1, 3)`. Draw both from the origin, drop the perpendicular from `w` onto the line through `v`, and write the dot product next to it: `2·(-1) + 1·3 = 1`. Write whether the angle between them is under or over 90°, and check that the sign of `1` agrees. The duality half of the chapter, where a 1×2 matrix becomes a projection, has nothing to draw; it is why T05's `dot` and one-row `matmul` gave the same number. Put the dot product and the under-or-over answer under `## During the video` in `evidence/T06.md`.
 
 Linear algebra closes today: the nine chapters are watched, and `linalg.py` is yours. Today runs it on every pair of your chapters, times it against NumPy, and writes the findings.
 
@@ -41,7 +41,7 @@ Under the timestamp, write today's checklist:
 
 ```markdown
 - [ ] Ch. 9 watched, the projection drawn
-- [ ] Step 2: two predictions in the log, gram.py bands run
+- [ ] Step 2: two predictions in evidence/T06.md and committed, then gram.py bands run
 - [ ] Step 3: the timing table read
 - [ ] Step 4: linear/FINDINGS.md
 - [ ] Fill every slot in evidence/T06.md (check_evidence.py: all slots filled); push, open the PR, sign off
@@ -49,7 +49,7 @@ Under the timestamp, write today's checklist:
 
 **Step 2. Two vocabulary bands.**
 
-Before you run anything, write two predictions in your log and commit it: the smallest cosine you expect between any two of your ten chapters using the 50 most common words, and whether that number goes up or down if you throw the 50 most common words away and use ranks 51 to 250 instead. I will check your commit timestamps. Then:
+Before you run anything, write two predictions under `## Step 2` in `evidence/T06.md` and commit that file: the smallest cosine you expect between any two of your ten chapters using the 50 most common words, and whether that number goes up or down if you throw the 50 most common words away and use ranks 51 to 250 instead. I will check your commit timestamps. Then:
 
 ```bash
 uv run python linear/gram.py bands
@@ -73,7 +73,7 @@ Your `matmul` and NumPy's, on the 10×V chapter matrix times its transpose, at t
 
 **Step 4. Write `linear/FINDINGS.md`.**
 
-Half a page, four parts: both band lines; which pair of chapters is most alike in the ranks 51-250 band, with one sentence on why from what you know about your corpus; your two predictions, copied from the log unchanged, with one sentence each on whether they held; and the timing table with one sentence under it giving the `V=50` and `V=2000` ratios.
+Half a page, four parts: both band lines; which pair of chapters is most alike in the ranks 51-250 band, with one sentence on why from what you know about your corpus; your two predictions, copied from `evidence/T06.md` unchanged, with one sentence each on whether they held; and the timing table with one sentence under it giving the `V=50` and `V=2000` ratios.
 
 **Commit, push, PR, sign off.** Fill `## Reflection` in `evidence/T06.md` (the questions are below) and run `uv run python scripts/check_evidence.py T06` until it says `all slots filled`. Then:
 
@@ -92,7 +92,7 @@ git add logs && git commit && git push
 ```
 
 **Deliverable**
-`evidence/T06.md` with every slot filled + `linear/FINDINGS.md` + `linear/video-notes-t06.jpg`. With T01 to T05 merged, `linear/` holds the whole week: your matrices, the visualizer's pictures, `linalg.py`, and the findings.
+`evidence/T06.md` with every slot filled + `linear/FINDINGS.md`. With T01 to T05 merged, `linear/` holds the whole week: your matrices, the visualizer's pictures, `linalg.py`, and the findings.
 
 **Reflection Questions** (answer under `## Reflection` in `evidence/T06.md`)
 
@@ -106,4 +106,4 @@ git add logs && git commit && git push
 
 3. Linear algebra is done. Name the one idea from the nine chapters you would be least able to explain to a classmate, and the chapter it is in.
 
-   *How to get it:* reread your `NOTATION.md` and your six pages of video notes; the idea with the fewest words next to it is usually the one.
+   *How to get it:* reread your `NOTATION.md` and the `## During the video` slot in each of the six evidence files. The idea with the fewest words next to it is usually the one.

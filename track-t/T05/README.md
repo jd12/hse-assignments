@@ -11,7 +11,7 @@
 
 **Ch. 7 · one word.** When he says a system `A x = b` has a solution only if `b` is in the column space of `A`, write on your page which of his two pictures your T04 singular system is: `b` off the line (no solution) or `b` on it (infinitely many). The column space is the span of the columns, Ch. 2's word for the same set.
 
-**Ch. 8 · write the rule.** A 2×3 matrix takes a vector with three coordinates and lands it in two. Write the dimension rule on your page before Step 2 needs it: `(n × m) @ (m × p) → (n × p)`. The inner dimensions must match, and they vanish. Photograph the page and save it as `linear/video-notes-t05.jpg`; it goes in with the final commit.
+**Ch. 8 · write the rule.** A 2×3 matrix takes a vector with three coordinates and lands it in two. Write the dimension rule on your page before Step 2 needs it: `(n × m) @ (m × p) → (n × p)`. The inner dimensions must match, and they vanish. Put both answers under `## During the video` in `evidence/T05.md`.
 
 **Notes**
 
@@ -100,7 +100,7 @@ uv run pytest linear -q
 
 **Step 4. Break it on purpose.**
 
-In `matmul`, change `col = [B[k][j] for k in range(m)]` to `col = [B[j][k] for k in range(m)]`, the transposed bug. Before you run the tests, write under `## Step 4` in `evidence/T05.md` which of the five you expect to fail. Then run `uv run pytest linear -q`.
+In `matmul`, change `col = [B[k][j] for k in range(m)]` to `col = [B[j][k] for k in range(m)]`, the transposed bug. Before you run the tests, write under `## Step 4` in `evidence/T05.md` which of the five you expect to fail, and commit that file. Then run `uv run pytest linear -q`.
 
 *You should see* `2 failed, 3 passed`: the square test fails on a wrong answer (`assert False`), the non-square test fails with `IndexError: list index out of range`, and the two `dot` tests and the mismatch test pass, because they never reach the bad line. Paste the `FAILED` lines and the summary line under `## Step 4`. Put the line back, run again to `5 passed`, and commit with a message that names the test that caught it. *If it broke* with the tests still failing after you put the line back, delete `linear/__pycache__`; Python kept the old compiled file because the edit landed within the same second.
 
@@ -110,7 +110,7 @@ In `matmul`, change `col = [B[k][j] for k in range(m)]` to `col = [B[j][k] for k
 uv run python linear/gram.py
 ```
 
-`gram.py` takes chapters 2 and 7 over the 50 most common words of your corpus and calls your `dot` on them. *You should see* a dot product in the millions, a cosine above 0.9, a one-row `matmul` that prints the same dot product wrapped as `[[...]]`, and the first ten of the fifty words. On Homer: `chapter 2 . chapter 7 = 7,470,275   cosine = 0.9538`, `one-row matmul: [[7470275.0]]` and `top 10 of the 50: ['the', 'and', 'of', 'to', 'he', 'in', 'his', 'a', 'you', 'i']`. The dot product is in the millions because `the` alone appears a thousand or two times in each chapter and contributes the product of its two counts, `1419 × 1935` on Homer, over a third of the total. The `matmul` line is Ch. 8's rule at its smallest: a 1×50 matrix times a 50×1 matrix is a 1×1 matrix, and the one entry is a dot product. Paste all three lines under `## Step 5`.
+`gram.py` takes chapters 2 and 7 over the 50 most common words of your corpus and calls your `dot` on them. *You should see* a dot product in the millions, a cosine above 0.9, a one-row `matmul` that prints the same dot product wrapped as `[[...]]`, and the first ten of the fifty words. On Homer: `chapter 2 . chapter 7 = 7,470,275   cosine = 0.9538`, `one-row matmul: [[7470275.0]]` and `top 10 of the 50: ['the', 'and', 'of', 'to', 'he', 'in', 'his', 'a', 'you', 'i']`. The dot product is in the millions because `the` alone appears a thousand or two times in each chapter and contributes the product of its two counts, `1419 × 1935` on Homer, over a third of the total. The `matmul` line is Ch. 8's rule at its smallest: a 1×50 matrix times a 50×1 matrix is a 1×1 matrix, and the one entry is a dot product. Paste all three lines under `## Step 5`. *If it broke* with `IndexError` inside `matmul`, the Step 4 line is still transposed, or `linear/__pycache__` kept the transposed version; put the line back and delete that folder.
 
 **Commit, push, PR, sign off.** Fill `## Reflection` in `evidence/T05.md` (the questions are below) and run `uv run python scripts/check_evidence.py T05` until it says `all slots filled`. Then:
 
@@ -129,7 +129,7 @@ git add logs && git commit && git push
 ```
 
 **Deliverable**
-`evidence/T05.md` with every slot filled + `linear/linalg.py` (no NumPy) + the commit that names the test that caught the bug + `linear/video-notes-t05.jpg`.
+`evidence/T05.md` with every slot filled + `linear/linalg.py` (no NumPy) + the commit that names the test that caught the bug.
 
 **Reflection Questions** (answer under `## Reflection` in `evidence/T05.md`)
 

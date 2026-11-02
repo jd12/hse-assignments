@@ -32,7 +32,7 @@ Under the timestamp, write today's checklist:
 ```markdown
 - [ ] Chapter 2 finished, every lesson green
 - [ ] Step 3: the CHAPTER FORMULA line checked, rag.tfidf run, my two P03 words checked
-- [ ] Extension: prediction in the log, corpus stopwords, rag/corpus_notes.md
+- [ ] Extension: prediction in evidence/P04.md and committed, corpus stopwords, rag/corpus_notes.md
 - [ ] Fill every slot in evidence/P04.md (check_evidence.py: all slots filled); push, sign off
 ```
 
@@ -72,7 +72,7 @@ uv run python -m rag.tfidf idf ulysses the
 
 **Extension — your corpus's own stopwords (ASSIGNED)**
 
-Before you run anything, write in your log three words you expect to be in at least a fifth of your passages. Commit the log. I will check your commit timestamps. Then:
+Before you run anything, write under `## Extension` in `evidence/P04.md` three words you expect to be in at least a fifth of your passages. Commit that file. I will check your commit timestamps. Then:
 
 ```bash
 uv run python -m rag.tfidf stopwords

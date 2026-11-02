@@ -45,7 +45,7 @@ Under the timestamp, write today's checklist:
 - [ ] Ch. 3 watched, his example computed before he did
 - [ ] Step 2: three matrices by hand, in evidence/T02.md and committed before any code runs
 - [ ] Step 3: landing.py checks them and moves my chapters
-- [ ] Extension: four predictions in the log, linearity.py run
+- [ ] Extension: four predictions in evidence/T02.md and committed, then linearity.py run
 - [ ] Fill every slot in evidence/T02.md (check_evidence.py: all slots filled); push, open the PR, sign off
 ```
 
@@ -98,7 +98,7 @@ The last two lines are the Ch. 3 example on your corpus: `M @ v` and `v[0]` copi
 
 **Extension — which ways of processing a count vector are linear? (ASSIGNED)**
 
-Four things people do to word counts before a model sees them. Before you run anything, write in your log, for each of the four, "linear" or "not linear", and for the ones you call linear, the 2×2 matrix, found by asking where î and ĵ land. Commit the log. I will check your commit timestamps.
+Four things people do to word counts before a model sees them. Before you run anything, write under `## Extension` in `evidence/T02.md`, for each of the four, "linear" or "not linear", and for the ones you call linear, the 2×2 matrix, found by asking where î and ĵ land. Commit that file. I will check your commit timestamps.
 
 | Name | What it does to a chapter vector `v` |
 |---|---|
