@@ -126,7 +126,7 @@ log counts                    6.7       13.4       976.3
                        matrix from where i and j land: [[0.6931, 0.0], [0.0, 0.6931]]
 ```
 
-For **centered**, the add gap is exactly the larger entry of your mean vector, because `(u + v) - mean` and `(u - mean) + (v - mean)` differ by one `mean`: a linear step plus a shift, which is called affine. For **log counts**, every gap is large and the "matrix" built from î and ĵ is nonsense, because no matrix does what `log` does. For the two linear ones, the printed matrix is the one you wrote in your log. Paste the table under `## Extension` in `evidence/T02.md` and say, for each function, whether your prediction held.
+For **centered**, the add gap is exactly the larger entry of your mean vector, because `(u + v) - mean` and `(u - mean) + (v - mean)` differ by one `mean`: a linear step plus a shift, which is called affine. For **log counts**, every gap is large and the "matrix" built from î and ĵ is nonsense, because no matrix does what `log` does. For the two linear ones, the printed matrix is the one you wrote under `## Extension`. Paste the table under `## Extension` in `evidence/T02.md` and say, for each function, whether your prediction held.
 
 **Commit, push, PR, sign off.** Fill `## Reflection` in `evidence/T02.md` (the questions are below) and run `uv run python scripts/check_evidence.py T02` until it says `all slots filled`. Then:
 
