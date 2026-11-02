@@ -9,9 +9,9 @@
 
 **During the video**
 
-**Ch. 2 · draw.** When he talks about the span of two vectors, draw three small sets of axes side by side and fill in the span for each case: two vectors pointing in different directions, two vectors on the same line, and both vectors zero. Write under each one "whole plane", "a line" or "a point". Reflection 1 asks which picture your chapters are.
+**Ch. 2 · three answers.** When he talks about the span of two vectors, pause and write the span for each of three cases: two vectors pointing in different directions, two vectors on the same line, and both vectors zero. Each answer is one of "whole plane", "a line" or "a point". Reflection 1 asks which case your chapters are.
 
-**Ch. 6 · draw the square.** When he shows what a transformation does to the unit square, sketch the square and the shape it becomes for your T02 scale matrix and your shear, and write the area next to each shape: T03's `det =` lines told you the numbers, today's drawings are why. Put the two areas under `## During the video` in `evidence/T04.md`.
+**Ch. 6 · two areas.** When he shows what a transformation does to the unit square, pause and write what the square becomes under your T02 scale matrix and under your shear, and the area of each: a 3 by 0.5 rectangle, and a parallelogram with base 1 and height 1. T03's `det =` lines told you the numbers; the video is why. Put the three span answers and the two areas under `## During the video` in `evidence/T04.md`.
 
 **Notes**
 
@@ -45,7 +45,7 @@ bash scripts/start-entry.sh
 Under the timestamp, write today's checklist:
 
 ```markdown
-- [ ] Ch. 2 watched, the three span pictures drawn; Ch. 6 watched, my two squares drawn with their areas
+- [ ] Ch. 2 watched, the three span answers written; Ch. 6 watched, the two areas written
 - [ ] Step 2: span.py, chapter 5 in the span of 2 and 7, the singular system
 - [ ] Extension: prediction in evidence/T04.md and committed, then dependent.py run
 - [ ] Fill every slot in evidence/T04.md (check_evidence.py: all slots filled); push, open the PR, sign off
@@ -108,13 +108,13 @@ git add logs && git commit && git push
 
 **Reflection Questions** (answer under `## Reflection` in `evidence/T04.md`)
 
-1. Paste the `2 words` line. Say which of your three Ch. 2 span pictures chapters 2 and 7 are, over two words, and why that is enough to make every chapter reachable.
+1. Paste the `2 words` line. Say which of the three Ch. 2 span cases chapters 2 and 7 are, over two words, and why that is enough to make every chapter reachable.
 
-   *How to get it:* chapters 2 and 7 have different slopes (T01's extension printed them), so the two arrows are not on one line, which is the "whole plane" picture. Every point in the plane is some amount of one plus some amount of the other, and the two coefficients on the line are those amounts for chapter 5.
+   *How to get it:* chapters 2 and 7 have different slopes (T01's extension printed them), so the two arrows are not on one line, which is the "whole plane" case. Every point in the plane is some amount of one plus some amount of the other, and the two coefficients on the line are those amounts for chapter 5.
 
 2. Paste the `singular system` block: the matrix, the rank, the determinant, and whichever ending you got. Say which kind of singular it is, given the right-hand side it tried to reach, and write a right-hand side in your own counts that would have made it the other kind.
 
-   *How to get it:* the columns both lie on the line through chapter 2's vector, which is the "a line" picture. `span.py` asked for chapter 5, which is off that line, so there is no solution. Any right-hand side on the line, such as chapter 2's own counts or three times them, has infinitely many.
+   *How to get it:* the columns both lie on the line through chapter 2's vector, which is the "a line" case. `span.py` asked for chapter 5, which is off that line, so there is no solution. Any right-hand side on the line, such as chapter 2's own counts or three times them, has infinitely many.
 
 3. From three words on, the relative miss is not zero. Paste the four coefficient lines and say what changed between two words and three that made chapter 5 unreachable.
 

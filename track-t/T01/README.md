@@ -8,7 +8,7 @@
 
 **During the video**
 
-**Ch. 1 · draw.** When he adds two vectors tip to tail, stop the video and draw your own pair: `(2, 1)` and `(-1, 3)`, the second one starting at the tip of the first, and the sum from the origin to where you ended up. Label the sum with its coordinates. When he gets to scalar multiplication, draw `2 · (2, 1)` on the same axes. Keep the page: Reflection 1 is about the arrows on it.
+**Ch. 1 · compute before he does.** When he adds two vectors tip to tail, pause and add your own pair on paper: `(2, 1) + (-1, 3)`, coordinate by coordinate. When he gets to scalar multiplication, compute `2 · (2, 1)`. Unpause and check both against what he draws. Those two lines of arithmetic are what Step 4's `add:` and `scale:` checks test on your chapter vectors.
 
 **Notes**
 
@@ -50,7 +50,7 @@ bash scripts/start-entry.sh
 That branch stays open for every theory assignment until Wed Dec 9. Under the timestamp, write today's checklist:
 
 ```markdown
-- [ ] Ch. 1 watched, the page drawn
+- [ ] Ch. 1 watched, his sum and his scaling computed before he did
 - [ ] gpt repo accepted, setup.sh run, corpus fetched and the sha256 matches
 - [ ] Step 4: WORD2 chosen, chapter_vectors.py run, output in evidence/T01.md
 - [ ] Extension: prediction written first, ratios run

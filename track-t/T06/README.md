@@ -8,7 +8,7 @@
 
 **During the video**
 
-**Ch. 9 · draw.** When he projects one vector onto another, stop and do it with your T01 pair: `v = (2, 1)` and `w = (-1, 3)`. Draw both from the origin, drop the perpendicular from `w` onto the line through `v`, and write the dot product next to it: `2·(-1) + 1·3 = 1`. Write whether the angle between them is under or over 90°, and check that the sign of `1` agrees. The duality half of the chapter, where a 1×2 matrix becomes a projection, has nothing to draw; it is why T05's `dot` and one-row `matmul` gave the same number. Put the dot product and the under-or-over answer under `## During the video` in `evidence/T06.md`.
+**Ch. 9 · compute before he does.** When he says the dot product is positive when two vectors point roughly the same way and negative when they point apart, pause and compute it for your T01 pair, `v = (2, 1)` and `w = (-1, 3)`: `2·(-1) + 1·3 = 1`. Say whether the angle between them is under or over 90°, and check that the sign of `1` agrees. The duality half of the chapter, where a 1×2 matrix becomes a projection, is why T05's `dot` and one-row `matmul` gave the same number. Put the dot product and the under-or-over answer under `## During the video` in `evidence/T06.md`.
 
 Linear algebra closes today: the nine chapters are watched, and `linalg.py` is yours. Today runs it on every pair of your chapters, times it against NumPy, and writes the findings.
 
@@ -40,7 +40,7 @@ bash scripts/start-entry.sh
 Under the timestamp, write today's checklist:
 
 ```markdown
-- [ ] Ch. 9 watched, the projection drawn
+- [ ] Ch. 9 watched, the dot product of my T01 pair computed
 - [ ] Step 2: two predictions in evidence/T06.md and committed, then gram.py bands run
 - [ ] Step 3: the timing table read
 - [ ] Step 4: linear/FINDINGS.md

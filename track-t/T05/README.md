@@ -9,9 +9,9 @@
 
 **During the video**
 
-**Ch. 7 · one word.** When he says a system `A x = b` has a solution only if `b` is in the column space of `A`, write on your page which of his two pictures your T04 singular system is: `b` off the line (no solution) or `b` on it (infinitely many). The column space is the span of the columns, Ch. 2's word for the same set.
+**Ch. 7 · one word.** When he says a system `A x = b` has a solution only if `b` is in the column space of `A`, write down which of his two pictures your T04 singular system is: `b` off the line (no solution) or `b` on it (infinitely many). The column space is the span of the columns, Ch. 2's word for the same set.
 
-**Ch. 8 · write the rule.** A 2×3 matrix takes a vector with three coordinates and lands it in two. Write the dimension rule on your page before Step 2 needs it: `(n × m) @ (m × p) → (n × p)`. The inner dimensions must match, and they vanish. Put both answers under `## During the video` in `evidence/T05.md`.
+**Ch. 8 · write the rule.** A 2×3 matrix takes a vector with three coordinates and lands it in two. Write the dimension rule down before Step 2 needs it: `(n × m) @ (m × p) → (n × p)`. The inner dimensions must match, and they vanish. Put both answers under `## During the video` in `evidence/T05.md`.
 
 **Notes**
 
