@@ -4,7 +4,7 @@
 
 **Watch — none**
 
-Boot.dev has no video: short readings, a function to write, tests run on your machine by its CLI. Today you buy the seat, point the CLI at it, accept the track repo, bring your corpus over, and start chapter 1.
+Boot.dev has no video: short readings, a function to write, tests run on your machine by its CLI. Today you buy the seat, point the CLI at it, accept the track repo, bring your corpus over, and do the first half of chapter 1, lessons 2 to 5.
 
 **Notes**
 
@@ -66,7 +66,7 @@ That branch stays open for every applied assignment until Wed Dec 9. Under the t
 ```markdown
 - [ ] Seat bought, bootdev login done, check_env says ok twice
 - [ ] rag repo accepted, setup.sh run, corpus fetched and the sha256 matches
-- [ ] Chapter 1, first half, every lesson run locally before it is submitted
+- [ ] Chapter 1, lessons 2 to 5, every lesson run locally before it is submitted
 - [ ] Fill every slot in evidence/P01.md (check_evidence.py: all slots filled); push, open the PR, sign off
 ```
 
@@ -85,9 +85,9 @@ grep -i sha256 data/SOURCE.md
 
 *You should see* the same 64 hex characters twice. Paste both lines under `## Step 4`, and put the `Title:` line from `data/SOURCE.md` on the `Corpus:` line at the top of `evidence/P01.md`. *If it broke* with a `curl` error or a `data/corpus.txt` of 0 bytes, the download was blocked; copy `data/corpus.txt` from the foundations repo instead and run the hash check again. *If it broke* with different hashes, the source changed since September; do not edit the hash to match. Run the script in the foundations repo too, `diff` the two files, and tell me which one moved. `git status` shows `scripts/fetch_corpus.sh` and `data/SOURCE.md` as new and nothing else under `data/`.
 
-**Step 5. Chapter 1, first half.**
+**Step 5. Chapter 1, first half: lessons 2 to 5.**
 
-Lesson 2 sets up the project. Its six steps, as commands, run from `~/version_control` so the project lands beside your course repos:
+Stop after lesson 5; lessons 6 to 9 are P02. Lesson 2 sets up the project. Its six steps, as commands, run from `~/version_control` so the project lands beside your course repos:
 
 ```bash
 cd ~/version_control
