@@ -95,11 +95,13 @@ Those two matrices are the two you wrote on paper during Ch. 4, if you composed 
 
 Your rotation, shear and scale can be multiplied in six orders. Before you run anything, write under `## Extension` in `evidence/T03.md` how many different matrices you expect from the six, and whether their determinants differ. Commit that file. I will check your commit timestamps.
 
+`compose3.py` has nothing to edit; it reads `MATRICES` from `linear/landing.py`, the three rows you filled in for T02 Step 3. Open `landing.py` and check that those rows are your matrices on this branch, not the template's zeros, before you run:
+
 ```bash
 uv run python linear/compose3.py
 ```
 
-*You should see* six lines, one per order, each with the product and its determinant and the word `new` or `same as one above`, then a count. On Homer's matrices, which are everyone's matrices today, all six are `new`: `6 distinct matrices from 6 orders`, and every determinant is `1.5000`. The order changes where everything lands and does not change the area scale. Paste the lines under `## Extension` in `evidence/T03.md` and say whether your prediction held.
+*You should see* six lines, one per order, each with the product and its determinant and the word `new` or `same as one above`, then a count. On Homer's matrices, which are everyone's matrices today, all six are `new`: `6 distinct matrices from 6 orders`, and every determinant is `1.5000`. The order changes where everything lands and does not change the area scale. Paste the lines under `## Extension` in `evidence/T03.md` and say whether your prediction held. *If it broke* with six matrices of zeros, `det = 0.0000` on every line and `1 distinct matrices from 6 orders`, `landing.py` on this branch still has the template's zeros: you branched from `main` without your T02 branch merged. Fill in the three rows and run again.
 
 **Commit, push, PR, sign off.** Fill `## Reflection` in `evidence/T03.md` (the questions are below) and run `uv run python scripts/check_evidence.py T03` until it says `all slots filled`. Then:
 
