@@ -168,6 +168,32 @@ bootdev run -s
 
 Three things to notice, because P02 does this on your corpus: `in` on strings is the simplest search there is and already breaks on case and punctuation; `[:5]` is a hard cutoff with no ranking, which is what TF-IDF fixes next week; and loading the whole file on every search is fine for a thousand movies and a bad habit, which chapter 2's index addresses.
 
+**Lesson 5: text processing, first step.** The reading lists the five steps of the pipeline the chapter builds (lowercase, strip punctuation, tokenize, drop stopwords, stem). Write those five, in that order, in `scratch/p02-order.md` now; that is the list Reflection 1 and P02 want. The assignment itself does only the first one: Webflyx users can't be bothered with the shift key, so `"country"` has to find `No Country for Old Men`.
+
+1. In `cli/lib/keyword_search.py`, lowercase both sides of the comparison:
+
+```python
+def search_titles(query):
+    query = query.lower()
+    results = []
+    for movie in load_movies():
+        if query in movie["title"].lower():
+            results.append(movie)
+    return results[:5]
+```
+
+Both sides, not one: `"country" in "No Country for Old Men"` is `False`, and `"Country" in "no country..."` is too. Lowercasing the title inside the loop means a new lowercase copy per movie per search, which is fine for a thousand titles and is exactly the kind of work chapter 2's index does once instead of every time.
+
+2. Run it, then submit:
+
+```bash
+uv run cli/keyword_search_cli.py search "country"
+bootdev run
+bootdev run -s
+```
+
+*You should see* `Searching for: country` and a list with `No Country for Old Men`, `The Wonderful Country` and `The Country Bears` in it; that is the CLI check. *If it broke* with the three titles missing but no error, you lowercased the query and not the title, or the other way round.
+
 **Commit, push, PR, sign off.** Fill `## Reflection` in `evidence/P01.md` (the questions are below) and run `uv run python scripts/check_evidence.py P01` until it says `all slots filled`. Then:
 
 ```bash
