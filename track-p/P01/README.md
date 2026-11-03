@@ -216,9 +216,9 @@ git add logs && git commit && git push -u origin <your-username>-track
 
 **Reflection Questions** (answer under `## Reflection` in `evidence/P01.md`)
 
-1. Chapter 1's first lessons normalize text before anything else sees it. Name the first two operations the chapter applies, in its order, and say what each one is for.
+1. Lesson 4's search found `"Great"` and not `"great"`. Paste your lesson 5 `search_titles`, say which two expressions changed, and say what goes wrong if only one of them does.
 
-   *How to get it:* the lesson titles in chapter 1's sidebar are the operations, in order. Write them down in `scratch/p02-order.md` now; P02 needs the whole list.
+   *How to get it:* the two `.lower()` calls. With one of them, `"country"` against `"No Country for Old Men"` fails one way and `"Country"` against `"no country for old men"` fails the other; the lesson's check uses the lowercase query, so lowercasing only the query still misses all three titles.
 
 2. `bootdev run <id>` without `-s` runs the tests on your machine. Paste one test's output from a lesson that failed before it passed, and say what the test was checking.
 
