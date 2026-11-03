@@ -50,7 +50,7 @@ The moment the chapter states it, before the next lesson. `scratch/p03-formula.m
 
 **Step 3. Chapter 2, first half.**
 
-In `~/version_control/bootdev-rag/`, lesson by lesson, `bootdev run <id>` before `bootdev run <id> -s`, for about twenty-five minutes. Stop where the period leaves you; P04 finishes the chapter. Save the chapter page as `evidence/p03-bootdev.png`.
+In `~/version_control/rag-search-engine/`, lesson by lesson, `bootdev run <id>` before `bootdev run <id> -s`, for about twenty-five minutes. Stop where the period leaves you; P04 finishes the chapter. Save the chapter page as `evidence/p03-bootdev.png`.
 
 **Step 4. Two predictions.**
 

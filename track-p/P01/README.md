@@ -8,7 +8,7 @@ Boot.dev has no video: short readings, a function to write, tests run on your ma
 
 **Notes**
 
-**Keep Boot.dev's project outside every course repo.** The course builds its own project on its own dataset. Put it in `~/version_control/bootdev-rag/` so none of its files end up in a course commit.
+**Keep Boot.dev's project outside every course repo.** The course builds its own project on its own dataset, and its chapter 1 lesson 2 creates the folder for you: `uv init --no-package rag-search-engine` makes `rag-search-engine/` with its own git repo inside it. Run that from `~/version_control`, so the project lands at `~/version_control/rag-search-engine/`, a sibling of your course repos and never inside one. The CLI's checks run in that folder, so keep the course's name for it.
 
 **Type every solution yourself.** Do not paste from the hint panel or the solution tab. Every chapter ends with you writing the same function a second time on your corpus, and the second time goes quickly only if the first time went through your fingers.
 
@@ -88,10 +88,10 @@ grep -i sha256 data/SOURCE.md
 **Step 5. Chapter 1, first half.**
 
 ```bash
-mkdir -p ~/version_control/bootdev-rag && cd ~/version_control/bootdev-rag
+cd ~/version_control
 ```
 
-Work through chapter 1, Preprocessing, lesson by lesson, in that folder, for the rest of the period: read, write the function, `bootdev run <id>`, fix, `bootdev run <id> -s`. Today's setup eats most of the period, so one or two lessons is a normal day. Stop when the period ends, wherever you are; P02 finishes the chapter. Before you stop, save a screenshot of the chapter page showing which lessons are green as `evidence/p01-bootdev.png` in the rag repo.
+Then follow chapter 1 lesson by lesson. Lesson 2 has you run `uv init --no-package rag-search-engine`, `cd rag-search-engine`, `uv venv` and `source .venv/bin/activate`; do those exactly as the lesson shows, from `~/version_control`, and every later lesson runs inside `~/version_control/rag-search-engine/` with that environment active. (That project uses an activated venv the way Boot.dev likes; the course repos use `uv run`. Both are fine, they are different folders.) For the rest of the period: read, write the function, `bootdev run <id>`, fix, `bootdev run <id> -s`. Today's setup eats most of the period, so one or two lessons is a normal day. Stop when the period ends, wherever you are; P02 finishes the chapter. Before you stop, save a screenshot of the chapter page showing which lessons are green as `evidence/p01-bootdev.png` in the rag repo.
 
 **Commit, push, PR, sign off.** Fill `## Reflection` in `evidence/P01.md` (the questions are below) and run `uv run python scripts/check_evidence.py P01` until it says `all slots filled`. Then:
 

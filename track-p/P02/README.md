@@ -51,7 +51,7 @@ Under the timestamp, write today's checklist:
 
 **Step 2. Finish chapter 1.**
 
-In `~/version_control/bootdev-rag/`, the remaining lessons, each run locally before it is submitted. When the chapter page shows every lesson complete, save it as `evidence/p02-bootdev-ch1.png` in the rag repo, and finish `scratch/p02-order.md`.
+In `~/version_control/rag-search-engine/`, the remaining lessons, each run locally before it is submitted. When the chapter page shows every lesson complete, save it as `evidence/p02-bootdev-ch1.png` in the rag repo, and finish `scratch/p02-order.md`.
 
 **Step 3. The corpus as passages.**
 

@@ -38,7 +38,7 @@ Under the timestamp, write today's checklist:
 
 **Step 2. Finish chapter 2.**
 
-In `~/version_control/bootdev-rag/`, the remaining lessons. When the chapter page shows every lesson complete, save it as `evidence/p04-bootdev-ch2.png` in the rag repo.
+In `~/version_control/rag-search-engine/`, the remaining lessons. When the chapter page shows every lesson complete, save it as `evidence/p04-bootdev-ch2.png` in the rag repo.
 
 **Step 3. The index on your corpus.**
 

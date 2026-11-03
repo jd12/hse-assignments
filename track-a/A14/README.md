@@ -7,7 +7,7 @@ Wed Nov 4 — [Boot.dev, *Learn Retrieval Augmented Generation*](https://www.boo
 
 **During the video**
 
-Same folder as A13, `~/version_control/bootdev-rag/`. Type every solution yourself, run each lesson with `bootdev run <lesson-id>` before you submit it with `-s`.
+Same folder as A13, `~/version_control/rag-search-engine/`. Type every solution yourself, run each lesson with `bootdev run <lesson-id>` before you submit it with `-s`.
 
 **Ch. 3 · write the constants down.** The chapter builds BM25, and BM25 has two tuning constants, `k1` and `b`. When the chapter gives you their values, write them into `scratch/a14-bm25.md` in your rag repo, along with one sentence for each saying what it controls in the chapter's own words. Step 3 uses those values.
 

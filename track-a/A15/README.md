@@ -7,7 +7,7 @@ Thu Nov 5 — [Boot.dev, *Learn Retrieval Augmented Generation*](https://www.boo
 
 **During the video**
 
-Same folder, `~/version_control/bootdev-rag/`. Type every solution, `bootdev run <lesson-id>` before `-s`.
+Same folder, `~/version_control/rag-search-engine/`. Type every solution, `bootdev run <lesson-id>` before `-s`.
 
 **Ch. 4 · write down the model.** When the chapter loads an embedding model, write its name and the dimension of the vectors it produces into `scratch/a15-models.md` in your rag repo. Under it, write the model you have used since A05 (`text-embedding-3-small`) and its dimension from your A05 `FINDINGS.md`. They will not match. Step 2 is about why that is fine and what would make it not fine.
 

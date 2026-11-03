@@ -11,7 +11,7 @@ Boot.dev has no video: short readings, a function to write, tests run on your ma
 
 **During the video**
 
-Boot.dev's course builds its own project on its own dataset. Keep that project in its own folder, `~/version_control/bootdev-rag/`, outside every course repo, so none of its files end up in a course commit.
+Boot.dev's course builds its own project on its own dataset. Keep that project in its own folder, `~/version_control/rag-search-engine/`, outside every course repo, so none of its files end up in a course commit.
 
 **Type every solution yourself.** Do not paste from the hint panel or the solution tab. The walkthrough below has you write the same function a second time on your corpus, and the second time only goes quickly if the first time went through your fingers.
 

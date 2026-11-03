@@ -9,7 +9,7 @@ That is about 50 minutes at the keyboard, over the cap. Both chapters are here b
 
 **During the video**
 
-Same folder, `~/version_control/bootdev-rag/`. Type every solution, `bootdev run <lesson-id>` before `-s`.
+Same folder, `~/version_control/rag-search-engine/`. Type every solution, `bootdev run <lesson-id>` before `-s`.
 
 **Ch. 5 · break the chunker on purpose.** When you have the chapter's fixed-size chunker passing, call it once with the overlap equal to the chunk size, and write what happened in `scratch/a16-chunks.md`: an error, a hang (press Ctrl-C), or a result. Then call it on a string whose length is not a multiple of the chunk size and write down what the last chunk looks like.
 
