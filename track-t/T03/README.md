@@ -58,13 +58,16 @@ First, the two matrices from your page, before any code runs: type them under `#
 git add evidence/T03.md && git commit -m "T03: two compositions by hand"
 ```
 
-Open `linear/transform_viz.py` and read `draw`: thirteen grid lines each way, drawn gray before and blue after `M`; the unit square after `M` in gold; green and red arrows for where î and ĵ land. Then run it on your three T02 matrices, one at a time, and look at `linear/viz.png` after each. The four numbers are the matrix read across its rows: `a b c d` is `[[a, b], [c, d]]`.
+Open `linear/transform_viz.py` and read `draw`: thirteen grid lines each way, drawn gray before and blue after `M`; the unit square after `M` in gold; green and red arrows for where î and ĵ land. Then run it four times, on your three T02 matrices and then a swap, and look at `linear/viz.png` after each. The four numbers are the matrix read across its rows: `a b c d` is `[[a, b], [c, d]]`.
 
 ```bash
-uv run python linear/transform_viz.py 0 -1 1 0
+uv run python linear/transform_viz.py 0 -1 1 0      # rotate 90
+uv run python linear/transform_viz.py 1 1 0 1       # shear
+uv run python linear/transform_viz.py 3 0 0 0.5     # scale
+uv run python linear/transform_viz.py 0 1 1 0       # swap i-hat and j-hat
 ```
 
-*You should see* `det = 1.0` and, in the picture, the grid landing on itself (a quarter turn of a square grid does that; the arrows and the gold square show the turn), green pointing straight up, red pointing left. For the shear, the gold square leans into a parallelogram with the same base and height, and `det = 1.0`. For your scale, a rectangle 3 wide and 0.5 tall and `det = 1.5000000000000002`; the title rounds it. Then run `0 1 1 0`, which swaps î and ĵ, and look for the minus sign: `det = -1.0`. Paste the four `det =` lines under `## Step 2` in `evidence/T03.md`. The determinant is tomorrow's video; today, read it as the area of the gold square, with a sign.
+*You should see*, for the rotation, `det = 1.0` and the grid landing on itself (a quarter turn of a square grid does that; the arrows and the gold square show the turn), green pointing straight up, red pointing left. For the shear, the gold square leans into a parallelogram with the same base and height, and `det = 1.0`. For the scale, a rectangle 3 wide and 0.5 tall and `det = 1.5000000000000002`; the title rounds it. For the swap, green up and red right, the square landing on itself, and the minus sign: `det = -1.0`. Paste the four `det =` lines under `## Step 2` in `evidence/T03.md`. The determinant is tomorrow's video; today, read it as the area of the gold square, with a sign.
 
 **Step 3. `AB` against `BA`.**
 
