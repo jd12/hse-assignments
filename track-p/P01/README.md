@@ -103,6 +103,59 @@ bootdev run -s
 
 *You should see* `(rag-search-engine)` at the front of your prompt after the `source` line, a `data/movies.json` of a few megabytes after the `curl`, and the lesson's three checks pass on `bootdev run -s`. *If it broke* with `curl: command not found` on Windows, download the file in the browser from that link and move it to `data/movies.json`. Every later lesson runs inside `~/version_control/rag-search-engine/` with that environment active. (That project uses an activated venv the way Boot.dev likes; the course repos use `uv run`. Both are fine, they are different folders.) For the rest of the period: read, write the function, `bootdev run <id>`, fix, `bootdev run <id> -s`. Today's setup eats most of the period, so one or two lessons is a normal day. Stop when the period ends, wherever you are; P02 finishes the chapter. Before you stop, save a screenshot of the chapter page showing which lessons are green as `evidence/p01-bootdev.png` in the rag repo.
 
+**Lesson 4: title search.** The CLI from lesson 3 parses `search "query"` and does nothing with it. This lesson makes it look through the movie titles. Assuming lesson 3 left you with `cli/keyword_search_cli.py`, an `argparse` parser with a `search` subcommand, and a `main()` that branches on `args.command`; if the course named things differently, use its names.
+
+1. At the top of the file, next to the `argparse` import: `import json`.
+
+2. Above `main()`, a function that reads the dataset once:
+
+```python
+# In: nothing.  Out: the dict in data/movies.json, with the list under its "movies" key.
+def load_movies():
+    with open("data/movies.json", encoding="utf-8") as f:
+        return json.load(f)
+```
+
+`json.load` takes an open file and turns the JSON into Python: the outer `{...}` becomes a dict, the `"movies": [...]` inside it becomes a list of dicts, one per movie, each with `id`, `title` and the rest.
+
+3. Above `main()`, the search itself:
+
+```python
+# In: a query string.  Out: up to five movie dicts whose title contains it, in dataset (id) order.
+def search_titles(query):
+    movies = load_movies()["movies"]
+    results = []
+    for movie in movies:
+        if query in movie["title"]:
+            results.append(movie)
+    return results[:5]
+```
+
+`query in movie["title"]` is substring containment: `"Police"` matches `"Kaakha..Kaakha: The Police"`. Case matters for now; lesson 5 fixes that. `results[:5]` keeps the first five, and because the file is already sorted by id, those are the five lowest ids.
+
+4. In `main()`, in the branch that handles `search`, replace the placeholder with:
+
+```python
+    results = search_titles(args.query)
+    print(f"Searching for: {args.query}")
+    for i, movie in enumerate(results, start=1):
+        print(f"{i}. {movie['title']}")
+```
+
+`enumerate(..., start=1)` numbers from 1, which is the format the checks expect.
+
+5. Run it yourself before submitting:
+
+```bash
+uv run cli/keyword_search_cli.py search "Police"
+bootdev run <lesson-id>
+bootdev run <lesson-id> -s
+```
+
+*You should see* `Searching for: Police` and a numbered list, five titles at most. *If it broke* with `FileNotFoundError: data/movies.json`, you ran it from inside `cli/`; the path is relative to the project root, so `cd` back up. *If it broke* with `KeyError: 'title'`, you iterated the outer dict instead of the list under `"movies"`.
+
+Three things to notice, because P02 does this on your corpus: `in` on strings is the simplest search there is and already breaks on case and punctuation; `[:5]` is a hard cutoff with no ranking, which is what TF-IDF fixes next week; and loading the whole file on every search is fine for a thousand movies and a bad habit, which chapter 2's index addresses.
+
 **Commit, push, PR, sign off.** Fill `## Reflection` in `evidence/P01.md` (the questions are below) and run `uv run python scripts/check_evidence.py P01` until it says `all slots filled`. Then:
 
 ```bash
