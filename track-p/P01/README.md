@@ -103,56 +103,68 @@ bootdev run -s
 
 *You should see* `(rag-search-engine)` at the front of your prompt after the `source` line, a `data/movies.json` of a few megabytes after the `curl`, and the lesson's three checks pass on `bootdev run -s`. *If it broke* with `curl: command not found` on Windows, download the file in the browser from that link and move it to `data/movies.json`. Every later lesson runs inside `~/version_control/rag-search-engine/` with that environment active. (That project uses an activated venv the way Boot.dev likes; the course repos use `uv run`. Both are fine, they are different folders.) For the rest of the period: read, write the function, `bootdev run <id>`, fix, `bootdev run <id> -s`. Today's setup eats most of the period, so one or two lessons is a normal day. Stop when the period ends, wherever you are; P02 finishes the chapter. Before you stop, save a screenshot of the chapter page showing which lessons are green as `evidence/p01-bootdev.png` in the rag repo.
 
-**Lesson 4: title search.** The CLI from lesson 3 parses `search "query"` and does nothing with it. This lesson makes it look through the movie titles. Assuming lesson 3 left you with `cli/keyword_search_cli.py`, an `argparse` parser with a `search` subcommand, and a `main()` that branches on `args.command`; if the course named things differently, use its names.
+**Lesson 4: title search.** Lesson 3 left you `cli/keyword_search_cli.py`: an `argparse` parser with a `search` subcommand and a `match args.command:` whose `case "search":` is still `pass`. This lesson makes it look through the movie titles. The course wants the dataset loading in `cli/lib/search_utils.py` and the search in `cli/lib/keyword_search.py`, with the CLI calling both.
 
-1. At the top of the file, next to the `argparse` import: `import json`.
+1. Make the `lib` folder a package:
 
-2. Above `main()`, a function that reads the dataset once:
-
-```python
-# In: nothing.  Out: the dict in data/movies.json, with the list under its "movies" key.
-def load_movies():
-    with open("data/movies.json", encoding="utf-8") as f:
-        return json.load(f)
+```bash
+mkdir -p cli/lib && touch cli/lib/__init__.py
 ```
 
-`json.load` takes an open file and turns the JSON into Python: the outer `{...}` becomes a dict, the `"movies": [...]` inside it becomes a list of dicts, one per movie, each with `id`, `title` and the rest.
-
-3. Above `main()`, the search itself:
+2. Create `cli/lib/search_utils.py`:
 
 ```python
+import json
+
+# In: nothing.  Out: the list of movie dicts under data/movies.json's "movies" key.
+def load_movies():
+    with open("data/movies.json", encoding="utf-8") as f:
+        return json.load(f)["movies"]
+```
+
+`json.load` takes an open file and turns the JSON into Python: the outer `{...}` becomes a dict, and `["movies"]` pulls out the list inside it, one dict per movie with `id`, `title` and the rest.
+
+3. Create `cli/lib/keyword_search.py`:
+
+```python
+from lib.search_utils import load_movies
+
 # In: a query string.  Out: up to five movie dicts whose title contains it, in dataset (id) order.
 def search_titles(query):
-    movies = load_movies()["movies"]
     results = []
-    for movie in movies:
+    for movie in load_movies():
         if query in movie["title"]:
             results.append(movie)
     return results[:5]
 ```
 
-`query in movie["title"]` is substring containment: `"Police"` matches `"Kaakha..Kaakha: The Police"`. Case matters for now; lesson 5 fixes that. `results[:5]` keeps the first five, and because the file is already sorted by id, those are the five lowest ids.
+`query in movie["title"]` is substring containment: `"Great"` matches `"The Great Valley Adventure"`. Case matters for now; lesson 5 fixes that. `results[:5]` keeps the first five, and because the file is already sorted by id, those are the five lowest ids.
 
-4. In `main()`, in the branch that handles `search`, replace the placeholder with:
+4. In `cli/keyword_search_cli.py`, add the import under `import argparse` and replace the `pass` under `case "search":`:
 
 ```python
-    results = search_titles(args.query)
-    print(f"Searching for: {args.query}")
-    for i, movie in enumerate(results, start=1):
-        print(f"{i}. {movie['title']}")
+from lib.keyword_search import search_titles
 ```
 
-`enumerate(..., start=1)` numbers from 1, which is the format the checks expect.
+```python
+        case "search":
+            results = search_titles(args.query)
+            print(f"Searching for: {args.query}")
+            for i, movie in enumerate(results, start=1):
+                print(f"{i}. {movie['title']}")
+```
 
-5. Run it yourself before submitting:
+`enumerate(..., start=1)` numbers from 1, which is the format the checks expect. The import says `lib.` and not `cli.lib.` because Python puts the script's own folder, `cli/`, on the import path when you run it.
+
+5. Run it yourself before submitting, from the project root:
 
 ```bash
-uv run cli/keyword_search_cli.py search "Police"
-bootdev run <lesson-id>
-bootdev run <lesson-id> -s
+uv run cli/keyword_search_cli.py search "Great"
+bootdev run
+bootdev run -s
 ```
 
-*You should see* `Searching for: Police` and a numbered list, five titles at most. *If it broke* with `FileNotFoundError: data/movies.json`, you ran it from inside `cli/`; the path is relative to the project root, so `cd` back up. *If it broke* with `KeyError: 'title'`, you iterated the outer dict instead of the list under `"movies"`.
+*You should see* `Searching for: Great` and a numbered list with `The Great Valley Adventure` and `The First Great Train Robbery` in it, five titles at most; that is the CLI check. *If it broke* with `FileNotFoundError: data/movies.json`, you ran it from inside `cli/`; the path is relative to the project root, so `cd` back up. *If it broke* with `ModuleNotFoundError: No module named 'lib'`, `cli/lib/__init__.py` is missing or you wrote `cli.lib` in the import.
 
 Three things to notice, because P02 does this on your corpus: `in` on strings is the simplest search there is and already breaks on case and punctuation; `[:5]` is a hard cutoff with no ranking, which is what TF-IDF fixes next week; and loading the whole file on every search is fine for a thousand movies and a bad habit, which chapter 2's index addresses.
 
