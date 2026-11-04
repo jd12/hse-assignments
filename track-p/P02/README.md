@@ -83,8 +83,8 @@ def search_titles(query):
 
 ```bash
 uv run cli/keyword_search_cli.py search "magic charlie"
-bootdev run
-bootdev run -s
+bootdev run <lesson-id>
+bootdev run -s <lesson-id>
 ```
 
 *You should see* `It's Magic, Charlie Brown` in the list. Deleting the marks, not replacing them with spaces, is the course's choice: `sci-fi` becomes `scifi` and `It's` becomes `Its`. P02 Step 4 makes the other choice on your corpus, and Reflection 1 asks you to say what each one does to `well-known`.
@@ -120,8 +120,8 @@ def search_titles(query):
 
 ```bash
 uv run cli/keyword_search_cli.py search "furious fast"
-bootdev run
-bootdev run -s
+bootdev run <lesson-id>
+bootdev run -s <lesson-id>
 ```
 
 *You should see* `Furious Seven`, `Fast and Furious` and `Faster, Pussycat! Kill! Kill!`. The last one is there because `fast` is inside `faster`; that is substring matching on tokens, which lesson 9 replaces with stems.
@@ -157,8 +157,8 @@ def tokenize_text(text):
 
 ```bash
 uv run cli/keyword_search_cli.py search "the hot shot"
-bootdev run
-bootdev run -s
+bootdev run <lesson-id>
+bootdev run -s <lesson-id>
 ```
 
 *You should see* `Hot Potato`, `Hotel Chevalier` and `Killshot`, and no title that matched only on `the`. *If it broke* with `FileNotFoundError: data/stopwords.txt`, the file is in the wrong folder or has a different name. *If it broke* with the stop words not filtering, you loaded them raw; `aren't` with its apostrophe never equals the token `arent`.
@@ -192,8 +192,8 @@ Order matters here, and it is Reflection 3: stem first and `was` becomes `wa`, w
 
 ```bash
 uv run cli/keyword_search_cli.py search "running"
-bootdev run
-bootdev run -s
+bootdev run <lesson-id>
+bootdev run -s <lesson-id>
 ```
 
 *You should see* `Virginia's Run`, `Take the Money and Run` and `Woman on the Run`: `running` stems to `run`, and so does `run`. *If it broke* with `ModuleNotFoundError: No module named 'nltk'`, the `uv add` did not run in the project folder, or you ran the script with `python` instead of `uv run`.

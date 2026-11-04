@@ -12,7 +12,7 @@ Boot.dev has no video: short readings, a function to write, tests run on your ma
 
 **Type every solution yourself.** Do not paste from the hint panel or the solution tab. Every chapter ends with you writing the same function a second time on your corpus, and the second time goes quickly only if the first time went through your fingers.
 
-**Run before you submit.** Every lesson, `bootdev run <lesson-id>` first, without `-s`. That runs the tests locally and shows you what they check. Read the output, fix, and only then `bootdev run <lesson-id> -s`.
+**Run before you submit.** Every lesson, `bootdev run <lesson-id>` first, without `-s`; both commands, with the id filled in, are on the lesson page under **Run** and **Submit**, so copy them from there. That runs the tests locally and shows you what they check. Read the output, fix, and only then `bootdev run <lesson-id> -s`.
 
 **Where the course calls a model, it uses free models through OpenRouter.** A `429` means you are throttled, not broken. Wait sixty seconds; hammering Run makes the cooldown longer.
 
@@ -98,7 +98,7 @@ source .venv/bin/activate
 mkdir data
 curl -L -o data/movies.json https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/course-rag-movies.json
 echo "/data/" >> .gitignore
-bootdev run -s
+bootdev run -s <lesson-id>
 ```
 
 *You should see* `(rag-search-engine)` at the front of your prompt after the `source` line, a `data/movies.json` of a few megabytes after the `curl`, and the lesson's three checks pass on `bootdev run -s`. *If it broke* with `curl: command not found` on Windows, download the file in the browser from that link and move it to `data/movies.json`. Every later lesson runs inside `~/version_control/rag-search-engine/` with that environment active. (That project uses an activated venv the way Boot.dev likes; the course repos use `uv run`. Both are fine, they are different folders.) For the rest of the period: read, write the function, `bootdev run <id>`, fix, `bootdev run <id> -s`. Today's setup eats most of the period, so one or two lessons is a normal day. Stop when the period ends, wherever you are; P02 finishes the chapter. Before you stop, save a screenshot of the chapter page showing which lessons are green as `evidence/p01-bootdev.png` in the rag repo.
@@ -160,8 +160,8 @@ from lib.keyword_search import search_titles
 
 ```bash
 uv run cli/keyword_search_cli.py search "Great"
-bootdev run
-bootdev run -s
+bootdev run <lesson-id>
+bootdev run -s <lesson-id>
 ```
 
 *You should see* `Searching for: Great` and a numbered list with `The Great Valley Adventure` and `The First Great Train Robbery` in it, five titles at most; that is the CLI check. *If it broke* with `FileNotFoundError: data/movies.json`, you ran it from inside `cli/`; the path is relative to the project root, so `cd` back up. *If it broke* with `ModuleNotFoundError: No module named 'lib'`, `cli/lib/__init__.py` is missing or you wrote `cli.lib` in the import.
@@ -188,8 +188,8 @@ Both sides, not one: `"country" in "No Country for Old Men"` is `False`, and `"C
 
 ```bash
 uv run cli/keyword_search_cli.py search "country"
-bootdev run
-bootdev run -s
+bootdev run <lesson-id>
+bootdev run -s <lesson-id>
 ```
 
 *You should see* `Searching for: country` and a list with `No Country for Old Men`, `The Wonderful Country` and `The Country Bears` in it; that is the CLI check. *If it broke* with the three titles missing but no error, you lowercased the query and not the title, or the other way round.
