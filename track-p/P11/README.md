@@ -175,7 +175,15 @@ Open `rag/hybrid.py`: `rrf` is lesson 5 on any number of ranked lists of ids, wi
 uv run python -m rag.search <one of your five queries>
 ```
 
-*You should see* `embedding <your chunk count> units with all-MiniLM-L6-v2` and a progress bar the first time, then three lines: BM25 ids with scores in the single or double digits, semantic ids with scores below 1, and hybrid ids with no scores at all. Run it again: no bar. The hybrid ids are drawn from both lists; a chunk high in both is first. Paste the three lines under `## Step 3` in `evidence/P11.md`.
+*You should see* `embedding <your chunk count> units with all-MiniLM-L6-v2` and a progress bar the first time, then three lines: BM25 ids with scores in the single or double digits, semantic ids with scores below 1, and hybrid ids with no scores at all. Run it again: no bar. The hybrid ids are drawn from both lists; a chunk high in both is first. Paste the three lines under `## Step 3` in `evidence/P11.md`. On Homer, `how was the Cyclops blinded`:
+
+```text
+bm25     [('c00308', 10.04), ('c00023', 7.91), ('c00305', 6.71), ('c00823', 6.63), ('c00280', 6.45)]
+semantic [('c00300', 0.609), ('c00341', 0.56), ('c00292', 0.548), ('c00659', 0.543), ('c00307', 0.54)]
+hybrid   ['c00300', 'c00308', 'c00307', 'c00305', 'c00301']
+```
+
+The two engines disagree on rank 1 and the fused list keeps both, `c00300` then `c00308`, with the chunks they share next.
 
 *If it broke* with `AssertionError: overlap ... must be smaller than size`, `rag/chunking.py`'s frozen values are wrong. *If it broke* with the bar running on every call, the chunk text changed between calls, which it cannot unless `SIZE` or `OVERLAP` did.
 
@@ -200,7 +208,18 @@ for cid in fused[:3]:
 "
 ```
 
-*You should see* the two id lists, the fused top five, and for the first three fused ids their rank in each list and the summed vote. A chunk at rank 1 and rank 1 shows `0.0328`; a chunk in only one list shows one vote. Paste it under `## Step 4`. *If it broke* with `ValueError: ... is not in list` the `if cid in ranking` guard was edited out.
+*You should see* the two id lists, the fused top five, and for the first three fused ids their rank in each list and the summed vote. A chunk at rank 1 and rank 1 shows `0.0328`, and a chunk in only one list shows one vote. Paste it under `## Step 4`. On Homer:
+
+```text
+keyword  ['c00308', 'c00023', 'c00305', 'c00823', 'c00280', 'c00307', 'c00301', 'c00300', 'c00828', 'c00306']
+semantic ['c00300', 'c00341', 'c00292', 'c00659', 'c00307', 'c00306', 'c00301', 'c00308', 'c00305', 'c01431']
+fused    ['c00300', 'c00308', 'c00307', 'c00305', 'c00301']
+c00300 ranks [8, 1] score 0.0311
+c00308 ranks [1, 8] score 0.0311
+c00307 ranks [6, 5] score 0.0305
+```
+
+`c00300` and `c00308` are mirror images, rank 1 in one list and rank 8 in the other, so their votes are the same `1/61 + 1/68`. The tie goes to the one that comes first in the engines' order, the P06 rule, which is why `c00300` leads. Nothing in a raw score of `10.04` against `0.609` could have produced that comparison. *If it broke* with `ValueError: ... is not in list` the `if cid in ranking` guard was edited out.
 
 **Step 5. The scoreboard on chunks.**
 
@@ -229,9 +248,21 @@ Change `from rag.corpus import ROOT, load_passages` to `from rag.corpus import R
 uv run python -m rag.scoreboard
 ```
 
-*You should see* three columns on chunks, and every needle found in some chunk, or the `assert` would have stopped it. The ranks will not match P08's: the units changed. Expect hybrid to equal the better of its two inputs on most queries and to beat both on at most one or two; expect at least one query where it is worse than one input, because a chunk only one engine ranked gets one vote. Paste the table under `## Step 5` and check your five predictions, one line each.
+*You should see* three columns on chunks, and every needle found in some chunk, or the `assert` would have stopped it. The ranks will not match P08's: the units changed. Expect hybrid to equal the better of its two inputs on most queries and to beat both on at most one or two; expect at least one query where it is worse than one input, because a chunk only one engine ranked gets one vote. Paste the table under `## Step 5` and check your five predictions, one line each. On Homer:
 
-**Where it got worse.** Find the query where hybrid ranked the answer lower than the better of BM25 and semantic did. Paste the three ranks, and say what RRF did to a chunk only one list found.
+```text
+query      bm25 semantic   hybrid
+q01           -        -        -
+q02           -        5        -
+q03           -        1        1
+q04           1        2        1
+q05           -        -        3
+hit@3       1/5      2/5      3/5
+```
+
+Compare this with P08's table. `q03`, outside the top 30 on passages, is rank 1 on chunks: the needle that sat past the model's window at word 206 of a 375-word passage now sits inside a 200-word chunk the model reads whole. That is the chapter 5 argument in one row. `q05` is the case where hybrid beat both inputs: BM25 had it outside the top 5 and semantic had it at rank 8, and two weak votes outranked every chunk that only one engine liked.
+
+**Where it got worse.** Find the query where hybrid ranked the answer lower than the better of BM25 and semantic did. Paste the three ranks, and say what RRF did to a chunk only one list found. On Homer it is `q02`: BM25 `-`, semantic 5, hybrid `-`. The answer chunk had one vote, `1/65` from semantic, for `0.0154`. The fused rank 1, `c00542`, was rank 15 for BM25 and rank 10 for semantic, two middling votes for `0.0276`, and the whole fused top five is chunks like it, ranked somewhere in both of the 50-deep pools. Neither engine liked any of them more than semantic liked the answer, and the answer still lost, because one good vote is worth less than two mediocre ones.
 
 **Commit, push, sign off.** Fill `## Reflection` in `evidence/P11.md` (the questions are below) and run `uv run python scripts/check_evidence.py P11` until it says `all slots filled`. Then:
 

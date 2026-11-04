@@ -274,7 +274,18 @@ uv add sentence-transformers
 uv run python -m rag.semantic where does the story begin
 ```
 
-*You should see* `embedding <your passage count> units with all-MiniLM-L6-v2`, a progress bar, then `matrix: (<your passage count>, 384)` and five results with scores between 0 and 1, best first. Run the same command again. *You should see* no `embedding` line and no bar: it loaded from disk. Paste the second run under `## Step 3` in `evidence/P08.md`.
+*You should see* `embedding <your passage count> units with all-MiniLM-L6-v2`, a progress bar, then `matrix: (<your passage count>, 384)` and five results with scores between 0 and 1, best first. Run the same command again. *You should see* no `embedding` line and no bar: it loaded from disk. Paste the second run under `## Step 3` in `evidence/P08.md`. On Homer the first run embeds 2,118 passages in about a minute, and the second run prints:
+
+```text
+matrix: (2118, 384)
+0.402  p0455  BOOK XII THE SIRENS, SCYLLA AND CHARYBDIS, THE CATTLE OF THE SUN. “Aft
+0.401  p0012  (2) The story of Penelope and the suitors, with the episode of Telemac
+0.397  p0421  “Thus did we converse, and anon Proserpine sent up the ghosts of the w
+0.393  p0370  “The men when they got on shore followed a level road by which the peo
+0.386  p0226  “Alas,” he cried to himself in his dismay, “what ever will become of m
+```
+
+Note the scores: the best is `0.402`, and the fifth is `0.386`. Nothing in these five is a strong match for `where does the story begin`, and the numbers say so.
 
 *If it broke* with the bar running on both runs, `data/emb_passages.json` did not match; `cat` it and compare the count to `rag.corpus`. *If it broke* with scores far outside -1 to 1, `normalize` was skipped on one side.
 
@@ -294,7 +305,15 @@ for i in (0, len(ps) // 2, len(ps) - 1):
 "
 ```
 
-*You should see* each id map to itself at rank 1 with a score of `1.0` or within a rounding of it, and a second-best score clearly below. The first, the middle and the last, because an off-by-one only shows at an end. Paste the three lines under `## Step 4`. *If it broke* with a different id at rank 1, `V[i]` is not the vector of `units[i]`: delete `data/emb_passages.*` and rebuild, and if it persists, the passages changed between the build and the search.
+*You should see* each id map to itself at rank 1 with a score of `1.0` or within a rounding of it, and a second-best score clearly below. The first, the middle and the last, because an off-by-one only shows at an end. Paste the three lines under `## Step 4`. On Homer:
+
+```text
+p0000 -> p0000 1.0 | next 0.8312
+p1059 -> p1059 1.0 | next 0.6223
+p2117 -> p2117 1.0 | next 0.7076
+```
+
+Change one character in `p1059`'s text and search again: it still comes back at rank 1, at `0.9979`. That is the size of a one-character change, which is what a `0.97` from A06's check should be read against. *If it broke* with a different id at rank 1, `V[i]` is not the vector of `units[i]`: delete `data/emb_passages.*` and rebuild, and if it persists, the passages changed between the build and the search.
 
 **Step 5. The semantic column.**
 
@@ -319,7 +338,19 @@ Your predictions are already under `## Predictions` in `evidence/P07.md`, commit
 uv run python -m rag.scoreboard
 ```
 
-*You should see* the P06 columns unchanged, which proves the queries and needles did not move, and a third column. Expect at least one `paraphrase` query found that both keyword methods missed, because the vector compares meanings and not stems; and expect a `rare-name` query to be at risk, because a name that is one token to BM25 is a small part of a 384-number summary of a whole passage. Paste the table under `## Step 5` and check your predictions, one line each: right or wrong.
+*You should see* the P06 columns unchanged, which proves the queries and needles did not move, and a third column. Expect at least one `paraphrase` query found that both keyword methods missed, because the vector compares meanings and not stems; and expect a `rare-name` query to be at risk, because a name that is one token to BM25 is a small part of a 384-number summary of a whole passage. Paste the table under `## Step 5` and check your predictions, one line each: right or wrong. On Homer:
+
+```text
+query     tfidf     bm25 semantic
+q01           -        -        -
+q02           -        -        -
+q03           -        -        -
+q04           1        5        -
+q05           1        1        1
+hit@3       2/5      1/5      1/5
+```
+
+Homer did not deliver the paraphrase win. `q05` is found again, `q04` sits at rank 6, and the other three are outside the top 30. The reason is the model's window: P07 Step 3 printed `Max sequence length: 256`, about 190 words, and the passages here are longer than that. `q03`'s answer passage is 375 words and its needle, `bore the red hot beam into his eye`, starts at word 206. The model never read that sentence, so the vector it compared the question against is a summary of the passage's first half. The top semantic scores tell the same story: `q03`'s best score is `0.571` for a miss, `q05`'s is `0.518` for the hit, so no threshold separates them. A corpus with short passages will see the paraphrase win here. A corpus with long ones sees it in chapter 5, once the units are cut to fit the window. Either result is a right answer if your prediction said why.
 
 **Commit, push, sign off.** Fill `## Reflection` in `evidence/P08.md` (the questions are below) and run `uv run python scripts/check_evidence.py P08` until it says `all slots filled`. Then:
 
