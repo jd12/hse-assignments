@@ -73,7 +73,7 @@ bootdev run -s 4bc96f50-0a24-4af3-b300-bad11568f3f3
 **Lesson 6: error analysis.** Four debug lines in `rrf-search`, each printing what one stage produced, so a missing result can be traced to the stage that lost it. In `cli/hybrid_search_cli.py`, above `main`:
 
 ```python
-# In: a label and anything.  Out: nothing; prints it only when --debug is on (chapter 9, error analysis).
+# In: a label and anything.  Out: nothing. Prints it only when --debug is on (chapter 9, error analysis).
 def debug(enabled, label, value):
     if enabled:
         print(f"[debug] {label}: {value}")

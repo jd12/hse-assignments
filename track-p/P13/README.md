@@ -108,7 +108,7 @@ User query: "{query}"
 PROMPTS = {"spell": SPELL, "rewrite": REWRITE, "expand": EXPAND}
 
 
-# In: a method name and the query.  Out: the enhanced query; for expand, the original with the new terms appended.
+# In: a method name and the query.  Out: the enhanced query. For expand, the original with the new terms appended.
 def enhance_query(method, query):
     reply = ask(PROMPTS[method].format(query=query)).strip('"')
     if method == "expand":

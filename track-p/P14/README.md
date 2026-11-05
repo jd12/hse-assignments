@@ -216,7 +216,7 @@ from sentence_transformers import CrossEncoder
 ```
 
 ```python
-# In: a query and RRF entries.  Out: the same entries with "cross_encoder_score", best first; no LLM involved.
+# In: a query and RRF entries.  Out: the same entries with "cross_encoder_score", best first. No LLM involved.
 def rerank_cross_encoder(query, entries):
     cross_encoder = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L2-v2", device="cpu")
     pairs = []
