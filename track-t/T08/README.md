@@ -31,7 +31,7 @@ Run it with `uv run python scratch/t08-video.py` from the repo root every time h
 
 **Common first bug:** `Value(2.0) + 1` crashes with `AttributeError: 'int' object has no attribute 'data'`, because `1` is an `int`, not a `Value`. The fix is one line at the top of `__add__` and `__mul__`: `other = other if isinstance(other, Value) else Value(other)`. It reads "if `other` is already a `Value` keep it, otherwise wrap it in one." Add it the first time you hit it, not the fifth. `1 + Value(2.0)`, the other way round, is a different crash with a different fix, and it arrives in T10.
 
-**Graphviz is two installs, not one.** `uv add graphviz` installs the Python package that writes the drawing instructions. The program that turns them into a picture is `dot`, and it comes from `brew install graphviz`. With only the first, `render` fails with `ExecutableNotFound: failed to execute 'dot'`. If Homebrew will not install it, `print_graph` in `viz.py` prints the same graph as indented text, and every script today falls back to it.
+**Graphviz is two installs, not one.** `uv add graphviz` installs the Python package that writes the drawing instructions. The program that turns them into a picture is `dot`, and it comes from `brew install graphviz` on a Mac or `winget install Graphviz.Graphviz` on Windows. With only the first, `render` fails with `ExecutableNotFound: failed to execute 'dot'`. If the program will not install, `print_graph` in `viz.py` prints the same graph as indented text, and every script today falls back to it.
 
 **Walkthrough — the chain rule on your counts**
 
@@ -65,14 +65,27 @@ Under the timestamp, write today's checklist:
 
 **Step 2. Install graphviz.**
 
+The program first. Mac:
+
 ```bash
 brew install graphviz
+```
+
+Windows, in PowerShell:
+
+```powershell
+winget install Graphviz.Graphviz
+```
+
+Then close that terminal and open a new one, so it picks up the new `PATH`. Now the Python package and the two checks, same on both:
+
+```bash
 uv add graphviz
 dot -V
 uv run python -c "import graphviz; print(graphviz.__version__)"
 ```
 
-*You should see* `dot - graphviz version 12.2.1` or similar from the third line (the program), and a version like `0.21` from the fourth (the Python package). The numbers do not matter; two versions do. *If it broke* with `brew: command not found` or a Homebrew error you cannot fix in two minutes, skip the program: `uv add graphviz` alone lets every script today run, with text graphs instead of pictures. Then watch the segment and type along.
+*You should see* `dot - graphviz version 12.2.1` or similar from the `dot -V` line (the program), and a version like `0.21` from the last line (the Python package). The numbers do not matter; two versions do. *If it broke* on Windows with `'dot' is not recognized`, the terminal is the old one or the installer did not add itself to `PATH`: open a new terminal and try `dot -V` again, and if it still fails, add `C:\Program Files\Graphviz\bin` to your user `PATH` (Settings, search "environment variables", edit `Path`, New) and open one more new terminal. *If it broke* with `brew: command not found`, or a Homebrew or winget error you cannot fix in two minutes, skip the program: `uv add graphviz` alone lets every script today run, with text graphs instead of pictures. Then watch the segment and type along.
 
 **Step 3. Check `engine.py`, then build the expression from your counts.**
 
@@ -110,7 +123,7 @@ drawn: micrograd/expr.svg
 
 Open `micrograd/expr.svg`. It reads left to right from five leaves (`a1`, `b1`, `a2`, `b2`, `s`) through two `*` nodes and a `+` to `d`, then one more `*` to `L`: the same shape as his `L = (a*b + c) * f`, with your corpus's numbers in the boxes. The order of the children under each node in the text version can differ from Homer's; a `set` has no order. Paste the three value lines under `## Step 3` in `evidence/T08.md`.
 
-*If it broke* with `could not draw (is graphviz installed with brew?): ExecutableNotFound`, the `dot` program is missing; the text graph is your picture today. *If it broke* with `TypeError: Value.__init__() got an unexpected keyword argument 'label'`, your `__init__` is missing `label=""`; he adds it while building the drawing, so the boxes have names.
+*If it broke* with `could not draw (is graphviz installed with brew?): ExecutableNotFound`, the `dot` program is missing, or your terminal has not seen it yet; on Windows open a new terminal and run again, and if it still fails the text graph is your picture today. *If it broke* with `TypeError: Value.__init__() got an unexpected keyword argument 'label'`, your `__init__` is missing `label=""`; he adds it while building the drawing, so the boxes have names.
 
 **Step 4. The five gradients, by hand, committed before the engine checks them.**
 
