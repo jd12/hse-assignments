@@ -8,7 +8,7 @@
 
 **During the video**
 
-**Type everything he types, and run it.** He is in a notebook and you are not. His `Value` class goes into `micrograd/engine.py`, the file you keep adding to until the milestone. Everything else he types, the expressions he builds out of `Value`s, goes into `scratch/t08-video.py`, which starts with these lines so it can find your engine and the drawing code that came with the template:
+**Type everything he types, and run it.** He is in a notebook and you are not. Create two empty files before you press play, `micrograd/engine.py` and `scratch/t08-video.py`; neither came with the template, because they are the two you write. His `Value` class goes into `micrograd/engine.py`, the file you keep adding to until the milestone. Everything else he types, the expressions he builds out of `Value`s, goes into `scratch/t08-video.py`, which starts with these lines so it can find your engine and the drawing code that came with the template:
 
 ```python
 import sys
@@ -95,7 +95,7 @@ At 00:51:10, `micrograd/engine.py` has one class, `Value`, with `__init__` stori
 uv run python -c "import sys; sys.path.insert(0, 'micrograd'); from engine import Value; a = Value(2.0); d = a * -3.0 + 10; print(d, d._op, len(d._prev), d.grad)"
 ```
 
-*You should see* `Value(data=4.0) + 2 0.0`. If yours differs anywhere else, his is the one to match; fix it now, because every later assignment edits this file.
+*You should see* `Value(data=4.0) + 2 0.0`. If yours differs anywhere else, his is the one to match; fix it now, because every later assignment edits this file. *If it broke* with `ModuleNotFoundError: No module named 'engine'`, the file does not exist yet or is not inside `micrograd/`; it is the one you type from the video, not one the template gives you.
 
 Now the expression. `micrograd/expr.py` came with the template; open it and read the top. It takes T01's two-word counts for chapter 2 and chapter 7, per 1,000 words and rounded to one decimal so a hand page is doable, and builds the two-word dot product out of your `Value`s: `p1 = a1 * b1`, `p2 = a2 * b2`, `d = p1 + p2`, then `L = d * s` with `s = 0.01`, a scale, so the chain rule has a product to pass through at the top, the way his `L = d * f` does.
 
