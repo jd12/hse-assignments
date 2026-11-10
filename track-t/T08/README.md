@@ -4,7 +4,7 @@
 
 **Watch — 32 min**
 [Karpathy, building micrograd](https://www.youtube.com/watch?v=VMj-3S1tku0&t=1149s) · 00:19:09 → 00:51:10, "starting the core Value object of micrograd and its visualization" and "manual backpropagation example #1: simple expression" (32m)
- · `micrograd/engine.py` (new, empty) and `scratch/t08-video.py` open side by side, terminal in the repo root. Step 2 installs graphviz; do it before you press play.
+ · Create `micrograd/engine.py` and `scratch/t08-video.py` (both new, both empty) and open them side by side, terminal in the repo root. Step 2 installs graphviz; do it before you press play.
 
 **During the video**
 
