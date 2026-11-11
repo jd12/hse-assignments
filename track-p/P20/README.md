@@ -50,7 +50,52 @@ uv run python -m rag.eval.grounded
 *You should see* twenty rows for `none`, twenty for `tool`, and two summary lines. It takes a few minutes: sixty requests, one at a time. On Homer:
 
 ```text
-{{LLM:P20-eval}}
+== mode none: 20 questions
+   g01  correct   calls 0  cited labeled no   She recognized him by the distinctive scar on his foot, a mark she remembered fr
+   g02  correct   calls 0  cited labeled no   In Samuel Butler's translation, the arrow strikes Antinous in the throat, killin
+   g03  correct   calls 0  cited labeled no   She served them a magic draught and, as they drank, struck them with her wand, c
+   g05  correct   calls 0  cited labeled no   Ulysses (Odysseus) stayed with Calypso for seven years before being released by 
+   g06  wrong     calls 0  cited labeled no   In Samuel Butler's prose translation of the Odyssey, Ulysses gave his father Lae
+   g08  correct   calls 0  cited labeled no   He set up twelve axes for the archery contest.
+   g09  wrong     calls 0  cited labeled no   He must consult the blind seer Tiresias.
+   g11  correct   calls 0  cited labeled no   Argos, the faithful hound, recognized Odysseus before anyone else in the house, 
+   g12  correct   calls 0  cited labeled no   Telemachus visits Nestor, king of Pylos, and Menelaus, king of Sparta.
+   g14  correct   calls 0  cited labeled no   Apollo sent the plague because Agamemnon refused to release Chryseis, the daught
+   g15  correct   calls 0  cited labeled no   Agamemnon threatened to take Achilles' prize, Briseis, from him. He declared tha
+   g16  correct   calls 0  cited labeled no   In Homer's epics, the immortal blood of the gods is called ichor.
+   g19  correct   calls 0  cited labeled no   Hector named his son Astyanax, meaning "lord of the city," and the people called
+   g20  wrong     calls 0  cited labeled no   Five layers.
+   g21  wrong     calls 0  cited labeled no   In Samuel Butler's prose translation of the *Iliad*, Achilles drags Hector's bod
+   x01  wrong     calls 0  cited labeled no   The Divine Comedy was written by Dante Alighieri, and it was composed in Italian
+   x02  correct   calls 0  cited labeled no   I don't have enough information.
+   x03  wrong     calls 0  cited labeled no   I'm set up to answer questions about Homer's Iliad and Odyssey in Samuel Butler'
+   x04  wrong     calls 0  cited labeled no   The derailleur shifts the chain between sprockets of different sizes by using ca
+   x05  wrong     calls 0  cited labeled no   The Colosseum was begun under Emperor Vespasian around AD 72 and completed by hi
+
+== mode tool: 20 questions
+   g01  correct   calls 1  cited labeled yes  The old nurse Euryclea recognized Ulysses by a scar on his leg. As she washed hi
+   g02  correct   calls 1  cited labeled yes  The arrow struck Antinous in the throat and went clean through his neck [c00712]
+   g03  correct   calls 3  cited labeled yes  The enchantress Circe invited the crew into her house, set them on benches and s
+   g05  correct   calls 1  cited labeled yes  Ulysses stayed with Calypso for seven years. [c00229]
+   g06  correct   calls 1  cited labeled yes  Ulysses gave his father Laertes detailed knowledge of the orchard Laertes had gi
+   g08  wrong     calls 1  cited labeled yes  Twelve [c00656]
+   g09  correct   calls 1  cited labeled yes  Ulysses must consult the ghost of the blind Theban prophet Teiresias [c00344].
+   g11  correct   calls 3  cited labeled yes  The dog Argos recognized the returning master Ulysses before anyone in the house
+   g12  correct   calls 2  cited labeled no   Based on the passages, Telemachus visits two kings in his search for news of his
+   g14  correct   calls 1  cited labeled yes  Apollo sent the plague on the Achaean host because Agamemnon had dishonoured Chr
+   g15  correct   calls 1  cited labeled no   The prize Agamemnon threatened to take from Achilles was Briseis. [c00884]
+   g16  correct   calls 1  cited labeled yes  The immortal blood of the gods is called **ichor** – the divine fluid that flows
+   g19  correct   calls 2  cited labeled yes  Hector gave his son the name Scamandrius, but the people called him Astyanax [c0
+   g20  wrong     calls 1  cited labeled no   Vulcan made the shield of Achilles in five layers. [c01673]
+   g21  wrong     calls 1  cited labeled yes  Achilles dragged Hector's body three times around the tomb of his friend Patrocl
+   x01  correct   calls 1  cited labeled no   I don't have enough information
+   x02  correct   calls 1  cited labeled no   I don't have enough information
+   x03  correct   calls 1  cited labeled no   I don't have enough information
+   x04  correct   calls 0  cited labeled no   I don't have enough information
+   x05  correct   calls 1  cited labeled no   I don't have enough information
+
+none  correct 12  refused  0  wrong  8  tool calls  0  median tool ms 0  cited a labeled chunk 0
+tool  correct 17  refused  0  wrong  3  tool calls 25  median tool ms 651  cited a labeled chunk 12
 ```
 
 Paste the two summary lines and the forty rows under `## Step 2` and check your P19 predictions, number by number. `rag/eval/grounded_results.json` has every answer and every tool query; Step 3 reads it. The ids the tool returned for each call are in `data/agent.jsonl`, one line per run.
@@ -96,7 +141,12 @@ for gid in ['<right id>', '<wrong id>']:
 The trailing spaces change the fingerprint `rag/llm.py` caches under without changing what the model reads. *You should see* six verdicts. On Homer:
 
 ```text
-{{LLM:P20-spread}}
+g05 run 1 correct calls 1
+g05 run 2 correct calls 1
+g05 run 3 correct calls 1
+g20 run 1 wrong calls 1
+g20 run 2 wrong calls 1
+g20 run 3 wrong calls 1
 ```
 
 Paste the verdicts under `## Step 4`. If the three runs of one question disagree, that question's verdict in Step 2 was one of three possible, and the report has to say so.

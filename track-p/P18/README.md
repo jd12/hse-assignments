@@ -155,7 +155,17 @@ uv run python -m rag.answer cite "<the question>"
 *You should see* the five ids with scores, an answer whose sentences end in ids, and a line `cited: [...]   invalid: []   gate: passed`. On Homer, for `How did the old nurse recognize Ulysses while washing his feet?`:
 
 ```text
-{{LLM:P18-cite}}
+Search Results:
+- c00741  score 5.326
+- c00644  score 4.344
+- c00618  score 3.303
+- c00643  score 3.148
+- c00205  score 2.238
+
+cite answer:
+The old nurse Euryclea recognised Ulysses by spotting the scar on his leg—a mark he recalled having received from a wild boar during his hunt on Mount Parnassus with his grandfather Autolycus and his sons—and she saw it immediately when she held his leg while washing his feet [c00644]
+
+cited: ['c00644']   invalid: []   gate: passed
 ```
 
 Paste it under `## Step 3`. Then read the cited chunk and decide whether the sentence citing it says what the chunk says:
@@ -205,7 +215,57 @@ uv run python -m rag.answer cite "<near-miss 2>"
 *You should see* the first refused with `gate: refused before generation` and no request made (in `rag/answer.py`, the refused branch never reaches `chat`); and the near-misses each getting to the model, which either refuses with the one allowed line or answers anyway. On Homer:
 
 ```text
-{{LLM:P18-refusals}}
+Search Results:
+- c00373  score -7.224
+- c00240  score -9.355
+- c00018  score -9.538
+- c00011  score -9.538
+- c00004  score -9.54
+
+cite answer:
+I don't have enough information
+
+cited: []   invalid: []   gate: refused before generation
+
+Search Results:
+- c00606  score -0.545
+- c00582  score -0.88
+- c00687  score -0.948
+- c00683  score -1.549
+- c00545  score -1.913
+
+cite answer:
+I don't have enough information
+
+cited: []   invalid: []   gate: passed
+
+Search Results:
+- c00786  score 2.175
+- c00637  score 1.838
+- c00914  score 1.579
+- c00634  score 1.429
+- c00425  score 1.342
+
+cite answer:
+I don't have enough information
+
+cited: []   invalid: []   gate: passed
+```
+
+On Homer the model refused both near-misses, so the third one ran, and this time it answered:
+
+```text
+Search Results:
+- c01311  score 0.684
+- c00921  score -1.349
+- c01564  score -2.394
+- c00081  score -4.413
+- c01488  score -4.889
+
+cite answer:
+The Trojan war lasted ten years, as the text records that the city was sacked in the tenth year [c01311].
+
+cited: ['c01311']   invalid: []   gate: passed
 ```
 
 Paste all three under `## Step 5`, and write "where it got worse": the near-miss the model answered anyway, the sentence it made up, and what it cited for it. If the model refused both near-misses, run the third; if it refused that too, say so, and the Reflection's third question becomes the reason you still do not trust it.
@@ -227,13 +287,24 @@ print(r['answer']); print('cited:', r['cited'], ' invalid:', r['invalid'])
 *You should see* citations anyway: ids in the right shape that were never in the prompt, or numbers like `[1]`, which `cited_ids` does not count. On Homer:
 
 ```text
-{{LLM:P18-bare}}
+The old nurse recognized Ulysses by a scar on his leg that had been given to him by a wild boar during his hunting with his grandfather Autolycus [c00412].
+cited: ['c00412']  invalid: ['c00412']
 ```
 
 Second, the gate off. Set `REFUSE_BELOW = -100.0`, run `cite` on the out-of-corpus question from Step 5, and put the gate back:
 
 ```text
-{{LLM:P18-nogate}}
+Search Results:
+- c00373  score -7.224
+- c00240  score -9.355
+- c00018  score -9.538
+- c00011  score -9.538
+- c00004  score -9.54
+
+cite answer:
+I don't have enough information
+
+cited: []   invalid: []   gate: passed
 ```
 
 Paste both under `## Extension` with one line each: what the model cited when it had no ids, and what it answered when the gate was off.

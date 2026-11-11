@@ -221,7 +221,28 @@ uv run python -m rag.eval.judge <three golden ids, like g01 g07 g17>
 *You should see* for each question the top five, your label for each (`yes` if it is in `chunk_ids`), the judge's `0` to `3`, and `agree` or `DISAGREE`, then a total. On Homer:
 
 ```text
-{{LLM:P16-judge}}
+g01: How did the old nurse recognize Ulysses while washing his feet?
+   c00741  labeled no   judge 1/3  agree
+   c00644  labeled yes  judge 3/3  agree
+   c00618  labeled no   judge 3/3  DISAGREE
+   c00643  labeled no   judge 0/3  agree
+   c00205  labeled no   judge 0/3  agree
+
+g07: What became of the young crewman who slept on the roof of the house?
+   c00348  labeled yes  judge 0/3  DISAGREE
+   c00740  labeled no   judge 0/3  agree
+   c00484  labeled no   judge 0/3  agree
+   c00099  labeled no   judge 0/3  agree
+   c00604  labeled no   judge 0/3  agree
+
+g17: Which goddess did a mortal warrior wound in the hand?
+   c01039  labeled yes  judge 3/3  agree
+   c01043  labeled no   judge 1/3  agree
+   c01272  labeled no   judge 0/3  agree
+   c01659  labeled no   judge 0/3  agree
+   c01617  labeled no   judge 0/3  agree
+
+agree 13   disagree 2   (labeled yes with judge 2 or 3, or labeled no with judge 0 or 1, is agreement)
 ```
 
 Paste it under `## Extension` and write "where it got worse": the chunk you and the judge disagree on most, with the judge's score, who you think is right, and the sentence from the chunk that settles it. Open the chunk; do not decide from its first line.

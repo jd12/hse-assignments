@@ -184,13 +184,63 @@ uv run python -m rag.answer rag "<your passage question>"
 *You should see* the five chunk ids with their reranker scores, then the answer. On Homer, for `How did the old nurse recognize Ulysses?`:
 
 ```text
-{{LLM:P17-rag1}}
+Search Results:
+- c00741  score 3.131
+- c00650  score 1.665
+- c00853  score 1.304
+- c00761  score 0.616
+- c00744  score 0.351
+
+rag answer:
+**Answer**
+
+In Samuel Butler’s prose version of *The Iliad*‑/‑Odyssey, the “old nurse” is **Euryclea (also called Eurynome)** – the woman who nursed Ulysses for twenty years.  
+
+When Ulysses finally returns home, Euryclea does not claim to have seen him herself at first. She tells the household that she only **heard the groans of the men being slain**, and that she was sitting quietly in a corner of the women’s room with the doors shut. Only after her son **Telemachus** arrives (sent by his father) does she learn that Ulysses is back.  
+
+Her recognition comes through several cues:
+
+1. **Hearing the cries** – She describes waking to “bring me such absurd news” and learning that “Ulysses is come home again.”  
+2. **Seeing his return** – Once Telemachus fetches her, she rushes inside and finds him kneeling in the doorway, embraced by the women who burst in with torches and press him to her side, kissing his head and shoulders.  
+3. **A symbolic act** – To mark her knowledge of him, she **throws the cloak over him** (a detail noted in the footnote: “it was herself that had thrown the cloak over Ulysses”). By covering him with the same garment she used to wrap him in his own childhood, she signals that she knows him as his former nurse.  
+4. **Divine acknowledgment** – Ulysses himself says, “Since it has been borne in upon you by heaven to recognise me…”, indicating that heaven has already recognised him. Euryclea repeats this sentiment when she asks him to keep quiet about it, warning that if anyone hears she will reveal that she intends to kill the other women.
+
+Together, these elements explain how the old nurse recognized Ulysses: she discovered his return through the sound of the dying soldiers, followed by her son’s visit, and confirmed his identity by placing the familiar cloak over him and by invoking the belief that God has already acknowledged him.
 ```
 
 and for `Why did Achilles withdraw from the fighting?`:
 
 ```text
-{{LLM:P17-rag2}}
+Search Results:
+- c00864  score 3.583
+- c01632  score 3.018
+- c01682  score 1.587
+- c01591  score 1.155
+- c01677  score 0.414
+
+rag answer:
+**Why Achilles withdrew from the fighting**
+
+The withdrawal of Achilles from the Trojan war was not a sudden, mysterious act; it was the direct result of a personal and political quarrel that erupted between the Achaean leaders. The events leading to his retreat can be traced to three linked episodes:
+
+1. **Agamemnon’s seizure of Briseis (or “the daughter of Chryses” in some translations)**  
+   - In the opening books of the poem (as summarized in the first document), Agamemnon and Achilles fall out over a matter of honor. Agamemnon takes Briseis, the concubine‑war‑prize that Achilles had earned in battle. This is seen as a profound insult to Achilles’ status as the greatest Greek warrior.  
+   - The quarrel is so deep that Achilles decides to abandon the fight altogether, refusing to continue fighting for the Achaean cause.
+
+2. **The divine spark that intensified the dispute**  
+   - According to the same passage, the conflict was also provoked by the god Apollo, who “sent a pestilence upon the host” because Agamemnon had dishonored Chryses, a priest of Apollo. The plague forces the Achaeans to confront the consequences of Agamemnon’s arrogance, and the tension between the two leaders becomes a focal point for divine displeasure.  
+   - This divine pressure adds an extra layer of tension: Achilles feels that the gods are also siding against Agamemnon’s authority, reinforcing his decision to withdraw.
+
+3. **Achilles’ personal response: the retreat and a plea to Zeus**  
+   - After the quarrel, Achilles “withdraws from the war” (the phrase used in the document) and sends his mother, Thetis, to Olympus to ask Zeus to favor the Trojans. This divine intervention is a direct consequence of Achilles’ anger and his belief that the Achaeans have been wronged.  
+   - The document notes that Thetis approaches Zeus with a request for the Trojans, implying that Achilles’ withdrawal is the mechanism through which he seeks to punish Agamemnon and re‑assert his own honor.
+
+**Consequences of the withdrawal**
+
+- **Military impact:** With Achilles absent, the Greek forces suffer heavy losses. The Trojans, bolstered by Zeus’ favor, press the fight, and many Greek heroes are slain (including Patroclus, who later takes Achilles’ place).  
+- **Narrative turning point:** The withdrawal sets the entire epic in motion: it creates the void that Patroclus attempts to fill, leads to Achilles’ eventual return, and drives the central themes of honor, wrath, and the cost of pride.
+
+In short, Achilles withdrew from the fighting because Agamemnon stole his prized concubine Briseis, an act that wounded his honor. The quarrel was inflamed by divine displeasure (Apollo’s plague) and, feeling that justice could not be achieved within the Greek camp, Achilles retreated to his ships and enlisted his mother’s help to secure divine support for the Trojans. This sequence of personal insult, divine tension, and retaliatory withdrawal is what underlies his absence from the battle throughout the early part of the poem.
 ```
 
 Paste both under `## Step 4`. Then the hand check: for each answer, open the five chunks (`uv run python -m rag.search` prints ids; the chunk text is `load_chunks()` by id, the command for that is below) and find one sentence of the answer that is in none of them, if there is one. The model is allowed to say things the chunks do not; nothing in today's prompt forbids it, and nothing in the output marks it.
@@ -217,7 +267,15 @@ uv run python -m rag.answer summarize "<another>"
 *You should see* the five chunks and three or four sentences combining them. On Homer, for `the Cyclops`:
 
 ```text
-{{LLM:P17-sum1}}
+Search Results:
+- c00306  score 2.724
+- c00293  score 2.231
+- c00341  score 1.681
+- c00307  score 1.397
+- c00308  score 1.098
+
+summarize answer:
+When the Greeks first meet the Cyclops Polyphemus, he smashes the sea with his oars, throws a boulder into the ship’s rudder, and drives the vessel back toward the mainland, forcing the crew to row for their lives [​c00306​]; he then devours the flesh of his comrades and lies full among his sheep, where he sleeps. Ulysses, son of Laertes, watches the scene and considers killing him, but his men intervene and persuade him to spare the Cyclops, leading them inland to Circe’s house, where she provides them with food, oil, and clothing and they feast together [​c00341​][​c00307​]; Eurylochus also arrives too late, frightened by the severe reprimand given to him. A seer named Telemus warned Ulysses that he would eventually lose his sight to the Cyclops’ ruse, yet Ulysses sees only a weak, foolish creature rather than a god‑like monster, and declares the culprit to be the valiant warrior Ulysses himself, invoking Neptune for aid [​c00308​]; the Cyclops groans and cries of the coming prophecy. Consequently, the Cyclops remains asleep among his flock, the Greeks survive, and the prophecy is fulfilled—Ulysses loses his sight through the deception of the Cyclops, illustrating the folly of hubris versus heroic resolve.
 ```
 
 Paste both under `## Step 5` and say which is the better summary for a reader of your corpus, and one fact it took from a chunk you would not have picked for the topic.

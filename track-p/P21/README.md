@@ -95,7 +95,30 @@ uv run python -m rag.eval.trace --expand <five ids>
 *You should see* each question's original trace, the expanded query, and the expanded trace under it. On Homer, for g04, g10, g15, g20 and g22:
 
 ```text
-{{LLM:P21-expand}}
+g04 (ordinary): How long did Penelope fool the suitors with her weaving?   labeled ['c00052', 'c00053', 'c00775', 'c00776']
+   original  bm25 4  semantic 38  hybrid 21  in rerank pool no  rerank -   -> lost at: fusion (outside the rerank pool)
+   expanded: How long did Penelope fool the suitors with her weaving? duration time years months days period length waiting patience endurance deception ruse stratagem cunning subterfuge loom weaving fabric shroud burial veil marriage courtship suitors Ithaca Odysseus homecoming delayed return long absence long separation long journey long voyage long exile long wanderings faithful wife loyal wife patient wife stall stalling the suitors wedding
+   expanded  bm25 4  semantic 6  hybrid 1  in rerank pool yes  rerank 10   -> lost at: reranker
+
+g10 (paraphrase): How many sailors does the many-headed monster take from a ship at each pass?   labeled ['c00398']
+   original  bm25 13  semantic -  hybrid 24  in rerank pool no  rerank -   -> lost at: fusion (outside the rerank pool)
+   expanded: How many sailors does the many-headed monster take from a ship at each pass? Scylla six men sailors crew devours snatches per passage each crossing six-headed monster
+   expanded  bm25 2  semantic 32  hybrid 9  in rerank pool yes  rerank 4   -> lost at: not lost: in the top 5
+
+g15 (ordinary): Whose prize did Agamemnon threaten to take from Achilles?   labeled ['c00875', 'c00876']
+   original  bm25 13  semantic -  hybrid 29  in rerank pool no  rerank -   -> lost at: fusion (outside the rerank pool)
+   expanded: Whose prize did Agamemnon threaten to take from Achilles? Briseis, captive, concubine, maiden, spoil, booty, damsel, seized, confiscated, Chryseis, prize of war, woman, threat, take by force
+   expanded  bm25 1  semantic -  hybrid 18  in rerank pool yes  rerank 8   -> lost at: reranker
+
+g20 (exact): In how many layers did Vulcan make the shield of Achilles?   labeled ['c01620']
+   original  bm25 10  semantic -  hybrid 26  in rerank pool no  rerank -   -> lost at: fusion (outside the rerank pool)
+   expanded: In how many layers did Vulcan make the shield of Achilles? Hephaestus divine armor shield layers bronze gold silver tin forge craftsmanship god of the forge
+   expanded  bm25 2  semantic 38  hybrid 8  in rerank pool yes  rerank 5   -> lost at: not lost: in the top 5
+
+g22 (paraphrase): What did the old king do when he reached the tent of the man who had killed his sons?   labeled ['c01859']
+   original  bm25 22  semantic -  hybrid 46  in rerank pool no  rerank -   -> lost at: fusion (outside the rerank pool)
+   expanded: What did the old king do when he reached the tent of the man who had killed his sons? Priam aged king elderly monarch senior ruler aged chieftain aged lord aged patriarch tent shelter pavilion hut Achilles' tent Achilles' shelter slayer murderer killer enemy foe antagonist son‑killer child‑killer Hector wept lamented grieved mourned sobbed cried supplicated pleaded entreated requested offered ransom tribute gifts bargained negotiated exchanged demanded corpse demanded body arrived came approached entered went into drew near
+   expanded  bm25 30  semantic 7  hybrid 8  in rerank pool yes  rerank 8   -> lost at: reranker
 ```
 
 Paste it under `## Step 3`. An expansion that moves a chunk from semantic `-` to a semantic rank is the fusion getting its second vote; one that moves BM25 the wrong way is dilution from P13.

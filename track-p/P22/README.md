@@ -99,7 +99,10 @@ highest precision@5 this set allows: 0.3040
 and for `uv run python -m rag.ask "How many axes did Ulysses set up for the archery contest?"`:
 
 ```text
-{{LLM:P22-ask}}
+Twelve axes were set up for the archery contest [c00656] [c00855] [c00688]
+
+passages: c00656 (2.867), c00855 (2.329), c00688 (0.038), c00719 (-0.856), c00712 (-0.897)
+cited: ['c00656', 'c00688', 'c00855']   invalid: []   gate: passed
 ```
 
 If every number matches your working copy's, the semester's work is reproducible from the repo plus the two files the README names. Paste the table and the answer under `## Step 3` in `evidence/P22.md`. Leave `/tmp/ship-check` where it is: it is the clone you demo from when your name is called.

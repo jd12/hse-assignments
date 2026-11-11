@@ -175,7 +175,39 @@ uv run python -m rag.enhance_check
 *You should see* twenty `rewrite` and `expand` lines showing what the model did to each query, a table with ten rows and three rank columns, and two count lines. On Homer:
 
 ```text
-{{LLM:P13-table}}
+query   raw  rewrite  expand   (rank of the answer chunk in the hybrid top 10, - = not there)
+   rewrite  q01: Odysseus tricks Polyphemus Cyclops escape
+   expand   q01: how does the wanderer fool the one-eyed giant about who he is Odysseus Ulysses Polyphemus cyclops giant one‑eye blind deception trick lie disguise journey sea island hero
+q01       -        -       -
+   rewrite  q02: Odysseus wax used to deafen crew
+   expand   q02: what the captain used to deafen his crew captain, shipmaster, master, helmsman, steersman, pilot, commander, leader, chief; crew, sailors, seamen, mariners, shipmates, companions, men; shout, bellow, roar, halloo, cry out, call out, exclaim, thunder, stentorian, loud voice, trumpeted; deafen, deafened, deafening, dinned, ringing, ears; commands, orders, urge, exhort, encourage, cheer on
+q02       -        3       7
+   rewrite  q03: Cyclops blinded in Butler's Iliad and Odyssey
+   expand   q03: how was the Cyclops blinded Polyphemus, Ulysses, Odysseus, Nobody, Noman, "No-man", single eye, olive stake, olive-wood, staff, sharpened stake, firebrand, embers, red-hot, hardened in fire, drunken, strong wine, unmixed wine, Maron, deep sleep, cave, cavern, giant, shepherd, rams, sheep, flock, blinded, blinded his eye, pierced, put out his eye, sight destroyed, Cyclopes, son of Neptune, Poseidon
+q03       1        6       1
+   rewrite  q04: Nausicaa board game Odyssey
+   expand   q04: the game Nausicaa and her maids played on the beach Nausicaa and her companions, the bright-eyed maidens, her handmaidens, the shore, the sea, the sand, the waves, the running water, the clear spring, the meadow, the flowers, the shells, gathering flowers, playing at knucklebones, the beach scene, bathing, washing, the girls' game, the maidens' play
+q04       1        -       1
+   rewrite  q05: Odysseus bed built around living olive tree
+   expand   q05: the bed built around a living olive tree bed, bedding, sleeping bed, sleeping couch, sleeping quarters, bedchamber, bedstead, couch, mattress, constructed, made, fashioned, raised, hewn, surrounded, surrounding, encircling, beside, living, alive, green, growing, rooted, rooted in earth, olive, olive grove, leafy tree, olive trunk
+q05       3       10       9
+   rewrite  q06: the old dog that knew his master after twenty years
+   expand   q06: the old dog that knew his master after twenty years Argos, Odysseus, loyal dog, aged hound, faithful companion, recognition, loyalty, affection, death, waiting, homecoming, twenty winters, two decades, long absence, master recognition, owner, fidelity, epic, translation
+q06       5        5       1
+   rewrite  q07: Circe's drug transforms sailors into snakes
+   expand   q07: what Circe's drug did to the sailors Circe's potion, Circe's magic, Circe's spell, Circe's enchantment, Circe's incantation, Circe's charm, Circe's draught, Circe's magic drink, moly, magic herb, Odysseus, sorceress, witch, enchantress, bewitched, enchanted, transformed, metamorphosed, turned into pigs, turned into swine, pig transformation, swine transformation, magic potion, Aeolia, sailors, crew, companions
+q07       -        5       4
+   rewrite  q08: Hector's son Astyanax Scamandrius
+   expand   q08: Scamandrius Astyanax Scamander, Xanthus, Hector, Andromache, Priam, Troy, Trojan, Astyanax son of Hector, river god, Lord of the City, infant prince, walls of Troy, Scaean gates
+q08       3        1       1
+   rewrite  q09: Glaucus Diomedes armour exchange Samuel Butler Iliad
+   expand   q09: Glaucus trades armour with Diomed Nereid, Pharos, shield, hero, exchange
+q09       -        2       5
+   rewrite  q10: how many layers did Hephaestus hammer into Achilles' shield
+   expand   q10: how many layers the god hammered into the great shield shield layers, hammered rings, shield bosses, concentric circles, god of fire, Hephaestus, shield construction, layers of bronze, shield design, Achilles' shield
+q10       1        -       1
+rewrite: helped 4  hurt 4  same 2
+expand: helped 5  hurt 1  same 4
 ```
 
 Paste the whole output under `## Step 4` and check your P12 predictions against the `expand` column.

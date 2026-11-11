@@ -65,7 +65,12 @@ uv run python -m rag.agent tool "<the question>"
 *You should see* a `tool call:` line with the query the model chose and the five ids the tool returned, a `rounds` line (2 is one tool call and one answer), and the answer with ids. On Homer, for `How did the old nurse recognize Ulysses while washing his feet?`:
 
 ```text
-{{LLM:P19-tool}}
+tool call: search_corpus('Ulysses old nurse washing his feet recognized') -> ['c00741', 'c00644', 'c00618', 'c00641', 'c00643']
+rounds 2   tool ms 3190
+
+The old nurse Euryclea recognized Ulysses by a scar on his leg. As she washed his feet, she identified it as a wound received from a wild boar while he was hunting on Mount Parnassus with his grandfather Autolycus. This scar was the distinctive mark that revealed his true identity.
+
+[c00644]
 ```
 
 The model's query is not your question: it rewrote it before searching, the way chapter 7 did, and the rewrite is the first thing to look at when the tool returns the wrong chunks. Then the same question with no tool:
@@ -77,7 +82,9 @@ uv run python -m rag.agent none "<the question>"
 *You should see* no tool call, `rounds 1`, and an answer from the model's own memory. On Homer:
 
 ```text
-{{LLM:P19-none}}
+rounds 1   tool ms 0
+
+She recognized him by the distinctive scar on his foot, a mark she remembered from when he was a boy.
 ```
 
 Paste both under `## Step 3` and say which is right, and where the `none` answer came from: your corpus (it cannot), the model's memory of the text, or nowhere.
