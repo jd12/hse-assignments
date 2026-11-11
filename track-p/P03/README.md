@@ -290,7 +290,7 @@ git commit -m "P03: chapter 2 started, the chapter's tf copied, two predictions"
 git push -u origin dev/tfidf
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body names the lesson you stopped on. It stays open through P04.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. It stays open through P04.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

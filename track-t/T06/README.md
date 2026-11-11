@@ -83,7 +83,7 @@ git commit -m "T06: chapter similarity in two bands, pure Python against NumPy, 
 git push -u origin dev/bands
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body names the one chapter of the nine you would rewatch.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

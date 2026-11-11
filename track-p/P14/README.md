@@ -354,7 +354,7 @@ git commit -m "P14: the cross-encoder over the hybrid top 20, the scoreboard's f
 git push -u origin dev/rerank
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body is your "where it got worse" line.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

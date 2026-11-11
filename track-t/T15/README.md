@@ -109,7 +109,7 @@ git commit -m "T15: twenty names sampled from the counts, the loss on my names, 
 git push -u origin dev/sample
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body is the best of your twenty samples.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

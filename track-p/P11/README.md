@@ -272,7 +272,7 @@ git commit -m "P11: RRF hybrid search over chunks; scoreboard on chunks"
 git push
 ```
 
-The P10 pull request is already open; these commits land on it. Edit its body to name the query where fusion lost.
+The P10 pull request is already open; these commits land on it.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

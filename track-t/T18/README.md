@@ -126,7 +126,7 @@ git commit -m "T18: the learning-rate sweep, train/dev/test on my names, the big
 git push -u origin dev/splits
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body is your final line with the three losses.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

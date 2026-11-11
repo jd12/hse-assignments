@@ -175,7 +175,7 @@ git push -u origin dev/value
 
 *If it broke* with `fatal: pathspec 'micrograd/expr.svg' did not match any files`, `dot` never installed and there are no drawings to add; run the `git add` line again without the two `.svg` names.
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body names the gradient that took you longest.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

@@ -143,7 +143,7 @@ git commit -m "Milestone B1: engine tests, the two-neuron derivation page, clean
 git push -u origin dev/milestone
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, title it **Milestone B1**, **Create pull request**, stop. The PR body is the clean-clone `after training` line.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, title it **Milestone B1**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

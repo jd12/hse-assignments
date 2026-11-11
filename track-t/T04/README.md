@@ -95,7 +95,7 @@ git commit -m "T04: span of two chapters, a singular system, the most dependent 
 git push -u origin dev/determinant
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body says which of the four `span.py` findings you could not have predicted.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

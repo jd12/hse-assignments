@@ -111,7 +111,7 @@ git commit -m "T03: visualizer on three matrices, AB against BA, six orders of t
 git push -u origin dev/composition
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body says which of the two compositions you got wrong on paper, or that both were right.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

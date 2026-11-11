@@ -120,7 +120,7 @@ git commit -m "T05: dot and matmul from lists, five tests, two chapters dotted"
 git push -u origin dev/matmul
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body names the line of `matmul` you understand least.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

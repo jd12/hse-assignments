@@ -97,7 +97,7 @@ git commit -m "T17: the MLP on my names, every shape by hand and then printed, t
 git push -u origin dev/mlp-names
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body names the shape you got wrong on paper, or the one you were least sure of.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

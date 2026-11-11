@@ -215,7 +215,7 @@ git commit -m "P06: BM25 and tf-idf over passages, five queries scored"
 git push
 ```
 
-The P05 pull request is already open; these commits land on it. Edit its body to name the query you are least sure about.
+The P05 pull request is already open; these commits land on it.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

@@ -108,7 +108,7 @@ git commit -m "T22: practical prep, the demo from a clean clone, the page rehear
 git push -u origin dev/practical
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body is your demo seed and your second rehearsal time.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

@@ -108,7 +108,7 @@ git commit -m "T20: README front page, final clean clone, Semester 1 shipped"
 git push -u origin dev/ship
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, title it **Semester 1: shipped**, **Create pull request**. The PR body is the three-sentence "What this is" from your README. I review it during the period; when it is approved, merge it, click **Delete branch**, and then:
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, title it **Semester 1: shipped**, **Create pull request**. I review it during the period; when it is approved, merge it, click **Delete branch**, and then:
 
 ```bash
 git switch main && git pull

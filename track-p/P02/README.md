@@ -266,7 +266,7 @@ git commit -m "P02: corpus passages and the preprocessing pipeline"
 git push -u origin dev/preprocess
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body names the one operation in your docstring you would argue with.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

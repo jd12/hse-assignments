@@ -138,7 +138,7 @@ git commit -m "T10: backward() with topological sort, the full op set, my neuron
 git push -u origin dev/backward
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body names the operation whose `_backward` you are least sure of.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

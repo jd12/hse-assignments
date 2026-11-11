@@ -138,7 +138,7 @@ git commit -m "P21: every miss traced to its stage, five explained, the reranker
 git push -u origin dev/postmortem
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body is the Step 4 before-and-after rows.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

@@ -101,7 +101,7 @@ git commit -m "T19: the embedding picture read, twenty samples judged, five that
 git push -u origin dev/embed
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body is your best sample.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

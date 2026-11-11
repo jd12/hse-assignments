@@ -126,7 +126,7 @@ git commit -m "T12: trained the MLP on forty corpus slices, the curve and the mi
 git push -u origin dev/train
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body names one miss and says whether it is the label's fault or the features'.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

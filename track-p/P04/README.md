@@ -199,7 +199,7 @@ git commit -m "P04: evidence"
 git push
 ```
 
-The P03 pull request is already open; these commits land on it. Edit its body to name the word on your list you were least sure about.
+The P03 pull request is already open; these commits land on it.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

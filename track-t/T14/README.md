@@ -113,7 +113,7 @@ git commit -m "T14: the 27x27 matrix of my names drawn, one row read as a model,
 git push -u origin dev/counts
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body is the darkest cell of your picture and its count.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

@@ -203,7 +203,7 @@ git commit -m "P01: seat, CLI, corpus, chapter 1 started"
 git push -u origin dev/setup
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body names the lesson you stopped on.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

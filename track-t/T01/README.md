@@ -103,7 +103,7 @@ git commit -m "T01: chapter vectors, add and scale, ten slopes"
 git push -u origin dev/vectors
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body names the word you chose and the word you almost chose instead.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

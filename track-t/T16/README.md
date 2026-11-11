@@ -105,7 +105,7 @@ git commit -m "T16: one-layer net trained on my bigrams, its matrix against the 
 git push -u origin dev/net
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body is your largest-difference cell.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

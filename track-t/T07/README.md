@@ -151,7 +151,7 @@ git commit -m "T07: slope of the cosine by nudging and by rule, the gradient ove
 git push -u origin dev/slope
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body names the word whose slope surprised you.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

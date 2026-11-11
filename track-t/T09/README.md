@@ -161,7 +161,7 @@ git commit -m "T09: tanh and _backward per operation, my neuron's gradients by h
 git push -u origin dev/neuron
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body names the node whose local derivative you got wrong first, or the one you were least sure of.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

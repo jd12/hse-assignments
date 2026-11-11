@@ -120,7 +120,7 @@ git commit -m "T13: names mined from the corpus, their bigrams counted in a dict
 git push -u origin dev/names
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body names the non-name in your list that surprised you.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

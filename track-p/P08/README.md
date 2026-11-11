@@ -360,7 +360,7 @@ git commit -m "P08: semantic search over passages, cached and guarded; semantic 
 git push
 ```
 
-The P07 pull request is already open; these commits land on it. Edit its body to name the query where semantic search surprised you most.
+The P07 pull request is already open; these commits land on it.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

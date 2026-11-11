@@ -121,7 +121,7 @@ git commit -m "P20: Milestone A1, the grounded agent against the baseline on twe
 git push
 ```
 
-The P19 pull request is still open and now has both days on it. The PR body is your headline sentence; edit the description on GitHub to add it, then leave it for me.
+The P19 pull request is still open and now has both days on it.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>

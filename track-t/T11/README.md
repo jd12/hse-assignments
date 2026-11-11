@@ -115,7 +115,7 @@ git commit -m "T11: Neuron, Layer and MLP; forty corpus slices through an untrai
 git push -u origin dev/mlp
 ```
 
-Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body names the slice of your corpus you expect the network never to get right, and why.
+Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop.
 
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>
