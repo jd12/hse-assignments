@@ -96,13 +96,13 @@ def matmul(A, B):
 uv run pytest linear -q
 ```
 
-*You should see* `5 passed`. Paste the last line under `## Step 3` in `evidence/T05.md`. *If it broke* with `ERROR: file or directory not found: linear`, you are not in the repo root; `cd` back to it. *If it broke* with `ModuleNotFoundError: No module named 'linalg'`, you put an `__init__.py` in `linear/`; delete it, the folder is not a package.
+*You should see* `5 passed`. Paste the last line under `## Step 3` in `evidence/T05.md`. *If it broke* with `ERROR: file or directory not found: linear`, you are not in the repo root; `cd` back to it. *If it broke* with `ModuleNotFoundError: No module named 'linalg'`, either the file you typed is not at `linear/linalg.py` under exactly that name, or you put an `__init__.py` in `linear/`; delete it, the folder is not a package.
 
 **Step 4. Break it on purpose.**
 
 In `matmul`, change `col = [B[k][j] for k in range(m)]` to `col = [B[j][k] for k in range(m)]`, the transposed bug. Before you run the tests, write under `## Step 4` in `evidence/T05.md` which of the five you expect to fail, and commit that file. Then run `uv run pytest linear -q`.
 
-*You should see* `2 failed, 3 passed`: the square test fails on a wrong answer (`assert False`), the non-square test fails with `IndexError: list index out of range`, and the two `dot` tests and the mismatch test pass, because they never reach the bad line. Paste the `FAILED` lines and the summary line under `## Step 4`. Put the line back, run again to `5 passed`, and commit with a message that names the test that caught it. *If it broke* with the tests still failing after you put the line back, delete `linear/__pycache__`; Python kept the old compiled file because the edit landed within the same second.
+*You should see* `2 failed, 3 passed`: the square test fails on a wrong answer (`assert False`), the non-square test fails with `IndexError: list index out of range`, and the two `dot` tests and the mismatch test pass, because they never reach the bad line. Paste the `FAILED` lines and the summary line under `## Step 4`. Put the line back, run again to `5 passed`, commit with a message that names the test that caught it, and copy that message onto the `Commit message` line under `## Step 4`. *If it broke* with the tests still failing after you put the line back, delete `linear/__pycache__`; Python kept the old compiled file because the edit landed within the same second.
 
 **Step 5. Two chapters, one number.**
 

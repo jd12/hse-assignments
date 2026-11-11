@@ -95,7 +95,7 @@ bootdev run <lesson-id>
 bootdev run -s <lesson-id>
 ```
 
-*You should see* `The Inner Life of Martin Frost` at 4.60, `Definitely, Maybe` at 4.51 and `Cama de Gato` at 4.40 for the first, and `Gakuen Alice` at 7.35, `Day of the Animals` at 7.13 and `Fantastic Mr. Fox` at 6.92 for the second; those are the checks. *If it broke* with the right titles and scores a few hundredths off, `get_bm25_tf` is being called without `b`, or your `data/stopwords.txt` differs from the course's.
+*You should see* `The Inner Life of Martin Frost` at 4.60, `Definitely, Maybe` at 4.51 and `Cama de Gato` at 4.40 for the first, and `Gakuen Alice` at 7.35, `Day of the Animals` at 7.13 and `Fantastic Mr. Fox` at 6.92 for the second; those are the checks. *If it broke* with the right titles and scores a few hundredths off, `bm25` multiplies by chapter 2's `get_idf` instead of `get_bm25_idf`, or your `data/stopwords.txt` differs from the course's.
 
 **Step 3. `rag/keyword.py`.**
 
@@ -201,7 +201,7 @@ q05           1        1
 hit@3       2/5      1/5
 ```
 
-Expect both paraphrase queries to be missed by both methods: there is no shared term to match on, and that is the ceiling of keyword search, which chapter 4 is about. A rare-name query can miss too: Homer's `q03`, `how was the Cyclops blinded`, is answered by a passage that says `the monster's eye` and never `Cyclops`, so the name in the question is not in the answer. *If it broke* with `AssertionError: q02: needle not in any passage`, the needle is not an exact copy, or it crosses a paragraph break; fix the needle, not the check.
+Expect both paraphrase queries to be missed by both methods: there is no shared term to match on, and that is the ceiling of keyword search, which chapter 4 is about. A rare-name query can miss too: Homer's `q03`, `how was the Cyclops blinded`, is answered by a passage that says `Cyclops` twice and never `blind`, and 27 other passages say `Cyclops` too, so the name alone does not pick it out. *If it broke* with `AssertionError: q02: needle not in any passage`, the needle is not an exact copy, or it crosses a paragraph break; fix the needle, not the check.
 
 Paste the table under `## Extension` in `evidence/P06.md`.
 
@@ -228,9 +228,9 @@ git add logs && git commit && git push
 
 **Reflection Questions** (answer under `## Reflection` in `evidence/P06.md`)
 
-1. Paste the two Step 5 lists and your P05 prediction. Say which of the three fixes decided rank 1, with the numbers that show it: both passages' lengths and the count of each term in each, from `rag.keyword`'s source if you add a print, or from `uv run python -m rag.tfidf idf` and the passage text.
+1. Paste the two Step 5 lists and your P05 prediction. Say which of the three fixes decided rank 1, with the numbers that show it: both passages' lengths and the count of each term in each.
 
-   *How to get it:* the two winners differ in length and in how many times the common word repeats. Saturation caps the repeats; length normalization divides by the passage's length against the average. One of those two moved the long passage down, and the idf ratio between your two words says how much the rare one counted.
+   *How to get it:* `uv run python -c "from rag.corpus import load_passages; from rag.keyword import Keyword; kw = Keyword(load_passages()); i = 329; print(kw.ix.lengths[i], kw.ix.docs[i]['ship'], kw.ix.docs[i]['cyclop'])"` prints a passage's length in terms and the count of each term in it, with `i` the number in the passage id (`p0329` is 329) and your two stems from the `terms:` line in place of Homer's. Run it for both winners. The two winners differ in length and in how many times the common word repeats. Saturation caps the repeats; length normalization divides by the passage's length against the average. One of those two moved the long passage down, and the idf ratio between your two words says how much the rare one counted.
 
 2. Paste your scoreboard. For each `paraphrase` query, paste the `terms:` line `rag.keyword` printed and three content words from the answer passage, and point to the reason no term matched. For a paraphrase query that *was* found, name the shared stem.
 

@@ -11,7 +11,7 @@
 
 **Ch. 4 · multiply before he does.** He composes two transformations and then works out the single matrix that does both. Pause when he sets it up. Using only "where does î land, then where does that land", write the composed matrix yourself, then unpause and check. Then take your T02 rotation and shear and do the same thing both ways round: rotation first then shear, and shear first then rotation. You now have two matrices on paper that Step 3 draws, and they are not equal. Step 2 starts by committing them.
 
-**Ch. 5 · nothing to draw.** The point of the five minutes is that everything from Ch. 3 and 4 holds with three coordinates instead of two: a 3×3 matrix is three columns, each saying where a basis vector lands. Your count vectors in T05 have fifty coordinates; nothing changes but the size.
+**Ch. 5 · nothing to compute.** The point of the five minutes is that everything from Ch. 3 and 4 holds with three coordinates instead of two: a 3×3 matrix is three columns, each saying where a basis vector lands. Your count vectors in T05 have fifty coordinates; nothing changes but the size.
 
 **Notes**
 
@@ -126,7 +126,7 @@ git add logs && git commit && git push
 
 1. From `linear/composition.png`, name one specific place where `AB` and `BA` differ: where the gold square sits, or where green or red points.
 
-   *How to get it:* compare the two bottom panels. Green is column 0 of the matrix printed above the picture; in `AB` it is `(0, 1)` and in `BA` it is `(1, 1)`.
+   *How to get it:* compare the two bottom panels. Green is column 0 of the matrix Step 3 printed; in `AB` it is `(0, 1)` and in `BA` it is `(1, 1)`.
 
 2. `AB` means "apply B first, then A". Say why, using where î goes under rotation-then-shear, which is `BA` in Step 3's run, step by step.
 

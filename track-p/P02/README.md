@@ -281,7 +281,7 @@ git add logs && git commit && git push
 
 1. Paste your `tokenize` line. Say what happened to `Don’t`, to `well-known` and to `Ulysses's`, and which line of `strip_punctuation` or `tokenize` did each. Then say what the course's lesson 6, which deletes the marks instead of replacing them, would have made of the same three.
 
-   *How to get it:* the curly apostrophe is punctuation by Unicode category, so `strip_punctuation` turned it into a space and `t` was dropped by `len(t) > 1`; the hyphen became a space, so two tokens; the possessive left an `s` that the same length rule dropped. Lesson 6's `translate` deletes: `dont`, `wellknown`, `ulyssess`, and it would leave the curly apostrophe alone, because `string.punctuation` is ASCII.
+   *How to get it:* the curly apostrophe is punctuation by Unicode category, so `strip_punctuation` turned it into a space and `t` was dropped by `len(t) > 1`; the hyphen became a space, so two tokens; the possessive left an `s` that the same length rule dropped. Lesson 6's `translate` deletes: `wellknown` and `ulyssess`, and `don’t` keeps its curly apostrophe, because `string.punctuation` is ASCII. A straight `don't` would become `dont`.
 
 2. Your `shortest` passage is exactly `MIN_CHARS` or longer. Say why the loop in `load_passages` cannot produce a shorter one, and what happens to the text left over at the end of the file.
 

@@ -123,7 +123,7 @@ bootdev run <lesson-id>
 bootdev run -s <lesson-id>
 ```
 
-*You should see* `This is a test text` then `test text with two chunks` for the first, and `The bear attack was` then `was very terrifying.` for the second; those are the checks, with a zero-overlap one too. The third line is the break: `range` refuses a step of `0` with `ValueError: range() arg 3 must not be zero`. Write that in `scratch/p09-chunks.md`. *If it broke* with a third chunk `terrifying.` on the second command, the `break` is missing.
+*You should see* `This is a test text` then `test text with two chunks` for the first, and `The bear attack was` then `was very terrifying.` for the second; those are the checks, with a zero-overlap one too. The third line is the break: `range` refuses a step of `0` with `ValueError: range() arg 3 must not be zero`. Write that in `scratch/p09-chunks.md`. *If it broke* with a third chunk `two chunks` on the first command, the `break` is missing.
 
 **Lesson 3: sentence chunks.** Split at sentence ends instead of every `n` words, so a chunk is whole thoughts. The regular expression is the chapter's; the Notes say what it does.
 
@@ -206,7 +206,11 @@ class ChunkedSemanticSearch(SemanticSearch):
 
 `movie_idx` is the movie's position in the list, not its id; `search_chunks` uses it to get back to `self.documents[movie_idx]`.
 
-2. In the CLI, an `embed_chunks` subcommand and its case:
+2. In the CLI, `ChunkedSemanticSearch` joins the import from `lib.semantic_search`, `load_movies` is imported from `lib.search_utils`, and there is an `embed_chunks` subcommand and its case:
+
+```python
+from lib.search_utils import load_movies
+```
 
 ```python
         case "embed_chunks":
@@ -326,7 +330,7 @@ uv run python -m rag.chunking 100 25
 uv run python -m rag.chunking 100 100
 ```
 
-*You should see* both checks `True` on the first two and a chunk count matching the formula (on Homer, 942 and 3765). The second chunk on the `300 0` run starts exactly one character after the first ends: no overlap, no shared text. The third run stops at once with `AssertionError: overlap 100 must be smaller than size 100`: the walkthrough refuses what the chapter's chunker would have crashed on with a `range` error, and a hand-written `while` loop would have hung on. Write the two outcomes next to each other in `scratch/p09-chunks.md`. Paste the three runs' first lines under `## Step 4`.
+*You should see* both checks `True` on the first two and a chunk count matching the formula (on Homer, 942 and 3765). The second chunk on the `300 0` run starts right after the first ends, with only the whitespace between two words in the gap (on Homer, one character): no overlap, no shared text. The third run stops at once with `AssertionError: overlap 100 must be smaller than size 100`: the walkthrough refuses what the chapter's chunker would have crashed on with a `range` error, and a hand-written `while` loop would have hung on. Write the two outcomes next to each other in `scratch/p09-chunks.md`. Paste the three runs' first lines under `## Step 4`.
 
 *If it broke* with `exact slice: False`, the text was rebuilt from the words and lost the original spacing; the chunk must be a slice of the original. *If it broke* with `ends at the last word: False`, the loop stopped a step early.
 

@@ -4,7 +4,7 @@
 
 **Watch — 34 min**
 [Karpathy, building makemore](https://www.youtube.com/watch?v=PaCmpygFfXo&t=3014s) · 00:50:14 → 01:24:03, "loss function (the negative log likelihood of the data under our model)", "model smoothing with fake counts", "PART 2: the neural network approach: intro", "creating the bigram dataset for the neural net", "feeding integers into neural nets? one-hot encodings", "the neural net: one linear layer of neurons implemented with matrix multiplication" and "transforming neural net outputs into probabilities: the softmax" (34m)
- · `scratch/t13-video.py` open, `evidence/T15.md`, terminal in the repo root. The longest segment of the track; the walkthrough is short to match.
+ · `scratch/t13-video.py` open, `evidence/T15.md`, terminal in the repo root. A long segment; the walkthrough is short to match.
 
 **During the video**
 
@@ -22,7 +22,7 @@
 
 **Smoothing adds fake counts.** `N + 1` gives every bigram at least one sighting, so no probability is zero and no name has infinite loss. It also flattens every row a little, so the loss on the real names goes up. The Extension measures both.
 
-**Sampling is a random walk on the matrix.** Start at `.`, pick the next character by the `.` row's probabilities, move to that character's row, repeat until `.` comes up. The video's generator seed makes the walk repeatable: your twenty samples will be the same tomorrow, and T16's net will be sampled with the same seed so the two can be compared.
+**Sampling is a random walk on the matrix.** Start at `.`, pick the next character by the `.` row's probabilities, move to that character's row, repeat until `.` comes up. The video's generator seed, `2147483647`, makes the walk repeatable: your twenty samples will be the same tomorrow, and T16's net will be sampled with the same seed so the two can be compared.
 
 **Walkthrough — sample, then score**
 
@@ -78,7 +78,7 @@ a model that guessed every character uniformly would score 3.2958
    s.: probability 0.6942   -log 0.3650
 ```
 
-The samples are not names, and they are not random letters either: `macomphus`, `therygothimiclis` and `cthus` sound like something out of Homer because every pair in them is a pair Homer's names use. `a`, `s` and `an` are what a bigram model does when the start row picks a letter whose row then picks `.`; it cannot know that a one-letter name is wrong, because it never sees further back than one character. The loss, `2.19`, beats the uniform `3.30` and is a long way from `0`. In the bigram list, `ab` costs `5.2` because `b` rarely follows `a` in Homer's names, and `s.` costs `0.37` because it is the commonest pair there is. Paste everything under `## Step 2` and check your two predictions.
+The samples are not names, and they are not random letters either: `macomphus`, `therygothimiclis` and `cthus` sound like something out of Homer because every pair in them is a pair Homer's names use. `a` and `s` are what a bigram model does when the start row picks a letter whose row then picks `.`; it cannot know that a one-letter name is wrong, because it never sees further back than one character. The loss, `2.19`, beats the uniform `3.30` and is a long way from `0`. In the bigram list, `ab` costs `5.2` because `b` rarely follows `a` in Homer's names, and `s.` costs `0.37` because it is the commonest pair there is. Paste everything under `## Step 2` and check your two predictions.
 
 *If it broke* with the samples differing from run to run, the generator is not being passed to `multinomial`; `sample.py` is the template's, so `git checkout names/sample.py`. *If it broke* with `inf` for the loss, a name in your list has a bigram with zero count, which cannot happen when the counts come from the same list, so `names/names.txt` and the matrix are out of step: run `names/mine.py` again.
 
@@ -99,7 +99,7 @@ fake counts  10   bigrams with probability 0:   0   loss 2.5447
 fake counts 100   bigrams with probability 0:   0   loss 3.0432
 ```
 
-With no smoothing, 419 of the 729 cells are zero: more than half of all possible pairs never occur in Homer's 508 names. One fake count removes every zero and costs `0.07` of loss. A hundred fake counts drown the real ones: a cell with `5` real sightings and `100` fake ones looks the same as a cell with none, and the loss climbs toward the uniform model's `3.30`. Write where it got worse under `## Extension`: the loss at `1` against `0`, the loss at `100`, and the one-sentence trade: what smoothing buys and what it costs. T17's network has a smoothing knob of its own, and the trade is the same.
+With no smoothing, 419 of the 729 cells are zero: more than half of all possible pairs never occur in Homer's 508 names. One fake count removes every zero and costs `0.07` of loss. A hundred fake counts drown the real ones: a cell with `5` real sightings and `100` fake ones looks the same as a cell with none, and the loss climbs toward the uniform model's `3.30`. Write where it got worse under `## Extension`: the loss at `1` against `0`, the loss at `100`, and the one-sentence trade: what smoothing buys and what it costs. The network in T16's video has a smoothing knob of its own, and the trade is the same.
 
 **Commit, push, PR, sign off.** Fill `## Reflection` in `evidence/T15.md` (the questions are below) and run `uv run python scripts/check_evidence.py T15` until it says `all slots filled`. Then:
 

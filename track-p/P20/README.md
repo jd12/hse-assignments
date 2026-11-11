@@ -8,9 +8,9 @@ No Boot.dev today. The eval runs, the report gets written, and the defense of it
 
 **Notes**
 
-**Sixty requests.** Twenty questions in `none` mode is twenty requests; twenty in `tool` mode is about forty, two per question when the model searches once. That is more than the free tier's day, and `rag/llm.py` caches every one, so a run that dies at request fifty finishes tomorrow where it stopped. I have put credit on the key for this week; the limit is still twenty a minute, and the script already waits.
+**Sixty requests.** Twenty questions in `none` mode is twenty requests; twenty in `tool` mode is about forty, two per question when the model searches once. That is more than the free tier's day, and `rag/llm.py` caches every one, so a run that dies at request fifty finishes tomorrow where it stopped. I have put credit on the key for this week; the limit is still twenty a minute, and `rag/llm.py` waits and retries when a request is turned away.
 
-**Routing and retrieval fail differently.** A `tool`-mode miss is one of three things: the model did not call the tool; it called it with a query that found the wrong chunks; or it got the right chunk and still answered wrong. The results file has the model's query and the ids the tool returned for every question, so each miss can be sorted into one of the three. P21 can fix the second kind. Nothing in `rag/` can fix the first.
+**Routing and retrieval fail differently.** A `tool`-mode miss is one of three things: the model did not call the tool; it called it with a query that found the wrong chunks; or it got the right chunk and still answered wrong. The results file has the model's query for every question, and `data/agent.jsonl` has the ids the tool returned, so each miss can be sorted into one of the three. P21 can fix the second kind. Nothing in `rag/` can fix the first.
 
 **One run is a coin flip, so two questions get three.** The model is not deterministic and the router changes models between requests. Running the whole eval three times is a hundred and eighty requests; running two questions three times is twelve, and it is enough to show the spread the report has to admit.
 
@@ -47,13 +47,13 @@ Open `rag/eval/grounded.py` and read `grade`: the three verdicts and the one rul
 uv run python -m rag.eval.grounded
 ```
 
-*You should see* twenty rows for `none`, twenty for `tool`, and two summary lines. It takes a few minutes; the script waits between requests. On Homer:
+*You should see* twenty rows for `none`, twenty for `tool`, and two summary lines. It takes a few minutes: sixty requests, one at a time. On Homer:
 
 ```text
 {{LLM:P20-eval}}
 ```
 
-Paste the two summary lines and the forty rows under `## Step 2` and check your P19 predictions, number by number. `rag/eval/grounded_results.json` has every answer, every tool query and the ids the tool returned; Step 3 reads it.
+Paste the two summary lines and the forty rows under `## Step 2` and check your P19 predictions, number by number. `rag/eval/grounded_results.json` has every answer and every tool query; Step 3 reads it. The ids the tool returned for each call are in `data/agent.jsonl`, one line per run.
 
 *If it broke* partway with `the model did not answer after several tries`, the day's limit is reached or the router is empty; run the same command later and the cache skips everything already answered. *If it broke* with the `tool` mode's `calls` column all `0`, the model never used the tool; that is a routing result, not a crash, and Step 3 is where it goes.
 
@@ -88,7 +88,7 @@ import json
 qs = {q['id']: q for q in json.load(open('rag/eval/grounded_questions.json', encoding='utf-8'))}
 for gid in ['<right id>', '<wrong id>']:
     for i in range(3):
-        r = run('tool', qs[gid]['question'] + ' ' * i)       # i trailing spaces: a new cache key, the same question
+        r = run('tool', qs[gid]['question'] + ' ' * (i + 1))       # one to three trailing spaces: a new cache key each time, the same question
         print(gid, 'run', i + 1, grade(qs[gid], r['answer']), 'calls', len(r['calls']))
 "
 ```
@@ -107,7 +107,7 @@ Paste the verdicts under `## Step 4`. If the three runs of one question disagree
 
 1. **The table.** Both summary lines from Step 2, pasted. Under them, your headline in one sentence with two numbers in it: `correct` for `none` against `tool` out of twenty.
 2. **Routing.** From Step 3: how many `tool`-mode misses were routing, how many retrieval, how many generation, and one question from each kind with the model's query where there was one.
-3. **Where it got worse.** At least two categories where `tool` did worse than `none`, or where the tool made the agent slower or wronger: an out-of-corpus question answered instead of refused, a question the model knew from memory and got wrong after searching, a question the tool returned the right chunk for and the model answered from the wrong one. For each: the count, one question pasted with its query, its ids and its answer from the results file, and the mechanism in two sentences. If `tool` beat `none` on every row, look at the `tool_ms`, at questions with two or more calls, and at answers that cite a chunk and are wrong; the regressions are there.
+3. **Where it got worse.** At least two categories where `tool` did worse than `none`, or where the tool made the agent slower or wronger: an out-of-corpus question answered instead of refused, a question the model knew from memory and got wrong after searching, a question the tool returned the right chunk for and the model answered from the wrong one. For each: the count, one question pasted with its query and its answer from the results file and its ids from `data/agent.jsonl`, and the mechanism in two sentences. If `tool` beat `none` on every row, look at the `tool_ms`, at questions with two or more calls, and at answers that cite a chunk and are wrong; the regressions are there.
 4. **The spread.** Step 4's six verdicts, and what they mean for the headline: a range, not a point.
 5. **The number I trust least.** One number from this report, and why.
 

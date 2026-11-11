@@ -193,7 +193,7 @@ and for `Why did Achilles withdraw from the fighting?`:
 {{LLM:P17-rag2}}
 ```
 
-Paste both under `## Step 4`. Then the hand check: for each answer, open the five chunks (`uv run python -m rag.search` prints ids; the chunk text is `load_chunks()` by id, the P18 command for that is below) and find one sentence of the answer that is in none of them, if there is one. The model is allowed to say things the chunks do not; nothing in today's prompt forbids it, and nothing in the output marks it.
+Paste both under `## Step 4`. Then the hand check: for each answer, open the five chunks (`uv run python -m rag.search` prints ids; the chunk text is `load_chunks()` by id, the command for that is below) and find one sentence of the answer that is in none of them, if there is one. The model is allowed to say things the chunks do not; nothing in today's prompt forbids it, and nothing in the output marks it.
 
 ```bash
 uv run python -c "

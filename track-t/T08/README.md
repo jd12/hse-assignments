@@ -97,7 +97,7 @@ At 00:51:10, `micrograd/engine.py` has one class, `Value`, with `__init__` stori
 uv run python -c "import sys; sys.path.insert(0, 'micrograd'); from engine import Value; a = Value(2.0); d = a * -3.0 + 10; print(d, d._op, len(d._prev), d.grad)"
 ```
 
-*You should see* `Value(data=4.0) + 2 0.0`. If yours differs anywhere else, his is the one to match; fix it now, because every later assignment edits this file. *If it broke* with `ModuleNotFoundError: No module named 'engine'`, the file does not exist yet or is not inside `micrograd/`; it is the one you type from the video, not one the template gives you.
+*You should see* `Value(data=4.0) + 2 0.0`. If yours differs anywhere else, his is the one to match; fix it now, because every later assignment edits this file. *If it broke* with `ModuleNotFoundError: No module named 'engine'`, the file does not exist yet or is not inside `micrograd/`; it is the one you type from the video, not one the template gives you. *If it broke* with `AttributeError: 'float' object has no attribute 'data'`, the two `isinstance` lines from the Notes are not in `__add__` and `__mul__` yet; add them.
 
 Now the expression. `micrograd/expr.py` came with the template; open it and read the top. It takes T01's two-word counts for chapter 2 and chapter 7, per 1,000 words and rounded to one decimal so a hand page is doable, and builds the two-word dot product out of your `Value`s: `p1 = a1 * b1`, `p2 = a2 * b2`, `d = p1 + p2`, then `L = d * s` with `s = 0.01`, a scale, so the chain rule has a product to pass through at the top, the way his `L = d * f` does.
 
@@ -125,7 +125,7 @@ drawn: micrograd/expr.svg
 
 Open `micrograd/expr.svg`. It reads left to right from five leaves (`a1`, `b1`, `a2`, `b2`, `s`) through two `*` nodes and a `+` to `d`, then one more `*` to `L`: the same shape as his `L = (a*b + c) * f`, with your corpus's numbers in the boxes. The order of the children under each node in the text version can differ from Homer's; a `set` has no order. Paste the three value lines under `## Step 3` in `evidence/T08.md`.
 
-*If it broke* with `could not draw (is graphviz installed with brew?): ExecutableNotFound`, the `dot` program is missing, or your terminal has not seen it yet; on Windows that means `dot` is not on your `PATH`, so go back to Step 2's `echo` and `source` lines, check `dot -V`, and run again; if it still fails the text graph is your picture today. *If it broke* with `TypeError: Value.__init__() got an unexpected keyword argument 'label'`, your `__init__` is missing `label=""`; he adds it while building the drawing, so the boxes have names.
+*If it broke* with a line that starts `could not draw` and ends `ExecutableNotFound`, the `dot` program is missing, or your terminal has not seen it yet; on Windows that means `dot` is not on your `PATH`, so go back to Step 2's `echo` and `source` lines, check `dot -V`, and run again; if it still fails the text graph is your picture today. *If it broke* with `TypeError: Value.__init__() got an unexpected keyword argument 'label'`, your `__init__` is missing `label=""`; he adds it while building the drawing, so the boxes have names.
 
 **Step 4. The five gradients, by hand, committed before the engine checks them.**
 
@@ -163,6 +163,8 @@ dL/ds  by hand  3400.6000   by nudging  3400.6000
 
 Hold your page next to it. `dL/da1` is `b1 · s`: one more `the` per 1,000 words in chapter 2 raises `L` by chapter 7's `the` rate times the scale. `dL/ds` is `d` itself, the biggest number on the page, because `s` multiplies everything. Where your page and the script disagree, do not change the page: write the correct number next to the wrong one under `## Step 4`, with one line on which rule you applied wrongly. Paste the five lines under `## Step 5`. Open `micrograd/expr-grads.svg`: every box now shows its `grad`.
 
+*If it broke* with `ExecutableNotFound` after the five lines printed, the `dot` program is missing and only the drawing failed; the five lines are the check, so paste them and go on.
+
 **Commit, push, PR, sign off.** Fill `## Reflection` in `evidence/T08.md` (the questions are below) and run `uv run python scripts/check_evidence.py T08` until it says `all slots filled`. Then:
 
 ```bash
@@ -170,6 +172,8 @@ git add micrograd/engine.py micrograd/expr.svg micrograd/expr-grads.svg scratch/
 git commit -m "T08: Value with + and *, my counts as an expression graph, gradients by hand checked by nudging"
 git push -u origin dev/value
 ```
+
+*If it broke* with `fatal: pathspec 'micrograd/expr.svg' did not match any files`, `dot` never installed and there are no drawings to add; run the `git add` line again without the two `.svg` names.
 
 Open the pull request: **Compare & pull request**, **jd12** under **Reviewers**, **Create pull request**, stop. The PR body names the gradient that took you longest.
 
@@ -192,6 +196,6 @@ git add logs && git commit && git push
 
    *How to get it:* his numbers are `dL/dL = 1`, `dL/dd = -2`, `dL/df = 4`, `dL/dc = -2`, `dL/de = -2`, `dL/da = 6`, `dL/db = -4`. `dL/dc` equals `dL/dd` because `d = e + c` and a `+` passes the gradient through unchanged.
 
-3. Your `L` is `0.01` times a two-word dot product. Say what `dL/ds = 3400.6` means in words, and why one gradient on your page is a thousand times bigger than the others even though `s` is the smallest number in the expression.
+3. Your `L` is `0.01` times a two-word dot product. Say what your `dL/ds` (`3400.6` on Homer) means in words, and why one gradient on your page is a thousand times bigger than the others even though `s` is the smallest number in the expression.
 
    *How to get it:* `dL/ds` is how much `L` moves when `s` moves by 1, and `L = d × s` moves by `d` per unit of `s`. The size of a gradient is set by what multiplies the input, not by the input's own size.

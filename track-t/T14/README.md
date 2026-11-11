@@ -74,17 +74,17 @@ row 'u' sums to 1.0000; after 'u' the five likeliest next characters:
    'm'  count    5   probability 0.023
 ```
 
-Open `names/counts.png`: his picture, on your names, every cell labeled with its pair and its count. Find the darkest cell. On Homer it is `s.`, 286, the Greek ending from T13, and then `us`, 165. Then find your most common name's row and read it across. On Homer `u` is followed by `s` three times out of four, which is `-us` in `ulysses`, `menelaus`, `telemachus` and a hundred others. Paste the output under `## Step 2` and check your prediction.
+Open `names/counts.png`: his picture, on your names, every cell labeled with its pair and its count. Find the darkest cell. On Homer it is `s.`, 286, the Greek ending from T13, and then `us`, 165. Then find your most common name's row and read it across. On Homer `u` is followed by `s` three times out of four, which is `-us` in `menelaus`, `telemachus`, `patroclus` and a hundred others. Paste the output under `## Step 2`, check your prediction, and write the darkest cell and its count.
 
 **Step 3. Read one row as a model.**
 
-Under `## Step 3` in `evidence/T14.md`, write what the row you just printed predicts: if a name of your corpus has reached your most common name's first letter, what the model thinks comes next, with the top probability, and how often it would be wrong if it always guessed the top character. On Homer, `u` then `s` is right 76% of the time and wrong 24%, and when it is wrong the model has 25 other characters sharing the remaining quarter, none above 8%. Then write which row of your matrix you expect to be the most spread out (the one where the top character has the lowest probability) and check it with:
+Under `## Step 3` in `evidence/T14.md`, write what the row you just printed predicts: if a name of your corpus has reached your most common name's first letter, what the model thinks comes next, with the top probability, and how often it would be wrong if it always guessed the top character. On Homer, `u` then `s` is right 76% of the time and wrong 24%, and when it is wrong the model has 26 other characters sharing the remaining quarter, none above 8%. Then write which row of your matrix you expect to be the most spread out (the one where the top character has the lowest probability) and check it with:
 
 ```bash
 uv run python -c "import sys; sys.path.insert(0, 'names'); from counts import N, itos, row_probabilities; P = row_probabilities(N); tops = P.max(1).values; r = int(tops.argmin()); print('flattest row:', repr(itos[r]), 'top probability', round(float(tops[r]), 3), '  sharpest row:', repr(itos[int(tops.argmax())]), round(float(tops.max()), 3))"
 ```
 
-*You should see* two rows named with their top probabilities. On Homer the flattest is `y`, with `c` on top at only `0.130`, and the start row `.` is close behind it with `a` at `0.156`: the first letter of a name is one of the hardest characters to guess. The sharpest is `q` at `1.000`, because the one `q` in Homer's names is followed by `u`. Paste the line under `## Step 3`. *If it broke* with the import failing, you are not in the repo root.
+*You should see* two rows named with their top probabilities. On Homer the flattest is `y`, with `c` on top at only `0.13`, and the start row `.` is among the flattest too, with `a` at `0.156`: the first letter of a name is one of the hardest characters to guess. The sharpest is `q` at `1.0`, because the one `q` in Homer's names is followed by `u`. Paste the line under `## Step 3`. *If it broke* with the import failing, you are not in the repo root.
 
 **Extension — The broadcasting bug, on your matrix** *(assigned)*
 
@@ -94,7 +94,7 @@ uv run python -c "import sys; sys.path.insert(0, 'names'); from counts import N,
 uv run python names/counts.py bug
 ```
 
-*You should see* the right and wrong row sums, one column sum, and the two shapes. On Homer:
+*You should see* the same two opening lines as in Step 2, then the right and wrong row sums, one column sum, and the two shapes. On Homer the last four lines are:
 
 ```text
 right: row 1 sums to 1.0000   row 2 sums to 1.0000
@@ -132,7 +132,7 @@ git add logs && git commit && git push
 
 2. Paste the flattest-row line. Say why the start row is among the flattest on most corpora, and what a model that only knows bigrams cannot know about the third letter of a name that a model reading two characters back could.
 
-   *How to get it:* the start row is the first-letter distribution of all your names at once, spread over most of the alphabet, because nothing comes before `.` to narrow it. A bigram model choosing the third letter of `ulysses` sees only `l`; a model reading two characters back sees `ul`, and after `ul` in Homer's names `y` is far likelier than after `l` alone. That is T17.
+   *How to get it:* the start row is the first-letter distribution of all your names at once, spread over most of the alphabet, because nothing comes before `.` to narrow it. A bigram model choosing the third letter of `trojans` sees only `r`; a model reading two characters back sees `tr`, and after `tr` in Homer's names `o` comes next 6 times out of 18, against 23 out of 197 after `r` alone. That is T17.
 
 3. Paste your Extension lines beside your committed predictions. Say why `(27, 27) / (27,)` produced no error and the wrong answer, in terms of which side PyTorch lines shapes up from, and what single check (one line) would catch the bug in any matrix of probabilities.
 

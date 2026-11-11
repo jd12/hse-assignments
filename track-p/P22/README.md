@@ -52,9 +52,19 @@ Open `README.md` at the repo root. Above the template's `## First run`, add a se
 - **The eval.** One line pointing at `rag/eval/golden.json` and `rag/eval/run.py`, with the command, and one at `rag/MILESTONE.md`.
 - **Where everything is.** A table with one row per module in `rag/` and the assignment it came from, in your own words, not the template's.
 
-Half a page. No screenshots.
+Half a page. No screenshots. Paste the three sentences of "What this is" under `## Step 2` in `evidence/P22.md`.
 
 **Step 3. The final clone.**
+
+The clone sees only what is on GitHub, so commit and push the front page first:
+
+```bash
+git add README.md evidence/P22.md
+git commit -m "P22: README front page"
+git push -u origin dev/ship
+```
+
+Then:
 
 ```bash
 cd /tmp
@@ -70,7 +80,7 @@ uv run python -m rag.eval.run
 uv run python -m rag.ask "<the question your README names>"
 ```
 
-*You should see* the golden set check pass, the four-row table with your P21 numbers, and a cited answer. The first two commands take a minute each the first time, because the clone has no `data/emb_chunks_*.npy` and no model cache of its own: the embeddings are rebuilt from the corpus, and the two models load from your home folder's cache. On Homer:
+*You should see* the golden set check pass, the four-row table with your P21 numbers, and a cited answer. The runner takes a minute or two longer than in your working copy, because the clone has no `data/emb_chunks_*.npy` and no model cache of its own: the embeddings are rebuilt from the corpus (a line starting `embedding` appears inside the table while that happens), and the two models load from your home folder's cache. On Homer:
 
 ```text
 chunking 200/50, 1882 chunks, 25 questions
@@ -94,11 +104,11 @@ and for `uv run python -m rag.ask "How many axes did Ulysses set up for the arch
 
 If every number matches your working copy's, the semester's work is reproducible from the repo plus the two files the README names. Paste the table and the answer under `## Step 3` in `evidence/P22.md`. Leave `/tmp/ship-check` where it is: it is the clone you demo from when your name is called.
 
-*If it broke* at `uv sync` on `torch`, the committed `pyproject.toml` is missing what P07's `uv add` wrote; check `git status` in your working copy for an uncommitted `pyproject.toml`. *If it broke* with `golden.json` missing, P15's commit never reached `main`; the branch it is on is still open. *If it broke* with `OPENROUTER_API_KEY is not set`, the `cp .env` line was skipped, which is the point of the README saying it. Write under `## Step 3` what broke, if anything, and the commit that fixed it.
+*If it broke* at `git switch dev/ship` with `invalid reference`, the branch was never pushed; run the three lines at the top of this step in your working copy. *If it broke* at `uv sync` on `torch`, the committed `pyproject.toml` is missing what P07's `uv add` wrote; check `git status` in your working copy for an uncommitted `pyproject.toml`. *If it broke* with `golden.json` missing, P15's commit never reached `main`; the branch it is on is still open. *If it broke* with `OPENROUTER_API_KEY is not set`, the `cp .env` line was skipped, which is the point of the README saying it. Write under `## Step 3` what broke, if anything, and the commit that fixed it.
 
 **Step 4. The last pull request.**
 
-Fill `## Reflection` and `## Practical prep` in `evidence/P22.md` (the questions are below) and run `uv run python scripts/check_evidence.py P22` until it says `all slots filled`. Then:
+Fill `## Reflection` and `## Practical prep` in `evidence/P22.md` (the Reflection questions are below; the Practical prep slots say what goes in each) and run `uv run python scripts/check_evidence.py P22` until it says `all slots filled`. Then:
 
 ```bash
 git add README.md evidence/P22.md
@@ -135,7 +145,7 @@ git add logs && git commit && git push
 
 2. Paste your clone outputs. Name the one file in `rag/` that, if deleted, would break `rag.ask` but not `rag.eval.run`, and the one that would break both.
 
-   *How to get it:* `rag/llm.py` is imported by `rag/answer.py`, which `rag.ask` needs and the runner does not; `rag/search.py` (or `chunking.py` under it) is under both. Read the imports at the top of each file; the answer is there.
+   *How to get it:* `rag/answer.py` is imported by `rag/ask.py` and by nothing the runner uses; `rag/search.py` (or `chunking.py` under it) is under both. `rag/llm.py` looks like the first answer and is not: `rag/rerank.py` imports it, and the runner imports `rag/rerank.py`. Read the imports at the top of each file; the answer is there.
 
 3. Of the twenty-two assignments, name the one whose idea you would be least able to explain to a classmate without opening the repo, and the one you could explain from memory, with one sentence on why each.
 

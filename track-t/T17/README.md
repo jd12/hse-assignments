@@ -12,7 +12,7 @@
 
 **00:09:03 · compute before he does.** When he builds the dataset for the first name with a block size of 3, pause and write under `## During the video` in `evidence/T17.md` the contexts and targets for `emma`: five lines of three characters and the character that follows. Then unpause and check.
 
-**00:12:19 → 00:29:15 · compute before he does.** Before he prints each of these shapes, pause and write it: `C[X]` for his `X`, the result of `.view(-1, 6)`, `h`, and `logits`. Then, before he counts, the parameter count for `C` 27×2, `W1` 6×100, `b1` 100, `W2` 100×27, `b2` 27. Six answers under `## During the video`.
+**00:12:19 → 00:29:15 · compute before he does.** Before he prints each of these shapes, pause and write it: `C[X]` for his `X`, the result of `.view(-1, 6)`, `h`, and `logits`. Then, before he counts, the parameter count for `C` 27×2, `W1` 6×100, `b1` 100, `W2` 100×27, `b2` 27. Five answers under `## During the video`.
 
 **00:32:49 → 00:37:56.** Why `F.cross_entropy` instead of the three lines of softmax and log: the same number, faster, and no overflow when a logit is large. Write under `## During the video` the one word for what happens to `exp(100)` in the hand-written version.
 

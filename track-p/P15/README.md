@@ -8,7 +8,7 @@
 
 **During the chapter**
 
-**Copy lesson 1's three questions.** The vibe check is three questions you ask of a result list. Write them in `scratch/p15-eval.md` in the rag repo, exactly as he words them. Step 3 asks them of your own results.
+**Copy lesson 1's three questions.** The vibe check is three questions you ask of a result list. Write them in `scratch/p15-eval.md` in the rag repo, exactly as the lesson words them. Step 3 asks them of your own results.
 
 **Write the two formulas as fractions.** Lessons 3 and 4 each give one line of arithmetic. Write both in `scratch/p15-eval.md` with the words the chapter uses for numerator and denominator, and beside each, which of the two "how much of what you found" and "how much of what is there" it answers. P16's runner computes both and you will need to say which is which without looking.
 
@@ -163,7 +163,7 @@ cross-encoder rerank of the hybrid top 20 for: the song of the Sirens
 5. c00390  score -6.270  was hybrid rank 10  men to go on board at once and loose the hawsers; so they embarked and...
 ```
 
-and for `who killed Hector`, five chunks in which Hector kills people, with scores near 8, and not the chunk where Achilles kills him. For each of your three, answer lesson 1's three questions in the table under `## Step 3` in `evidence/P15.md`: what is here that should not be, what is not here that should be, would I click. Read the chunks; the first line of each is not enough. On Homer the Sirens list is good at the top and padding from rank 3 down, and `who killed Hector` is five wrong answers with confident scores, because every chunk has `Hector` and `killed` in it and the model reads the pair, not the sentence's subject.
+and for `who killed Hector`, five chunks in which Hector kills people, with scores near 8, and not the chunk where Achilles kills him. Paste the three outputs under `## Step 3` in `evidence/P15.md`. Then, for each of your three, answer lesson 1's three questions in the table below them: what is here that should not be, what is not here that should be, would I click. Read the chunks; the first line of each is not enough. On Homer the Sirens list is good at the top and padding from rank 3 down, and `who killed Hector` is five wrong answers with confident scores, because every chunk has `Hector` and `killed` in it and the model reads the pair, not the sentence's subject.
 
 **Step 4. The finder.**
 
@@ -172,6 +172,8 @@ uv run python -m rag.eval.find <a short phrase you know is in your corpus>
 ```
 
 *You should see* one line per chunk containing the phrase, with its id and character position, and a count. A phrase near a chunk boundary is in two chunks because of the overlap, and a sentence Homer repeats is in more. On Homer, `She fooled us in this way for three years` is in four: two chunks each at two places in the Odyssey, because Antinous tells the story in Book II and the ghost of Amphimedon tells it again in Book XXIV. Every chunk that contains the answer is a correct label; list all of them. Paste a run where the phrase is in more than one chunk under `## Step 4`.
+
+*If it broke* with the terminal waiting at a `>` prompt, the phrase has a straight apostrophe in it and the shell is waiting for a second one; press Ctrl+C and pick words with no apostrophe.
 
 **Step 5. Write `rag/eval/golden.json`.**
 
@@ -211,7 +213,7 @@ mean labeled chunks per question: 1.52
 golden set is consistent with the chunking
 ```
 
-The first line is the point of the script: the labels are tied to the `SIZE` and `OVERLAP` you froze in P09, and if either ever changes, every label is wrong and this script says so. *If it broke* with `quote not in its chunks`, the quote is not an exact copy, or the finder's chunk id was mistyped. *If it broke* with `answer not in its chunks`, the answer string is a word that is not in the chunk; it has to be, because that is how P20 will check an answer without a judge.
+The first line is the point of the script: the labels are tied to the `SIZE` and `OVERLAP` you froze in P09, and if either ever changes, every label is wrong and this script says so. *If it broke* with `json.decoder.JSONDecodeError`, a comma, quote mark or bracket is missing in `golden.json`; the message gives the line number. *If it broke* with `no such chunk`, a chunk id is mistyped. *If it broke* with `quote not in its chunks`, the quote is not an exact copy, or the id is another chunk's. *If it broke* with `answer not in its chunks`, the answer string is a word that is not in the chunk; it has to be, because that is how P20 will check an answer without a judge.
 
 Paste the output under `## Step 5`, then commit the set before anything else:
 
@@ -262,4 +264,4 @@ git add logs && git commit && git push
 
 3. The chapter's golden set has ten queries with up to thirteen relevant titles each; yours has twenty-five questions with one or two chunks each. Say what precision@5 can reach on each set at best, and why the chapter's set is a better fit for precision than yours.
 
-   *How to get it:* a question with one relevant chunk cannot score above `0.2` at five, so Homer's set caps precision@5 at `0.304`, the runner's last line; the chapter's `children's animated bear adventure` has thirteen relevant titles and can reach `1.0`. Precision is for queries with many right answers; your questions have one, and recall and MRR are the numbers to read.
+   *How to get it:* a question with one relevant chunk cannot score above `0.2` at five, so Homer's set caps precision@5 at `0.304`, the mean of `1.52` labeled chunks divided by five (P16's runner prints it as its last line); the chapter's `children's animated bear adventure` has thirteen relevant titles and can reach `1.0`. Precision is for queries with many right answers; your questions have one, and recall and MRR are the numbers to read.

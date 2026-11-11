@@ -85,11 +85,11 @@ drawn: micrograd/loss.png
 
 The loss falls every ten steps and never rises: that is what a learning rate that is small enough looks like. It falls fast at first and slowly later, because the easy slices are learned in the first twenty steps and the rest are the ones the two features cannot settle. Paste everything from `before training` to the last miss under `## Step 2` and check your two predictions.
 
-*If it broke* with the loss rising or printing `nan`, the update line has `+=` instead of `-=`, or `engine.py`'s `backward` is not zeroing anything it should not; `train.py` itself is the template's. *If it broke* with `ModuleNotFoundError: No module named 'matplotlib'`, `uv sync` first; it has been in `pyproject.toml` since T01.
+*If it broke* with the loss rising or printing `nan`, the bug is in your `engine.py` or `nn.py`, because `train.py` is the template's: run T10 Step 3's three checks and `vs_torch.py` again. *If it broke* with `ModuleNotFoundError: No module named 'matplotlib'`, `uv sync` first; it has been in `pyproject.toml` since T01.
 
 **Step 3. Read the curve and the misses.**
 
-Open `micrograd/loss.png`: one line, steep for twenty steps, then a slow slide. Then hold the misses against your T11 Step 3 table. On Homer, chapter 4's two late slices are there, as T11 predicted: one has an Iliad-sized `x1`, the other an Iliad-sized `x2`, and both are labeled Odyssey because chapter 4 straddles where one book ends and the other begins. Chapter 6's second slice is the other kind of miss: `x1 = -1.80`, a stretch of the Iliad that happens to say `the` as rarely as the Odyssey does. No network reading only these two numbers can get those right; it would need a third feature or a bigger slice. Write under `## Step 3` which of your misses are label noise (the slice really does belong to the other half, by where the books meet) and which are feature noise (the slice belongs where it is labeled, but its two numbers say otherwise), with one sentence each.
+Open `micrograd/loss.png`: one line, steep for twenty steps, then a slow slide. Then hold the misses against your T11 Step 3 table. On Homer, two of chapter 4's slices are there, as T11 predicted: one has an Iliad-sized `x1`, the other an Iliad-sized `x2`, and both are labeled Odyssey because chapter 4 straddles where one book ends and the other begins (the slice at `8814` is Butler's footnotes to the Odyssey, and the one at `26442` is already the Iliad). Chapter 6's second slice is the other kind of miss: `x1 = -1.80`, a stretch of the Iliad that happens to say `the` as rarely as the Odyssey does. No network reading only these two numbers can get those right; it would need a third feature or a bigger slice. Write under `## Step 3` which of your misses are label noise (the slice really does belong to the other half, by where the books meet) and which are feature noise (the slice belongs where it is labeled, but its two numbers say otherwise), with one sentence each.
 
 **Extension — What happens when nobody zeroes the gradients** *(assigned)*
 
@@ -99,7 +99,7 @@ Open `micrograd/loss.png`: one line, steep for twenty steps, then a slow slide. 
 uv run python micrograd/train.py noreset
 ```
 
-*You should see* a loss that falls for about ten steps and then wanders, jumps and ends far above where it started falling, with a count no better than the untrained network's. On Homer the last lines:
+*You should see* a loss that falls for about ten steps and then wanders, jumps and ends far above where it started falling, with a count about the same as the untrained network's. Up to about step 100 everyone on the same corpus sees the same numbers; after that they differ from run to run, because `_prev` in your engine is a `set`, a `set` has no fixed order, and the stale gradients magnify the last digit of every sum. On Homer the last lines of one run:
 
 ```text
 step 170   loss  35.2513   correct 30/40
@@ -113,6 +113,8 @@ misses (chapter, start, x1, x2, label, prediction):
    ...
    chapter 9  start 26442   x1   0.07  x2  -2.26   label +1   predicted -1.000
 ```
+
+It is not a failure if the run stops early with `OverflowError: a neuron's sum is too large for tanh, so training stops here`: that is the explosion itself, a number grown past what `math.exp` in your `tanh` can hold, and on Homer most runs end this way, somewhere between step 100 and step 199. The script still prints the `after training` line and the misses from the last step that ran, and still draws `micrograd/loss_noreset.png`. *If it broke* with a red `Traceback` ending in `OverflowError: math range error` and no picture, your `train.py` is the older copy: get the current one with `git fetch template && git checkout template/main -- micrograd/train.py` and run again.
 
 Look at the predictions: `+1.000` and `-1.000`, `tanh` saturated flat at its limits, with the sign wrong. The gradients were never cleared, so each step moved by the sum of every gradient so far, and after a hundred steps the parameters are being thrown back and forth across the minimum by a hundred stale slopes. A loss of `36` is nine slices wrong by the full `2`, squared. Open `micrograd/loss_noreset.png` next to `loss.png`. Write where it got worse under `## Extension`: the first step where the no-reset loss is above the reset loss at the same step, the final losses side by side, and the fact that the misses at the end are at `±1.000` and what that says about their gradients.
 

@@ -45,7 +45,13 @@ Under the timestamp, write today's checklist:
 
 **Step 2. The demo, from a clean clone.**
 
-In a second terminal, the T21 clean-clone check again, on today's branch, with the demo at the end:
+The clone can only switch to a branch that is on GitHub, so push today's branch first, from the repo root:
+
+```bash
+git push -u origin dev/practical
+```
+
+Then, in a second terminal, the T21 clean-clone check again, on today's branch, with the demo at the end:
 
 ```bash
 cd /tmp
@@ -76,7 +82,7 @@ name model trained on 508 names mined from data/corpus.txt   seed 7
 
 Paste the ten under `## Step 2` in `evidence/T22.md`. Then run it once without the seed and once with `uv run python names/demo.py 42`, and write under them which seed you will use tomorrow and why that one.
 
-*If it broke* with `names/mlp.pt is missing`, the model was never committed: `git add names/mlp.pt` in your working copy, commit, push, and clone again. *If it broke* with `ModuleNotFoundError: No module named 'counts'`, `names/names.txt` is missing from the clone and `counts.py` could not build the vocabulary; commit it. *If it broke* at `uv sync` on `torch`, the CPU index from T10 is not in the committed `pyproject.toml`.
+*If it broke* with `names/mlp.pt is missing`, the model was never committed: `git add names/mlp.pt` in your working copy, commit, push, and clone again. *If it broke* with `FileNotFoundError: [Errno 2] No such file or directory: 'names/names.txt'`, `names/names.txt` is missing from the clone and `counts.py` could not build the vocabulary; commit it. *If it broke* with `fatal: invalid reference: dev/practical`, the branch is not on GitHub yet; run the `git push` above, then clone again. *If it broke* at `uv sync` on `torch`, the CPU index from T10 is not in the committed `pyproject.toml`.
 
 **Step 3. The derivation page, aloud, timed.**
 
@@ -111,7 +117,7 @@ git add logs && git commit && git push
 ```
 
 **Deliverable**
-`names/PRACTICAL.md` (the command, the seed, the five shapes answered) + `evidence/T22.md` with every slot filled. Bring the T21 page and `PRACTICAL.md` tomorrow; nothing else is allowed on the desk.
+`names/PRACTICAL.md` (the command, the seed, the five shapes answered) + `evidence/T22.md` with every slot filled. Bring the T21 page and `PRACTICAL.md` tomorrow; nothing else is allowed on the desk except the laptop for the demo.
 
 **Reflection Questions** (answer under `## Reflection` in `evidence/T22.md`)
 

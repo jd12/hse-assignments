@@ -22,7 +22,7 @@
 
 **`tanh` has the derivative `1 - tanh(n)²`.** The `_backward` for `tanh` uses the output it already computed, `t`, so it reads `1 - t**2`. Write `1 - n**2` and you get plausible wrong numbers with no error.
 
-**`+=` not `=`.** His `_backward` functions add to the gradient instead of setting it. Today's neuron uses every node once, so `=` would give the same numbers; the reason for `+=` arrives at 01:22:28 in T10, when a node is used twice. Type `+=` now anyway, because that is what he types, and because changing six closures later is how bugs get in.
+**`+=` not `=`.** In this segment he writes `=` in each `_backward`, and at 01:22:28 in T10 he changes every one to `+=`, because a node used twice gets gradient from two places and both have to be kept. Today's neuron uses every node once, so `=` would give the same numbers. Type `+=` now anyway, because changing every closure later is how bugs get in.
 
 **The order matters.** `o._backward()` fills in `n.grad`; only then can `n._backward()` fill in `s.grad` and `b.grad`; and so on down. Call them in the wrong order and a node passes back a gradient of `0.0`, because its own has not arrived yet. Step 4 calls them in the right order by hand; T10 replaces that with a sort.
 
@@ -134,7 +134,7 @@ do/dw2 = -0.3004
 
 Hold your page next to it. `do/dn` is `1 - (-0.4070)² = 0.8344`, and every `+` on the way down passes it through unchanged, so `b`, `s`, `p1` and `p2` all get the same number. Then each `*` hands it on multiplied by the other factor: `do/dw1 = x1 · 0.8344 = -1.0680`, `do/dx1 = w1 · 0.8344 = 0.4172`. Where your page and the engine disagree, do not change the page; write the correct number next to the wrong one under `## Step 3` with the rule you misapplied. Paste the ten lines under `## Step 4`.
 
-*If it broke* with every gradient below `o` printing `0.0000`, one `_backward` is not stored: `out._backward = _backward` is missing from an operation, so the default `lambda: None` ran instead. *If it broke* with `do/dn` right and everything below it `0.0000`, `n._backward` ran before `o._backward` filled `n.grad`; the order in the script is right, so the closure in `tanh` is reading the wrong variable.
+*If it broke* with every gradient below `o` printing `0.0000`, the `_backward` in `tanh` is not stored: `out._backward = _backward` is missing there, so the default `lambda: None` ran instead and nothing reached `n`. *If it broke* with `do/dn` right and everything below it `0.0000`, the same line is missing from `__add__`: `tanh` passed its gradient to `n`, and `n`, a `+`, passed nothing on.
 
 **Step 5. One optimization step.**
 

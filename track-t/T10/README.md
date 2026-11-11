@@ -12,7 +12,7 @@
 
 **01:17:32 → 01:22:28.** He writes the ordering itself, a topological sort, and a `backward` method that sets `self.grad = 1.0` and walks the sorted list in reverse calling every `_backward`. That replaces T09 Step 4's hand-ordered calls.
 
-**01:22:28 · compute before he does.** He finds a bug in his own engine when a node is used twice: `b = a + a`. **Before he fixes it, pause** and write under `## During the video` in `evidence/T10.md` what `a.grad` should be and what his engine printed instead, and which line of `__add__` is the reason. Then type the fix. Of everything in micrograd, that one fix causes the most lost evenings.
+**01:22:28 · compute before he does.** He finds a bug in his own engine when a node is used twice: `b = a + a`. **Before he fixes it, pause** and write under `## During the video` in `evidence/T10.md` what `a.grad` should be and what his engine printed instead, and which line of `__add__` is the reason. Then type the fix. If you typed `+=` in T09, as its Notes said, the fix is already in your engine and your own `a + a` prints `2.0` where his printed `1.0`. Of everything in micrograd, that one fix causes the most lost evenings.
 
 **01:27:05 → 01:39:31.** He adds the operations a real expression needs: numbers on the left of `+` and `*`, `exp`, powers, division, negation and subtraction, each with its own `_backward`. Then he rebuilds `tanh` out of `exp` and division instead of as one node. **Before he runs backward on the rebuilt version**, write under `## During the video` whether the input's gradient will be the same as with the one-node `tanh`, and why.
 
@@ -20,7 +20,7 @@
 
 **Notes**
 
-**Topological sort answers one question: in what order is it safe to call the `_backward`s?** A node cannot pass gradient to its inputs until every node that uses it has passed gradient to it. Sorting the graph so that every node comes after its children, then walking the list backwards, guarantees that. His `build_topo` is a depth-first walk with a `visited` set, and `topo.append(v)` comes **after** the loop over `v._prev`. Put it before the loop and every gradient comes out `0.0` with no error.
+**Topological sort answers one question: in what order is it safe to call the `_backward`s?** A node cannot pass gradient to its inputs until every node that uses it has passed gradient to it. Sorting the graph so that every node comes after its children, then walking the list backwards, guarantees that. His `build_topo` is a depth-first walk with a `visited` set, and `topo.append(v)` comes **after** the loop over `v._prev`. Put it before the loop and every gradient below the top two nodes comes out `0.0` with no error.
 
 **`+=` not `=`.** When a node is used twice, gradient arrives from two places and both have to be kept. With `=`, the second arrival overwrites the first. The Extension breaks exactly one of the two lines in `__add__` and shows what the `a + a` check cannot see.
 
@@ -81,7 +81,7 @@ uv run python micrograd/neuron.py backward
 
 *You should see* `2.0` from the first; `Value(data=4.0) Value(data=6.0) Value(data=-1.0) Value(data=0.75) Value(data=9.0) -3.0 Value(data=7.0)` from the second; and from the third, T09's two lines and the same ten gradients as T09 Step 4 printed, now from one call to `o.backward()` instead of five hand-ordered calls. Paste the `2.0` and the ten gradient lines under `## Step 3` in `evidence/T10.md`.
 
-*If it broke* with `1.0` from the first check, one of the two lines in `__add__`'s `_backward` still uses `=`. A `TypeError` from the second names the method you are missing. *If it broke* with every gradient `0.0000` from the third, `topo.append(v)` is before the loop in `build_topo`, or `self.grad = 1.0` is missing from `backward`.
+*If it broke* with `1.0` from the first check, one of the two lines in `__add__`'s `_backward` still uses `=`. A `TypeError` from the second names the operator whose method you are missing (`unsupported operand type(s) for +: 'int' and 'Value'` is `__radd__`). *If it broke* with every gradient `0.0000` from the third, `self.grad = 1.0` is missing from `backward`; with `do/do` and `do/dn` right and everything below them `0.0000`, `topo.append(v)` is before the loop in `build_topo`. *If it broke* with `AttributeError: 'Value' object has no attribute '_backward'`, `__init__` is missing `self._backward = lambda: None`, so a leaf has nothing to call.
 
 **Step 4. Your neuron three ways.**
 
@@ -124,6 +124,8 @@ o          -0.406991    -0.406991    -0.406991   True
 do/db       0.834358     0.241349     0.834358   False
 do/dw1     -1.067978    -0.308927    -1.067978   False
 do/dw2     -0.300369    -0.086886    -0.300369   False
+do/dx1      0.417179     0.120675     0.417179   False
+do/dx2     -0.250307    -0.072405    -0.250307   False
 ```
 
 The check passed because in `a + a`, `self` and `other` are the same object: the `=` set `a.grad` to `1.0` and the untouched `+=` on the next line added the second `1.0`, so `2.0` came out by luck. The `from exp` graph uses `e` in two different `+` nodes, `e - 1` and `e + 1`, so `e` is `self` in both and the second arrival overwrote the first. The `tanh node` graph reuses nothing, so it never noticed. Write where it got worse under `## Extension`: the factor by which `do/dw1` in the `from exp` column shrank, and one sentence on what the `a + a` check measured and what it should have. **Then put the `+=` back** and run `vs_torch.py` to six `True`s before you commit anything else.

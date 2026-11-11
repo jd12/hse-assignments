@@ -61,13 +61,13 @@ twenty names from the MLP: chrean atus leus imrous hilaspans neomacus fepesastil
 0 of the twenty are real names from your list
 ```
 
-Open `names/embeddings.png`. On Homer `a`, `o`, `e`, `i` and `y` sit in a tight group at the lower left, `0.34` apart on average, and `u` is at the top of the picture, `3.8` away from them, with `l` and `g` on the way. The first distance line says the vowels are *farther* apart than average, which is true only because `u` is counted as one of them; the second line is the picture as it really is: four vowels together and one outlier with a reason. Paste the five lines under `## Step 2`, check your two predictions, and write what your picture shows: which letters group, which one is farthest out, and one sentence on why that letter behaves differently in your corpus's names.
+Open `names/embeddings.png`. On Homer `a`, `o`, `e` and `i` sit in a group at the lower left, `0.34` apart on average, with `y` among them, and `u` is at the top of the picture, `3.8` away from them, with `l` and `g` on the way. The first distance line says the vowels are *farther* apart than average, which is true only because `u` is counted as one of them; the second line is the picture as it really is: four vowels together and one outlier with a reason. Paste the five lines under `## Step 2`, check your two predictions, and write what your picture shows: which letters group, which one is farthest out, and one sentence on why that letter behaves differently in your corpus's names.
 
 *If it broke* with `FileNotFoundError: names/mlp.pt`, T18's training did not finish or was not committed; run `uv run python names/train_mlp.py` first.
 
 **Step 3. Twenty samples, five that pass.**
 
-Read the twenty. For each one, decide: a name your corpus could contain, a word rather than a name, or noise. Then create `names/SAMPLES.md` with the twenty listed under those three headings, and under a fourth heading the five best, each with one line on what makes it pass: the ending, a familiar three-letter run, a real name it is one letter from. On Homer, `atus`, `leus`, `lyodus`, `iuretus` and `adcius` pass on their endings alone, `mon` and `depo` are words, and `fepesastilasgius` and `pelocianrysixippus` are three names run together. Paste the five with their reasons under `## Step 3`.
+Read the twenty. For each one, decide: a name your corpus could contain, a word rather than a name, or noise. Then create `names/SAMPLES.md` with the twenty listed under those three headings, and under a fourth heading the five best, each with one line on what makes it pass: the ending, a familiar three-letter run, a real name it is one letter from. On Homer, `atus`, `leus`, `lyodus`, `iuretus` and `adcius` pass on their endings alone, `mon` and `depo` are words, and `fepesastilasgius` and `pelocianrysixippus` are three names run together. Under `## Step 3`, write how many of the twenty went under each of the three headings, and paste the five with their reasons.
 
 **Extension — The same twenty, before and after training** *(assigned)*
 
@@ -91,7 +91,7 @@ for _ in range(20):
 "
 ```
 
-*You should see* twenty strings and their lengths. On Homer every one of them is 40 long, cut off by the rail, and they read `jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj` and `ijjjjjjjjjjjjjjjiijjjjjjjjjjjiiijjjjjjjj`: the untrained net is a spike on one character per context, as T17's probability line showed, so once it says `j` after `jjj` it says `j` after `jjj` forever and never reaches `.`. Without the rail the first sample would never end. Write where it got worse under `## Extension`: how many of the twenty hit the rail, the letters they are made of, and the one sentence that explains the repetition from T17's probability line.
+*You should see* twenty strings and their lengths. On Homer every one of them is 40 long, cut off by the rail, and they read `jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj` and `ijjjjjjjjjjjjjjjiijjjjjjjjjjjiiijjjjjjjj`: the untrained net is a spike on one character per context, as T17's probability line showed, so once it says `j` after `jjj` it says `j` after `jjj` forever and never reaches `.`. Without the rail the first sample would never end. Paste the first five with their lengths under `## Extension`, and write where it got worse: how many of the twenty hit the rail, the letters they are made of, and the one sentence that explains the repetition from T17's probability line.
 
 **Commit, push, PR, sign off.** Fill `## Reflection` in `evidence/T19.md` (the questions are below) and run `uv run python scripts/check_evidence.py T19` until it says `all slots filled`. Then:
 
@@ -120,7 +120,7 @@ git add logs && git commit && git push
 
 2. Paste your five with their reasons. For the best one, write the three-character contexts the network walked through to make it, and say which of those contexts appears in a real name of your corpus.
 
-   *How to get it:* `lyodus` is `...` → `l`, `..l` → `y`, `.ly` → `o`, `lyo` → `d`, `yod` → `u`, `odu` → `s`, `dus` → `.`; `.ly` is `lycaon` and `dus` is `odysseus`'s tail without the `e`.
+   *How to get it:* `lyodus` is `...` → `l`, `..l` → `y`, `.ly` → `o`, `lyo` → `d`, `yod` → `u`, `odu` → `s`, `dus` → `.`; `.ly` is `lycaon` and `dus` is the end of `polyidus`.
 
 3. Paste the first three untrained samples beside your prediction. Say what training did to the network's probabilities, in one sentence that uses the word "spread", and what the bigram model of T15 would have been better at than the untrained MLP.
 

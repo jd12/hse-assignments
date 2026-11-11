@@ -102,7 +102,13 @@ Hold your page next to it. `do2/dw1` on Homer is `0.7677 × 0.8 × 0.8344 × (-1
 
 **Step 5. The clean clone.**
 
-In the second terminal, somewhere outside your repo:
+A clone only gets what is on GitHub, so push the branch from your first terminal:
+
+```bash
+git push -u origin dev/milestone
+```
+
+Then in the second terminal, somewhere outside your repo:
 
 ```bash
 cd /tmp

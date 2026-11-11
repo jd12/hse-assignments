@@ -190,7 +190,7 @@ uv run python -m rag.keyword <your paraphrase query>
 uv run python -m rag.semantic <your paraphrase query>
 ```
 
-*You should see* what the scoreboard already told you in numbers, now as the passages themselves: the name query found by keyword search on the name, the paraphrase query found by semantic search on the meaning, and each engine's miss. Paste the four outputs' top three lines and say which blind spot from lesson 1 each miss is.
+*You should see* what the scoreboard already told you in numbers, now as the passages themselves: the name query found by keyword search on the name, the paraphrase query found by semantic search on the meaning if your P08 scoreboard had it, and each engine's miss. Paste the four outputs' top three lines and say which blind spot from lesson 1 each miss is.
 
 **Step 4. The scale problem, on your numbers.**
 

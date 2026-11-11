@@ -286,7 +286,7 @@ cross-encoder rerank of the hybrid top 20 for: how was the Cyclops blinded
 5. c00763  score 0.849  was hybrid rank 11  he thence reached the fertile land of the Lotus-eaters. He told her al...
 ```
 
-Nineteen of the twenty changed position, and only one chunk of the hybrid top five survived in the reranked top five. The chunk that was hybrid rank 1, the one with `bore the red hot beam into his eye`, is now rank 9: the cross-encoder preferred a chunk where Ulysses' men *remember* the Cyclops, which has the word `Cyclops` beside words about the blinding, over the chunk that narrates the blinding without naming him. Paste your output under `## Step 4` and count your two numbers: positions changed, and hybrid top-five survivors. The count is quick by hand from the `was hybrid rank` column, or:
+Nineteen of the twenty changed position, and only one chunk of the hybrid top five survived in the reranked top five. The chunk that was hybrid rank 1, the one with `bore the red hot beam into his eye`, is now rank 9: the cross-encoder preferred a chunk where Ulysses' men *remember* the Cyclops, which has the word `Cyclops` beside words about the blinding, over the chunk that narrates the blinding without naming him. Paste your output under `## Step 4` and count your two numbers: positions changed, and hybrid top-five survivors. The survivors are quick to count by hand from the `was hybrid rank` column. This prints both numbers:
 
 ```bash
 uv run python -c "
@@ -304,7 +304,13 @@ print('hybrid top five still in the top five:', len({pool[i]['id'] for i in orde
 
 **Step 5. The scoreboard with four columns.**
 
-`rag/scoreboard.py` has a fourth method since P14, `rerank`, the cross-encoder over the hybrid top 20, cut to five:
+`rag/scoreboard.py` gets a fourth method, `rerank`, the cross-encoder over the hybrid top 20, cut to five. Change `from rag import search` to `from rag import rerank, search`, and add one entry to the dictionary `methods()` returns, below `hybrid`:
+
+```python
+        "rerank": lambda q: rerank.rerank(q, 5),
+```
+
+Then:
 
 ```bash
 uv run python -m rag.scoreboard

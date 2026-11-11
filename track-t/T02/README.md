@@ -94,7 +94,7 @@ Whatever your corpus: both rotations keep the angle and keep L2 at `1.0000`; the
 
 The last two lines are the Ch. 3 example on your corpus: `M @ v` and `v[0]` copies of column 0 plus `v[1]` copies of column 1 print the same two numbers, with your chapter 2 counts in them. Open `linear/transforms.png`. On Homer the ten arrows are within two degrees of each other, so the gray "fan" looks like one arrow; on a corpus whose chapters differ in subject (your T01 slopes told you), the fan is visibly open. Either way, what you can see is the whole bundle turning a quarter circle under the rotation, stretching along the x axis under the scale, and barely moving under the shear, which is the point: a shear that sends ĵ to (1, 1) hardly touches arrows that lie almost along î. Paste everything it printed under `## Step 3`.
 
-*If it broke:* `i lands at [ 0. -1.]` for the rotation, or a picture where it turns clockwise, means you typed the matrix down its columns instead of across its rows; `np.array([[0, -1], [1, 0]])` is the first row then the second.
+*If it broke:* `i lands at [ 0. -1.]` for the rotation, or a picture where it turns clockwise, means you typed the matrix down its columns instead of across its rows; `np.array([[0, -1], [1, 0]])` is the first row then the second. `i lands at [0. 0.]`, a `RuntimeWarning: invalid value` and `nan degrees` mean that row of `MATRICES` is still the template's zeros; fill it in.
 
 **Extension — which ways of processing a count vector are linear? (ASSIGNED)**
 

@@ -219,7 +219,7 @@ c00308 ranks [1, 8] score 0.0311
 c00307 ranks [6, 5] score 0.0305
 ```
 
-`c00300` and `c00308` are mirror images, rank 1 in one list and rank 8 in the other, so their votes are the same `1/61 + 1/68`. The tie goes to the one that comes first in the engines' order, the P06 rule, which is why `c00300` leads. Nothing in a raw score of `10.04` against `0.609` could have produced that comparison. *If it broke* with `ValueError: ... is not in list` the `if cid in ranking` guard was edited out.
+`c00300` and `c00308` are mirror images, rank 1 in one list and rank 8 in the other, so their votes are the same `1/61 + 1/68`. The tie goes to the lower id, the chunk that comes first in the file, which is the P06 rule and why `c00300` leads. Nothing in a raw score of `10.04` against `0.609` could have produced that comparison. *If it broke* with `ValueError: ... is not in list` the `if cid in ranking` guard was edited out.
 
 **Step 5. The scoreboard on chunks.**
 
@@ -260,7 +260,7 @@ q05           -        -        3
 hit@3       1/5      2/5      3/5
 ```
 
-Compare this with P08's table. `q03`, outside the top 30 on passages, is rank 1 on chunks: the needle that sat past the model's window at word 206 of a 375-word passage now sits inside a 200-word chunk the model reads whole. That is the chapter 5 argument in one row. `q05` is the case where hybrid beat both inputs: BM25 had it outside the top 5 and semantic had it at rank 8, and two weak votes outranked every chunk that only one engine liked.
+Compare this with P08's table. `q03`, outside the top 30 on passages, is rank 1 on chunks: the needle that sat past the model's window at word 207 of a 375-word passage now sits inside a 200-word chunk the model reads whole. That is the chapter 5 argument in one row. `q05` is the case where hybrid beat both inputs: BM25 had it outside the top 5 and semantic had it at rank 8, and two weak votes outranked every chunk that only one engine liked.
 
 **Where it got worse.** Find the query where hybrid ranked the answer lower than the better of BM25 and semantic did. Paste the three ranks, and say what RRF did to a chunk only one list found. On Homer it is `q02`: BM25 `-`, semantic 5, hybrid `-`. The answer chunk had one vote, `1/65` from semantic, for `0.0154`. The fused rank 1, `c00542`, was rank 15 for BM25 and rank 10 for semantic, two middling votes for `0.0276`, and the whole fused top five is chunks like it, ranked somewhere in both of the 50-deep pools. Neither engine liked any of them more than semantic liked the answer, and the answer still lost, because one good vote is worth less than two mediocre ones.
 

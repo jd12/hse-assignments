@@ -82,7 +82,7 @@ uv run python -m rag.agent none "<the question>"
 
 Paste both under `## Step 3` and say which is right, and where the `none` answer came from: your corpus (it cannot), the model's memory of the text, or nowhere.
 
-*If it broke* with `rounds 5` and an empty answer, the model called the tool at every turn and never answered; `MAX_ROUNDS` ended it, and that question is a `wrong` in P20's terms. *If it broke* with the model answering in `tool` mode without calling the tool, that is routing, and the system prompt's second line is the place to look; keep the output for P20. *If it broke* with an error mentioning `tools` or `function calling`, the free router handed the request to a model that cannot call tools; `rag/llm.py` retries, and a second run usually lands on one that can. If it keeps failing, pin a model: in `rag/llm.py`, set `MODEL` to one of the `:free` models on the OpenRouter models page that lists tool calling, and tell me which.
+*If it broke* with `rounds 5` and an empty answer, the model called the tool at every turn and never answered; `MAX_ROUNDS` ended it, and that question is a `wrong` in P20's terms. *If it broke* with the model answering in `tool` mode without calling the tool, that is routing, and the system prompt's third line is the place to look; keep the output for P20. *If it broke* with an error mentioning `tools` or `function calling`, the free router handed the request to a model that cannot call tools; `rag/llm.py` retries, and a second run usually lands on one that can. If it keeps failing, pin a model: in `rag/llm.py`, set `MODEL` to one of the `:free` models on the OpenRouter models page that lists tool calling, and tell me which.
 
 **Step 4. Twenty questions, committed before any run.**
 

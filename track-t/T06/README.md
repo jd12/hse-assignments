@@ -69,7 +69,7 @@ Whatever your corpus: with the top 50 words every pair of chapters is very alike
 
 **Step 3. The timing.**
 
-Your `matmul` and NumPy's, on the 10×V chapter matrix times its transpose, at three vocabulary sizes. *You should see* a ratio in the hundreds at every size, the `V=2000` ratio larger than the `V=50` one, and `same answer: True` on all three rows. Your milliseconds will differ from Homer's and so will your ratios; the middle row can land on either side of the last, because NumPy's time there is a few microseconds and jitters. If your corpus has fewer than 2,000 distinct words, the last row uses all of them and prints the number it used. Paste the three rows under `## Step 3`.
+Your `matmul` and NumPy's, on the 10×V chapter matrix times its transpose, at three vocabulary sizes. *You should see* a ratio of a hundred or more at every size, the `V=2000` ratio larger than the `V=50` one, and `same answer: True` on all three rows. Your milliseconds will differ from Homer's and so will your ratios; the middle row can land on either side of the last, because NumPy's time there is a few microseconds and jitters. If your corpus has fewer than 2,000 distinct words, the last row uses all of them and prints the number it used. Paste the three rows under `## Step 3`.
 
 **Step 4. Write `linear/FINDINGS.md`.**
 
@@ -106,4 +106,4 @@ git add logs && git commit && git push
 
 3. Linear algebra is done. Name the one idea from the nine chapters you would be least able to explain to a classmate, and the chapter it is in.
 
-   *How to get it:* reread your `NOTATION.md` and the `## During the video` slot in each of the six evidence files. The idea with the fewest words next to it is usually the one.
+   *How to get it:* reread your `NOTATION.md` and the `## During the video` slots in `evidence/T03.md` to `evidence/T06.md`. The idea with the fewest words next to it is usually the one.

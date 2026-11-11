@@ -217,7 +217,7 @@ print(va, vb, 'dot', dot, 'cosine', round(dot / (na * nb), 3))
 "
 ```
 
-*You should see* two short vectors, their dot product and their cosine. On Homer: `[1, 1, 0] [1, 1, 1] dot 2 cosine 0.816`. Replace the three words and the two sentences with your own, picking words that are in at least one of the sentences, and paste the line under `## Step 3` in `evidence/P07.md`. Then double every count in `va` by hand and say what happens to the dot product and to the cosine. *If it broke* with `cosine` dividing by zero, one of your vectors is all zeros: none of the three words is in that sentence after `preprocess`, which stems, so `ships` and `ship` both count as `ship` but `gods` and `god` need checking.
+*You should see* two short vectors, their dot product and their cosine. On Homer: `[1, 1, 0] [1, 1, 1] dot 2 cosine 0.816`. Replace the three words and the two sentences with your own, picking words that are in at least one of the sentences, and paste the line under `## Step 3` in `evidence/P07.md`. Then double every count in `va` by hand and say what happens to the dot product and to the cosine. *If it broke* with `ZeroDivisionError`, one of your vectors is all zeros: none of the three words is in that sentence after `preprocess`, which stems, so `ships` and `ship` both count as `ship` but `gods` and `god` need checking.
 
 **Commit, push, PR, sign off.** Fill `## Reflection` in `evidence/P07.md` (the questions are below) and run `uv run python scripts/check_evidence.py P07` until it says `all slots filled`. Then:
 

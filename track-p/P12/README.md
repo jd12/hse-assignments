@@ -8,7 +8,7 @@
 
 **During the chapter**
 
-**Write down what the model is allowed to do.** Lesson 1 lists four things a model can do to a query before the search runs. Write the four in `scratch/p12-llm.md` in the rag repo. Lesson 3's prompt forbids three of them; mark which three. P13 adds the other two back on purpose.
+**Write down what the model is allowed to do.** Lesson 1 lists four things a model can do to a query before the search runs. Write the four in `scratch/p12-llm.md` in the rag repo. Lesson 3's prompt forbids three of them; mark which three. P13 adds two of them back on purpose.
 
 **Count the requests.** Lesson 2 gives two numbers for the free tier: requests per day and requests per minute. Write both in `scratch/p12-llm.md`. Every script in this repo from today on prints how many requests it made, and the Reflection asks you to add them up.
 
@@ -235,7 +235,17 @@ Open `rag/enhance.py` first: the chapter's prompt with one line added, `CORPUS_N
 {{LLM:P12-spell}}
 ```
 
-Then the ranks. Run `uv run python -m rag.search "<typo'd query>"` and `uv run python -m rag.search "<corrected query>"` for each and find your needle chunk's rank in the `hybrid` list (the scoreboard does this for the clean query already). On Homer, the typo'd `Ciclops` query had its answer chunk at hybrid rank 6 and the clean one at rank 1; `captian` for `captain` put a chunk at rank 6 that the clean query did not find in the top ten at all, because the misspelled word matched nothing and the other words did the work; `Nausica` for `Nausicaa` did not move the rank 1 result, because the semantic engine does not spell. Fill the Step 4 table in `evidence/P12.md` and write what, if anything, the model changed that was not a typo.
+Then the ranks. Run this once for each typo'd query and once for its corrected version, with that query's needle from `rag/queries.json`. It prints the rank of the needle's chunk in the hybrid top ten, or `None` if it is not there:
+
+```bash
+uv run python -c "
+from rag import search
+from rag.scoreboard import first_hit
+print(first_hit(search.hybrid('<the query>', 10), '<its needle>'))
+"
+```
+
+On Homer, the typo'd `Ciclops` query had its answer chunk at hybrid rank 6 and the clean one at rank 1; `captian` for `captain` put a chunk at rank 6 that the clean query did not find in the top ten at all, because the misspelled word matched nothing and the other words did the work; `Nausica` for `Nausicaa` did not move the rank 1 result, because the semantic engine does not spell. Fill the Step 4 table in `evidence/P12.md` and write what, if anything, the model changed that was not a typo.
 
 *If it broke* with the model returning your query with a word "corrected" to something else, that is the Reflection's third question; keep the output.
 

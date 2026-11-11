@@ -16,7 +16,7 @@
 
 **One question moves a score by 0.04.** Twenty-five questions: a method that finds one more is `0.04` better on recall@5, and a difference of one question is not a finding. The runner prints `n` above every table so the number is never read without its size. The chapter's set is ten, and its numbers move by `0.1`.
 
-**Recall@1 ≤ MRR ≤ recall@5 is arithmetic, not a result.** A question found at rank 1 adds 1 to all three; one found at rank 3 adds a third to MRR and 1 to recall@5. If a row breaks that order, the metric code is wrong, not the pipeline.
+**Recall@1 ≤ MRR ≤ recall@5 is arithmetic, not a result.** A question found at rank 1 adds 1 to all three; one found at rank 3 adds a third to MRR and 1 to recall@5. That is for a question with one labeled chunk. A question with two labeled chunks and only one of them in the top five adds `0.5` to recall@5, so on a set with many multi-chunk labels MRR can pass recall@5 with nothing wrong. If a row breaks the order and that is not the reason, the metric code is wrong, not the pipeline.
 
 **Two cross-encoders, decided by twenty-five questions.** P14's five queries said the chapter's model made things worse and could not say whether a bigger one would help. The walkthrough runs the two-layer model, then swaps in a six-layer one from the same family, `ms-marco-MiniLM-L-6-v2`, and the twenty-five decide. Whatever wins is frozen in `rag/rerank.py`, and every later day runs on it.
 
@@ -184,7 +184,7 @@ highest precision@5 this set allows: 0.3040
 
 Read the rows against each other. BM25 beats semantic on this corpus by a wide margin: Butler's names are rare tokens, and the semantic model's 256-token window never got the whole passage. Hybrid is a little above both on recall and well above both on MRR, which is fusion doing what P11 said it would. And the chapter's reranker is below hybrid on every column, which is P14's five queries again, now on twenty-five. Paste the table under `## Step 3`, check your P15 predictions, and look up your three expected misses in `rag/eval/runs.json` (the per-question ranks the runner saved) to say what happened to them.
 
-*If it broke* with a row where `MRR` is above `recall@5` or below the recall@1 you can read off the per-question ranks, the metrics are wrong; `rag/eval/metrics.py` is the template's. *If it broke* with `FileNotFoundError: golden.json`, you are on a branch from before P15's commit.
+*If it broke* with a row where `MRR` is above `recall@5` (and half-found multi-chunk questions do not explain it) or below the recall@1 you can read off the per-question ranks, the metrics are wrong; `rag/eval/metrics.py` is the template's. *If it broke* with `FileNotFoundError: golden.json`, you are on a branch from before P15's commit.
 
 **Step 4. The second cross-encoder, predicted first.**
 

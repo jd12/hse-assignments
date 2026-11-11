@@ -44,7 +44,7 @@ bash scripts/start-entry.sh
 Under the timestamp, write today's checklist:
 
 ```markdown
-- [ ] micrograd 00:00 → 19:09 watched, the seven derivatives computed before he nudged
+- [ ] micrograd 00:00 → 19:09 watched, the seven numbers written before he nudged
 - [ ] Step 2: two predictions in evidence/T07.md and committed, then slope.py run
 - [ ] Step 3: the gradient, all 51 words
 - [ ] Step 4: the h table

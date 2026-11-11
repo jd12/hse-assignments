@@ -168,7 +168,7 @@ bootdev run -s <lesson-id>
 
 Three things to notice, because P02 does this on your corpus: `in` on strings is the simplest search there is and already breaks on case and punctuation; `[:5]` is a hard cutoff with no ranking, which is what TF-IDF fixes next week; and loading the whole file on every search is fine for a thousand movies and a bad habit, which chapter 2's index addresses.
 
-**Lesson 5: text processing, first step.** The reading lists the five steps of the pipeline the chapter builds (lowercase, strip punctuation, tokenize, drop stopwords, stem). Write those five, in that order, in `scratch/p02-order.md` now; that is the list Reflection 1 and P02 want. The assignment itself does only the first one: Webflyx users can't be bothered with the shift key, so `"country"` has to find `No Country for Old Men`.
+**Lesson 5: text processing, first step.** The reading lists the five steps of the pipeline the chapter builds (lowercase, strip punctuation, tokenize, drop stopwords, stem). Write those five, in that order, in `scratch/p02-order.md` in the rag repo now; that is the list P02 wants. The assignment itself does only the first one: Webflyx users can't be bothered with the shift key, so `"country"` has to find `No Country for Old Men`.
 
 1. In `cli/lib/keyword_search.py`, lowercase both sides of the comparison:
 

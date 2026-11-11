@@ -98,14 +98,14 @@ first five: ['abantes', 'abydos', 'acamas', 'achaean', 'achaeans']
 the ten most common:
      s <E> 286
      u s   165
-     a n   98
+     a n   95
    <S> a   79
-   <S> p   75
-     n <E> 74
-     e s   68
-     t h   67
-     h e   58
-     o n   58
+   <S> p   76
+     n <E> 71
+     e s   66
+     t h   64
+     o n   56
+     i a   55
 N: shape (28, 28)   sum 4125   (the sum equals the dictionary's total)
 row <S>: starts with the most common first letter 'a' (79 names)
 ```
@@ -135,7 +135,7 @@ git add logs && git commit && git push
 
 1. Paste your Step 3 lines beside your predictions. List the non-names you found and say which single change to `mine.py`'s rule would remove the most of them, and what real names that change would also throw away.
 
-   *How to get it:* `king` goes if words that precede another capitalized word are skipped, but so does `agamemnon` in `Agamemnon King of men`. Raising `MIN_COUNT` to 10 drops `book` and `sir` and also every minor character named three to nine times. Every rule costs something; say what yours costs.
+   *How to get it:* `king` goes if words that precede another capitalized word are skipped, but so does `agamemnon` in `Agamemnon King of men`. Raising `MIN_COUNT` to 10 drops `sir` and `books` and also every minor character named three to nine times. Every rule costs something; say what yours costs.
 
 2. Paste your ten most common bigrams. Say what the top one tells you about your corpus's names, and compare it with his top pair, `n <E>`, in one sentence about what kind of names each list holds.
 

@@ -13,7 +13,7 @@ No video. The last day of the semester's theory track. Everything from T01 is in
 
 **Ship means `main`.** Every assignment since T01 landed on `main` through a pull request. Today's PR is the last, and after it is merged every piece of the semester is reachable from one branch at one commit, which is what the spring picks up from.
 
-**The practical is ten minutes and you have rehearsed it.** `names/PRACTICAL.md` is on the desk, the T21 page beside it, the demo seed decided. When your name is called, bring the laptop with `/tmp/practical-check` already cloned from `main`.
+**The practical is ten minutes and you have rehearsed it.** `names/PRACTICAL.md` is on the desk, the T21 page beside it, the demo seed decided. When your name is called, bring the laptop with a clean clone ready: `/tmp/ship-check` from Step 3 if you have reached it, yesterday's `/tmp/practical-check` if you have not.
 
 **Walkthrough — the front page, the final clone, the merge**
 
@@ -40,7 +40,7 @@ Under the timestamp, write today's checklist:
 - [ ] Step 2: README.md, the front page
 - [ ] Step 3: the final clean clone, tests, training, demo
 - [ ] Step 4: PR, merged, branch deleted; the practical when called
-- [ ] Fill every slot in evidence/T20.md (check_evidence.py: all slots filled); sign off
+- [ ] Fill every slot in evidence/T20.md (check_evidence.py: all slots filled once the Step 4 paste is in); sign off
 ```
 
 **Step 2. The front page.**
@@ -48,13 +48,23 @@ Under the timestamp, write today's checklist:
 Open `README.md` at the repo root. Above the template's `## First run`, add a section with your name and the semester, and under it four short parts, in this order:
 
 - **What this is.** Three sentences: the corpus (title, source, size in words from T01), what the linear algebra scripts measured on it (T06's most-alike pair in the ranks 51-250 band), and what the two models learned from it (T12's final count out of 40, T18's three losses).
-- **Run the name model.** The three clean-clone commands from T22 Step 2 and the demo line with your seed, as one code block a stranger can paste.
+- **Run the name model.** Three clean-clone commands from T22 Step 2 (`git clone`, `cd` into the clone, `uv sync`) and the demo line with your seed, as one code block a stranger can paste.
 - **The engine.** One sentence pointing at `micrograd/engine.py` and `micrograd/MILESTONE.md`, with the five tests: `uv run pytest micrograd -q`.
 - **Where everything is.** A table with one row per folder, `linear/`, `micrograd/`, `names/`, `evidence/`, `scratch/`, and the assignments each covers, in your own words, not the template's.
 
 Half a page. No screenshots; the pictures are in the folders and the table says so.
 
 **Step 3. The final clone.**
+
+The clone gets only what is on GitHub, so commit the front page and push the branch first, from the repo root:
+
+```bash
+git add README.md
+git commit -m "T20: README front page"
+git push -u origin dev/ship
+```
+
+Then, in the second terminal:
 
 ```bash
 cd /tmp
@@ -90,7 +100,7 @@ If every number matches your working copy's, the semester's work is reproducible
 
 **Step 4. The last pull request.**
 
-Fill `## Reflection` in `evidence/T20.md` (the questions are below) and run `uv run python scripts/check_evidence.py T20` until it says `all slots filled`. Then:
+Fill `## Reflection` in `evidence/T20.md` (the questions are below) and run `uv run python scripts/check_evidence.py T20` until the only slot it lists is the paste under `## Step 4`, which you fill after the merge. Then:
 
 ```bash
 git add README.md evidence/T20.md
@@ -125,7 +135,7 @@ git add logs && git commit && git push
 
 2. Paste your Step 3 lines. Name the one file in the repo that, if deleted, would break the most of those three commands, and say which commands it breaks and why.
 
-   *How to get it:* `linear/chapter_vectors.py`: `train.py` reads `slices.py`, which reads `features.py`, which reads it; `demo.py` does not, because `names/` reads only `names.txt` and `mlp.pt`. Deleting `micrograd/engine.py` breaks the tests and `train.py` but not the demo.
+   *How to get it:* `micrograd/engine.py`: the tests import `Value` from it, and `train.py` reads `nn.py`, which reads it; `demo.py` does not, because `names/` reads only `names.txt` and `mlp.pt`. Deleting `linear/chapter_vectors.py` breaks `train.py` alone, through `slices.py`, and not the tests or the demo.
 
 3. Of the twenty-two assignments, name the one whose idea you would be least able to explain to a classmate without opening the repo, and the one you could explain from memory, with one sentence on why each.
 

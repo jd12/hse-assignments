@@ -80,9 +80,9 @@ g22 (paraphrase): What did the old king do when he reached the tent of the man w
    original  bm25 22  semantic -  hybrid 46  in rerank pool no  rerank -   -> lost at: fusion (outside the rerank pool)
 ```
 
-Seven of Homer's eight misses have the same shape: BM25 found the chunk somewhere in its top 50, the semantic engine did not find it at all, and a chunk with one vote lands at hybrid rank 21 to 46, past the reranker's pool of 20. The reranker never read it. g04 is the sharpest case: BM25 rank 4, and still lost, because semantic rank 38 is worth almost nothing in RRF. The eighth, g03, neither engine found: `enchantress`, `island`, `crew`, `animals` are none of them Butler's words for Circe turning men into pigs. Paste the output under `## Step 2` and fill the stage table with your counts.
+Seven of Homer's eight misses have the same shape: BM25 found the chunk somewhere in its top 50, the semantic engine did not find it at all, and a chunk with one vote lands at hybrid rank 21 to 46 (g12's is past 50 and prints `-`), past the reranker's pool of 20. The reranker never read it. g04 is the sharpest case: BM25 rank 4, and still lost, because semantic rank 38 is worth almost nothing in RRF. The eighth, g03, neither engine found: `enchantress`, `island`, `crew`, `animals` are none of them Butler's words for Circe turning men into pigs. Paste the output under `## Step 2` and fill the stage table with your counts.
 
-*If it broke* with `0 of 25 questions`, your pipeline misses nothing at five, which with twenty-five hand-written questions is a sign the golden set was labeled from search; P15's Reflection said why. Trace five questions by id instead, the five with the lowest reranker scores in `rag/eval/runs.json`.
+*If it broke* with `0 of 25 questions`, your pipeline misses nothing at five, which with twenty-five hand-written questions is a sign the golden set was labeled from search; P15's Reflection said why. Trace five questions by id instead, the five whose `first` (the rank of the first labeled chunk) is largest under `rerank` in `rag/eval/runs.json`.
 
 **Step 3. Five traced, with the expansion.**
 
@@ -116,7 +116,7 @@ rerank     0.1600    0.5933  0.2462 0.5513     (POOL = 20)
 rerank     0.1760    0.6433  0.2684 0.6013     (POOL = 50)
 ```
 
-Two questions recovered, g04 and g20: the reranker, once it could see them, put g04's chunk first and g20's fourth. The other three were in the pool of 50 and the reranker still put them at 9, 27 and 28, so for those the stage that lost them moved from fusion to the reranker, which is progress of a kind: a stage with a model in it can be swapped, and a chunk outside the pool could not be helped by anything. The cost: every query now scores fifty pairs instead of twenty, two and a half times the reranker's time, and `rag.ask` is slower by that much. Paste the before-and-after rows and the five traces under `## Step 4`, and keep the change if the table says to; on Homer it stays.
+Two questions recovered, g04 and g20: the reranker, once it could see them, put g04's chunk first and g20's fourth. The other three were in the pool of 50 and the reranker still put them at 9, 27 and 28, so for those the stage that lost them moved from fusion to the reranker, which is progress of a kind: a stage with a model in it can be swapped, and a chunk outside the pool could not be helped by anything. The cost: every query now scores fifty pairs instead of twenty, two and a half times the reranker's time, and `rag.ask` is slower by that much. A wider pool can also raise a question's top score, so rerun P18 Step 4's command and check that `REFUSE_BELOW` still separates your two groups. Paste the before-and-after rows and the five traces under `## Step 4`, and keep the change if the table says to; on Homer it stays.
 
 *If it broke* with no row changing, the constant you changed is not on the path for those five; the trace says which stage lost them, and that stage's constant is the one.
 

@@ -84,7 +84,7 @@ Before you run it, write two predictions under `## Step 3` in `evidence/T18.md` 
 uv run python names/train_mlp.py
 ```
 
-*You should see* the losses every 2,500 steps, the three final losses, `saved: names/mlp.pt` and `drawn: names/train_curve.png`. On Homer:
+The run takes a minute or two, and a line appears every 2,500 steps. *You should see* the losses every 2,500 steps, the three final losses, `saved: names/mlp.pt` and `drawn: names/train_curve.png`. On Homer:
 
 ```text
 step     0   lr 0.1   minibatch loss 19.3858   train 17.3791   dev 17.9430
@@ -100,7 +100,7 @@ saved: names/mlp.pt   drawn: names/train_curve.png
 
 Read the last line. Train `1.97` is well below T15's bigram `2.19`: three characters of context beat one. Dev `2.19` is above train by `0.22`, which is the network knowing the 406 training names a little too well; his gap on 32,000 names was a few hundredths. Test `2.24` is the honest number, looked at once. The drop at step 10,000 when the rate falls to `0.01` is the decay doing its job. Paste everything under `## Step 3` and check your predictions. `names/mlp.pt` is the trained model; T19 and the practical sample from it.
 
-*If it broke* with `train` and `dev` both near `17` after 2,500 steps, the update has the wrong sign; `train_mlp.py` is the template's. *If it broke* with the minibatch loss at `nan`, the learning rate was edited above `1`.
+*If it broke* with `FileNotFoundError: [Errno 2] No such file or directory: 'names/names.txt'`, you are not in the repo root; `cd` back to it and run the command again. *If it broke* with the losses climbing instead of falling, `train_mlp.py` has been edited; `git checkout main -- names/train_mlp.py` puts the template's copy back.
 
 **Extension — Three times the hidden layer** *(assigned)*
 

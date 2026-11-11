@@ -142,7 +142,7 @@ uv run cli/augmented_generation_cli.py question 'Who are the main characters in 
 bootdev run -s 697bd109-e54d-46bc-90e7-290c58efa365
 ```
 
-*You should see* `Jurassic Park` in the titles and an answer naming Alan Grant, Ellie Sattler and Ian Malcolm; the six names are the check. That is chapter 10 done, and the course's scheduled chapters with it; 11 and 12 are extra credit, in January if you want them.
+*You should see* `Jurassic Park` in the titles and an answer naming Alan Grant, Ellie Sattler and Ian Malcolm; the three full names are the check. That is chapter 10 done, and the course's scheduled chapters with it; 11 and 12 are extra credit, in January if you want them.
 
 **Step 3. A cited answer.**
 
@@ -190,6 +190,8 @@ for q in ['<near-miss 1>', '<near-miss 2>', '<near-miss 3>']:
 
 *You should see* thirty-three lines. On Homer the in-corpus top scores run from `-5.78` (g10, the many-headed monster, where the top chunk is the wrong one) to `7.04` (g02, Antinous and the arrow), most of them between `0` and `6`; the five out-of-corpus questions (the Divine Comedy, the capital of Australia, the Colosseum, the Moon landing, a bicycle's gears) score `-7.22` to `-11.01`; and the three near-misses (`How many suitors did Penelope have in all?`, `What was the name of Ulysses' ship?`, `How many years did the Trojan war last?`) score `-0.55`, `2.17` and `0.68`, right among the in-corpus questions. The cross-encoder's scores are not probabilities and the line is yours to draw: on Homer, `REFUSE_BELOW = -6.0` sits between the lowest in-corpus score and the highest out-of-corpus one, refuses none of the twenty-five, and lets all three near-misses through. Set `REFUSE_BELOW` in `rag/answer.py`, paste the thirty-three lines under `## Step 4`, and write the number, how many in-corpus questions it refuses, and how many out-of-corpus questions it lets through. If your two groups overlap, the two counts are the cost of the gate, and you choose which cost to pay.
 
+*If it broke* with `SyntaxError`, one of your questions has an apostrophe in it, which ends the Python string early; put a backslash before the apostrophe, as in `'What was the name of Ulysses\' ship?'`.
+
 **Step 5. Three refusals.**
 
 With the gate set, three questions through `cite`:
@@ -200,13 +202,13 @@ uv run python -m rag.answer cite "<near-miss 1>"
 uv run python -m rag.answer cite "<near-miss 2>"
 ```
 
-*You should see* the first refused with `gate: refused before generation` and no request made (the counter in `rag/llm.py` is how you know); and the near-misses each getting to the model, which either refuses with the one allowed line or answers anyway. On Homer:
+*You should see* the first refused with `gate: refused before generation` and no request made (in `rag/answer.py`, the refused branch never reaches `chat`); and the near-misses each getting to the model, which either refuses with the one allowed line or answers anyway. On Homer:
 
 ```text
 {{LLM:P18-refusals}}
 ```
 
-Paste all three under `## Step 5`, and write "where it got worse": the near-miss the model answered anyway, the sentence it made up, and what it cited for it. If the model refused all three near-misses, run the third; if it refused that too, say so, and the Reflection's third question becomes the reason you still do not trust it.
+Paste all three under `## Step 5`, and write "where it got worse": the near-miss the model answered anyway, the sentence it made up, and what it cited for it. If the model refused both near-misses, run the third; if it refused that too, say so, and the Reflection's third question becomes the reason you still do not trust it.
 
 **Extension — The bare-string trap, then the gate too low** *(assigned)*
 

@@ -10,7 +10,7 @@
 
 **Rewrite replaces the query; expand adds to it.** Lesson 4's prompt asks for a new query under ten words, written the way a search engine likes: names, nouns, no filler. Lesson 5's prompt asks only for extra terms, and the code appends them to what the user typed. The difference matters to BM25: a rewrite can drop the one rare word that was finding the chunk, and an expansion can add five common words that match everything.
 
-**The model knows things your corpus does not say.** Ask it to expand `the Cyclops` and it may add `Polyphemus`, which is right about the story and absent from Butler, who writes `Cyclops` and `Polyphemus` both, but never near each other. A term can be true and still pull the search toward the wrong chunks. The walkthrough measures this instead of eyeballing it: for ten queries, the hybrid rank of the answer chunk before and after each enhancement.
+**The model knows things your corpus does not say.** Ask it to expand `the Cyclops` and it may add `Polyphemus`, which is right about the story and rare in Butler: 12 of Homer's 1,882 chunks say `Polyphemus`, and only 2 of those also say `Cyclops`. A term can be true and still pull the search toward the wrong chunks. The walkthrough measures this instead of eyeballing it: for ten queries, the hybrid rank of the answer chunk before and after each enhancement.
 
 **Twenty requests.** The checker sends two per query, and it caches both. Running it a second time costs nothing. Edit `CORPUS_NOTE` or a prompt and the changed prompts cost again.
 
@@ -33,7 +33,7 @@ Under the timestamp, write today's checklist:
 
 ```markdown
 - [ ] Chapter 7, lessons 4 and 5, every lesson green
-- [ ] Step 3: five more queries with needles in rag/questions.json, scoreboard still passes
+- [ ] Step 3: five more queries with needles in rag/questions.json, every needle found in a chunk
 - [ ] Step 4: rag.enhance_check, the table in evidence/P13.md, predictions checked
 - [ ] Step 5: one that helped and one that hurt, read closely
 - [ ] Fill every slot in evidence/P13.md (check_evidence.py: all slots filled); push, sign off
@@ -180,7 +180,7 @@ uv run python -m rag.enhance_check
 
 Paste the whole output under `## Step 4` and check your P12 predictions against the `expand` column.
 
-*If it broke* with `no JSON list` or a model reply that is a paragraph instead of a query, a free model ignored "output only"; `rag/llm.py` retries empty replies but not wordy ones. Run again: the cache keeps the good replies and only the bad query goes out again.
+*If it broke* with a model reply that is a paragraph instead of a query, a free model ignored "output only". `rag/llm.py` retries empty replies but not wordy ones, and the wordy reply is now in the cache, so running again prints the same thing. Keep the row and say so under the table: a paragraph searched as a query is a result too.
 
 **Step 5. One that helped and one that hurt.**
 

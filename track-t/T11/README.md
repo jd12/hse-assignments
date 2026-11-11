@@ -81,7 +81,7 @@ chapter  start      x1      x2    y
       0  17628   -2.86   -1.02   -1
       0  26442    0.01   -1.64   -1
 ...
-      9      0    1.47   2.67   +1
+      9      0    1.47    2.67   +1
       9   8814    0.27  -1.64   +1
       9  17628    0.27  -2.26   +1
       9  26442    0.07  -2.26   +1
@@ -138,4 +138,4 @@ git add logs && git commit && git push
 
 3. From your Step 3 table, name the slice you expect the trained network never to get right, with its two numbers and its label, and say in one sentence what about your corpus put those numbers in that chapter.
 
-   *How to get it:* a slice whose `x1` looks like the other half's. On Homer, chapter 4's second slice has `x1 = 3.47` with label `-1`: the Odyssey ends 43% of the way through the corpus, so chapter 4 is already partly the Iliad and its label is wrong for that slice before the network ever sees it.
+   *How to get it:* a slice whose `x1` looks like the other half's. On Homer, chapter 4's second slice has `x1 = 3.47` with label `-1`: the Odyssey's story ends 43% of the way through the corpus, so that slice is Butler's footnotes, not Homer, and the rest of chapter 4 is already the Iliad; the label is wrong for that slice before the network ever sees it.

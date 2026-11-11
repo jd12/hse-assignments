@@ -274,7 +274,7 @@ uv add sentence-transformers
 uv run python -m rag.semantic where does the story begin
 ```
 
-*You should see* `embedding <your passage count> units with all-MiniLM-L6-v2`, a progress bar, then `matrix: (<your passage count>, 384)` and five results with scores between 0 and 1, best first. Run the same command again. *You should see* no `embedding` line and no bar: it loaded from disk. Paste the second run under `## Step 3` in `evidence/P08.md`. On Homer the first run embeds 2,118 passages in about a minute, and the second run prints:
+*You should see* `embedding <your passage count> units with all-MiniLM-L6-v2`, a progress bar, then `matrix: (<your passage count>, 384)` and five results with scores between 0 and 1, best first. Run the same command again. *You should see* no `embedding` line and no `Batches` bar: it loaded from disk. Paste the second run under `## Step 3` in `evidence/P08.md`. On Homer the first run embeds 2,118 passages in about a minute, and the second run prints:
 
 ```text
 matrix: (2118, 384)
@@ -350,12 +350,12 @@ q05           1        1        1
 hit@3       2/5      1/5      1/5
 ```
 
-Homer did not deliver the paraphrase win. `q05` is found again, `q04` sits at rank 6, and the other three are outside the top 30. The reason is the model's window: P07 Step 3 printed `Max sequence length: 256`, about 190 words, and the passages here are longer than that. `q03`'s answer passage is 375 words and its needle, `bore the red hot beam into his eye`, starts at word 206. The model never read that sentence, so the vector it compared the question against is a summary of the passage's first half. The top semantic scores tell the same story: `q03`'s best score is `0.571` for a miss, `q05`'s is `0.518` for the hit, so no threshold separates them. A corpus with short passages will see the paraphrase win here. A corpus with long ones sees it in chapter 5, once the units are cut to fit the window. Either result is a right answer if your prediction said why.
+Homer did not deliver the paraphrase win. `q05` is found again, `q04` sits at rank 6, and the other three are outside the top 30. The reason is the model's window: P07 Step 3 printed `Max sequence length: 256`, about 190 words, and the passages here are longer than that. `q03`'s answer passage is 375 words and its needle, `bore the red hot beam into his eye`, starts at word 207. The model never read that sentence, so the vector it compared the question against is a summary of the passage's first half. The top semantic scores tell the same story: `q03`'s best score is `0.571` for a miss, `q05`'s is `0.518` for the hit, so no threshold separates them. A corpus with short passages will see the paraphrase win here. A corpus with long ones sees it in chapter 5, once the units are cut to fit the window. Either result is a right answer if your prediction said why.
 
 **Commit, push, sign off.** Fill `## Reflection` in `evidence/P08.md` (the questions are below) and run `uv run python scripts/check_evidence.py P08` until it says `all slots filled`. Then:
 
 ```bash
-git add rag/scoreboard.py scratch/ evidence/
+git add rag/scoreboard.py scratch/ evidence/ pyproject.toml uv.lock
 git commit -m "P08: semantic search over passages, cached and guarded; semantic column"
 git push
 ```
