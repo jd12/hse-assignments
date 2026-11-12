@@ -33,6 +33,17 @@ git switch -c dev/train
 
 *If T11 is not approved yet:* `git switch dev/mlp && git switch -c dev/train`.
 
+**Template update, once.** Two scripts in the gpt template were fixed on 11 Nov: `micrograd/expr.py` now prints the text graph when the `dot` program is missing, and `micrograd/train.py` no longer crashes in the T12 Extension. Take both now, on `dev/train`:
+
+```bash
+git fetch template 2>/dev/null || git remote add template https://github.com/Sierra-Canyon/gpt-template.git
+git fetch template
+git checkout template/main -- micrograd/expr.py micrograd/train.py
+git commit -m "Template update, 11 Nov: expr.py and train.py"
+```
+
+This takes only those two files, and you have not edited either one. If `git commit` says `nothing to commit`, you already have them. If you ran this in T08, skip it.
+
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>
 git branch --show-current   # <your-username>-track, not main

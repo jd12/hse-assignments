@@ -31,6 +31,17 @@ git switch -c dev/keyword
 
 *If P03 is not approved yet:* `git switch dev/tfidf && git switch -c dev/keyword`.
 
+**Template update, once.** The rag template has grown since your repo was made: it now has the scripts for P05 to P22 and their evidence files. Your repo does not update itself, so take the new files now, on `dev/keyword`:
+
+```bash
+git fetch template 2>/dev/null || git remote add template https://github.com/Sierra-Canyon/rag-template.git
+git fetch template
+git checkout template/main -- evidence/P05.md evidence/P06.md evidence/P07.md evidence/P08.md evidence/P09.md evidence/P10.md evidence/P11.md evidence/P12.md evidence/P13.md evidence/P14.md evidence/P15.md evidence/P16.md evidence/P17.md evidence/P18.md evidence/P19.md evidence/P20.md evidence/P21.md evidence/P22.md rag/keyword.py rag/scoreboard.py rag/semantic.py rag/chunking.py rag/hybrid.py rag/search.py rag/llm.py rag/enhance.py rag/enhance_check.py rag/rerank.py rag/answer.py rag/agent.py rag/ask.py rag/eval .env.example README.md
+git commit -m "Template update: P05 to P22 evidence files and the rag modules"
+```
+
+This takes only the files named. It does not touch `rag/preprocess.py`, `rag/corpus.py`, `rag/tfidf.py` or the evidence files you have filled in. *You should see* `keyword.py` and `scoreboard.py` when you run `ls rag`. *If it broke* with `pathspec` and `did not match`, the `git fetch template` line did not finish, so run it again. If `git commit` says `nothing to commit`, you already had the files.
+
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>
 git branch --show-current   # <your-username>-track, not main

@@ -46,6 +46,17 @@ git switch -c dev/value
 
 *If T07 is not approved yet:* `git switch dev/slope && git switch -c dev/value`.
 
+**Template update, once.** Two scripts in the gpt template were fixed on 11 Nov: `micrograd/expr.py` now prints the text graph when the `dot` program is missing, and `micrograd/train.py` no longer crashes in the T12 Extension. Take both now, on `dev/value`:
+
+```bash
+git fetch template 2>/dev/null || git remote add template https://github.com/Sierra-Canyon/gpt-template.git
+git fetch template
+git checkout template/main -- micrograd/expr.py micrograd/train.py
+git commit -m "Template update, 11 Nov: expr.py and train.py"
+```
+
+This takes only those two files, and you have not edited either one. If `git commit` says `nothing to commit`, you already have them. If you have written nothing in `evidence/T08.md` yet, add `evidence/T08.md` to the end of the `git checkout` line. Its slots were reworded to match this page.
+
 ```bash
 cd ~/version_control/hse-2026-2027-student-log-<your-username>
 git branch --show-current   # <your-username>-track, not main
