@@ -65,7 +65,7 @@ bootdev run -s 8796f663-0953-4dc0-948c-a84734db429f
 
 *You should see* the check count ten test cases. *If it broke* with a count other than ten, a comma or bracket went missing in the paste; the lesson's JSON is complete as shown.
 
-**Lesson 3: precision.** A new script with one flag and no subcommands. Create `cli/evaluation_cli.py`:
+**Lesson 3: precision.** A new script with one flag and no subcommands. Create the file `cli/evaluation_cli.py`. This is its whole contents:
 
 ```python
 import argparse
@@ -121,11 +121,13 @@ bootdev run -s 89e06cde-6e37-417f-bd48-498163aeed6f
 
 *You should see* `dinosaur park` and `cute british bear marmalade` at `Precision@3: 0.3333` and `Precision@6: 0.1667`; those four lines are the check, and they are the arithmetic of one relevant title in three and in six. Write the two numbers in `evidence/P15.md` under Step 2. *If it broke* with every precision at `0.0000`, the titles in `relevant_docs` are compared with `entry["doc"]["title"]`; a different key name in your `rrf_search` entries would make every comparison fail.
 
-**Lesson 4: recall.** One more fraction and one more line. After the precision line:
+**Lesson 4: recall.** One more fraction and one more line. In `cli/evaluation_cli.py`, inside the `for` loop of `main()`: two new lines, in two places. The first goes directly below the `precision = ...` line:
 
 ```python
         recall = relevant_retrieved / len(relevant) if relevant else 0.0
 ```
+
+The second goes directly below the `print(f"- Precision@{limit}: ...")` line:
 
 ```python
         print(f"- Recall@{limit}: {recall:.4f}")

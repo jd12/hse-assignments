@@ -46,7 +46,7 @@ In `~/version_control/rag-search-engine/`. When the chapter page shows every les
 
 **Lesson 4: BM25 search.** The three pieces become one score, `bm25_tf * bm25_idf`, summed over the query's tokens, for every document, sorted.
 
-1. In the class, below `get_bm25_tf`:
+1. In `cli/lib/keyword_search.py`, inside the `InvertedIndex` class: two new methods. They go below `get_bm25_tf`:
 
 ```python
     # In: a document id and one processed token.  Out: the BM25 score of that term in that document.
@@ -68,13 +68,15 @@ In `~/version_control/rag-search-engine/`. When the chapter page shows every les
 
 `sorted(scores, key=...)` sorts the dictionary's keys, the document ids, by the score each one maps to; `reverse=True` puts the highest first. The loop visits every document, which is the chapter 1 habit the index was built to avoid; the course accepts it here. A document with none of the query's tokens scores 0 in every term and sorts to the bottom.
 
-2. In the CLI, a `bm25search` subcommand with an optional `--limit`, and its case. The course's format puts the id in parentheses and the score to two places:
+2. In `cli/keyword_search_cli.py`: two changes, a `bm25search` subcommand with an optional `--limit`, and its case. The course's format puts the id in parentheses and the score to two places. First, inside `main()`: new lines. They go below the last `add_parser` or `add_argument` line and above `args = parser.parse_args()`:
 
 ```python
     bm25search_parser = subparsers.add_parser("bm25search", help="Search movies using full BM25 scoring")
     bm25search_parser.add_argument("query", type=str, help="Search query")
     bm25search_parser.add_argument("--limit", type=int, default=5, help="How many results")
 ```
+
+Second, inside `match args.command:`: a new case. It goes above `case _:`, indented like the other cases:
 
 ```python
         case "bm25search":

@@ -140,11 +140,13 @@ def search_titles(query):
 
 `query in movie["title"]` is substring containment: `"Great"` matches `"The Great Valley Adventure"`. Case matters for now; lesson 5 fixes that. `results[:5]` keeps the first five, and because the file is already sorted by id, those are the five lowest ids.
 
-4. In `cli/keyword_search_cli.py`, add the import under `import argparse` and replace the `pass` under `case "search":`:
+4. In `cli/keyword_search_cli.py`: two changes. The first is a new line. It goes at the top of the file, directly below `import argparse`:
 
 ```python
 from lib.keyword_search import search_titles
 ```
+
+In the same file, inside `match args.command:`: replace the two lines `case "search":` and `pass` with these five:
 
 ```python
         case "search":
@@ -170,7 +172,7 @@ Three things to notice, because P02 does this on your corpus: `in` on strings is
 
 **Lesson 5: text processing, first step.** The reading lists the five steps of the pipeline the chapter builds (lowercase, strip punctuation, tokenize, drop stopwords, stem). Write those five, in that order, in `scratch/p02-order.md` in the rag repo now; that is the list P02 wants. The assignment itself does only the first one: Webflyx users can't be bothered with the shift key, so `"country"` has to find `No Country for Old Men`.
 
-1. In `cli/lib/keyword_search.py`, lowercase both sides of the comparison:
+1. In `cli/lib/keyword_search.py`: replace the whole `search_titles` function with this. It lowercases both sides of the comparison:
 
 ```python
 def search_titles(query):

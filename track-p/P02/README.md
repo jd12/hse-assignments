@@ -51,11 +51,11 @@ Under the timestamp, write today's checklist:
 
 **Step 2. Finish chapter 1.**
 
-In `~/version_control/rag-search-engine/`, lessons 6 to 9, each run locally before it is submitted. Every one of them edits `cli/lib/keyword_search.py`, and by lesson 7 the processing lives in one helper, `tokenize_text`, that the rest of the course reuses. When the chapter page shows every lesson complete, save it as `evidence/p02-bootdev-ch1.png` in the rag repo, and check `scratch/p02-order.md` against what you built: lowercase, strip punctuation, tokenize, drop stopwords, stem.
+In `~/version_control/rag-search-engine/`, lessons 6 to 9, each run locally before it is submitted. Every code block from here on is introduced the same way: the file it goes in, whether it is new code or replaces something, and where in the file it goes. Every one of them edits `cli/lib/keyword_search.py`, and by lesson 7 the processing lives in one helper, `tokenize_text`, that the rest of the course reuses. When the chapter page shows every lesson complete, save it as `evidence/p02-bootdev-ch1.png` in the rag repo, and check `scratch/p02-order.md` against what you built: lowercase, strip punctuation, tokenize, drop stopwords, stem.
 
 **Lesson 6: punctuation.** Strip every punctuation mark from both the query and the title before comparing, so `"magic charlie"` finds `It's Magic, Charlie Brown`. The course points at three standard-library pieces: `string.punctuation` is the ASCII marks as one string, `str.maketrans("", "", string.punctuation)` builds a table that maps each of them to nothing, and `.translate(table)` applies it.
 
-1. At the top of `cli/lib/keyword_search.py`:
+1. In `cli/lib/keyword_search.py`: new code. It goes at the top of the file, directly below the `from lib.search_utils import load_movies` line and above `def search_titles`:
 
 ```python
 import string
@@ -67,7 +67,7 @@ def normalize(text):
     return text.lower().translate(PUNCT)
 ```
 
-2. Use it on both sides in `search_titles`:
+2. In the same file: replace the whole `search_titles` function with this. It uses `normalize` on both sides:
 
 ```python
 def search_titles(query):
@@ -91,7 +91,7 @@ bootdev run -s <lesson-id>
 
 **Lesson 7: tokenization.** `"Great Bear"` should match `Big Bear`, so the match has to be token against token, not whole query against whole title. The course says to wrap the processing in one helper, because every later lesson reuses it.
 
-1. In `cli/lib/keyword_search.py`, the helper, with `normalize` folded in:
+1. In `cli/lib/keyword_search.py`: new code. It goes below `normalize` and above `search_titles`. It does what `normalize` did and more, so after step 2 nothing calls `normalize` and you can delete that function or leave it:
 
 ```python
 # In: text.  Out: its tokens: lowercased, punctuation deleted, split on any whitespace.
@@ -101,7 +101,7 @@ def tokenize_text(text):
 
 `.split()` with no argument splits on any run of whitespace, so two spaces or a tab do not make an empty token.
 
-2. The match: at least one query token appears in some title token. "Appears in" is still substring, so `fast` matches the title token `faster`:
+2. In the same file: replace the whole `search_titles` function with this. The match: at least one query token appears in some title token. "Appears in" is still substring, so `fast` matches the title token `faster`:
 
 ```python
 def search_titles(query):
@@ -130,7 +130,7 @@ bootdev run -s <lesson-id>
 
 1. Make `data/stopwords.txt` from the list at the bottom of the lesson page: select it, paste it into the new file, one word per line. It is in `data/`, which is gitignored, like the dataset.
 
-2. Load it once, at import time, through the same processing as everything else, so `aren't` in the file becomes `arent` and matches the token `arent`:
+2. In `cli/lib/keyword_search.py`: new code. It goes below the `PUNCT = ...` line and above `def tokenize_text`. The order matters: this code uses `PUNCT`, and `tokenize_text` is about to use `STOPWORDS`. It loads the list once, at import time, through the same processing as everything else, so `aren't` in the file becomes `arent` and matches the token `arent`:
 
 ```python
 # In: nothing.  Out: the set of stop words from data/stopwords.txt, processed the way tokens are.
@@ -143,7 +143,7 @@ STOPWORDS = load_stopwords()
 
 A set, not a list: `token in STOPWORDS` is one lookup instead of a scan through 170 words for every token.
 
-3. Filter inside the helper, after splitting:
+3. In the same file: replace the whole `tokenize_text` function with this. It filters after splitting:
 
 ```python
 def tokenize_text(text):
@@ -171,13 +171,15 @@ bootdev run -s <lesson-id>
 uv add nltk==3.9.1
 ```
 
+In `cli/lib/keyword_search.py`: two new lines, in two places. The `from nltk.stem ...` line goes with the other imports at the top of the file. The `stemmer = ...` line goes below the `PUNCT = ...` line:
+
 ```python
 from nltk.stem import PorterStemmer
 
 stemmer = PorterStemmer()
 ```
 
-2. Stem each token as the last step of the helper, after the stop words are gone:
+2. In the same file: replace the whole `tokenize_text` function with this. Stemming is the last step, after the stop words are gone:
 
 ```python
 def tokenize_text(text):
@@ -212,7 +214,7 @@ uv run python -m rag.corpus
 
 **Step 4. `rag/preprocess.py`.**
 
-NLTK is already installed by `setup.sh`; it is here only for its Porter stemmer, which is the one the file uses whatever the chapter used, so that the test lines below come out the same for everyone. If the chapter's stemmer differs, say so in `evidence/P02.md` and keep Porter here. Open `rag/preprocess.py`. The top half is shipped: the docstring that states the order of operations, the stopword list, and `strip_punctuation`, which turns every punctuation mark and symbol into a space by its Unicode category rather than an ASCII list. Read those lines. The two functions that are the pipeline you type yourself, under the `# ---- P02 Step 4` line, because the pipeline is the lesson:
+NLTK is already installed by `setup.sh`; it is here only for its Porter stemmer, which is the one the file uses whatever the chapter used, so that the test lines below come out the same for everyone. If the chapter's stemmer differs, say so in `evidence/P02.md` and keep Porter here. Open `rag/preprocess.py`. The top half is shipped: the docstring that states the order of operations, the stopword list, and `strip_punctuation`, which turns every punctuation mark and symbol into a space by its Unicode category rather than an ASCII list. Read those lines. The two functions that are the pipeline you type yourself, because the pipeline is the lesson. In `rag/preprocess.py`: new code. It goes below the line that starts `# ---- P02 Step 4`, which is the last line of the file. Nothing above that line changes:
 
 ```python
 # In: text.  Out: lowercased words of two or more characters, punctuation gone.

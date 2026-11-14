@@ -63,7 +63,7 @@ uv run cli/keyword_search_cli.py bm25search "Bear DiCaprio"
 
 Then the code. A third CLI and a third library module that imports the other two.
 
-1. Create `cli/hybrid_search_cli.py`:
+1. Create the file `cli/hybrid_search_cli.py`. This is its whole contents:
 
 ```python
 import argparse
@@ -84,7 +84,7 @@ if __name__ == "__main__":
     main()
 ```
 
-2. Create `cli/lib/hybrid_search.py`. The course's starting point uses `from .keyword_search import ...`; this project runs the CLIs as scripts, so the imports say `lib.` as the other two modules do. The constructor builds the keyword index if `cache/` does not have one yet, and loads or builds the chunk embeddings; the two search methods are stubs until lessons 4 and 5:
+2. Create the file `cli/lib/hybrid_search.py`. The code below is its whole contents. The course's starting point uses `from .keyword_search import ...`; this project runs the CLIs as scripts, so the imports say `lib.` as the other two modules do. The constructor builds the keyword index if `cache/` does not have one yet, and loads or builds the chunk embeddings; the two search methods are stubs until lessons 4 and 5:
 
 ```python
 import os
@@ -130,7 +130,7 @@ bootdev run -s <lesson-id>
 
 **Lesson 3: min-max normalization.** Every score in a list is mapped to `(score - min) / (max - min)`, so the lowest becomes 0 and the highest 1.
 
-1. In `cli/lib/hybrid_search.py`, above the class:
+1. In `cli/lib/hybrid_search.py`: new code. It goes below the imports and above `class HybridSearch`, with no indent:
 
 ```python
 # In: a list of scores.  Out: the same scores scaled so the lowest is 0.0 and the highest 1.0; all 1.0 if they are equal.
@@ -146,16 +146,20 @@ def normalize_scores(scores):
 
 `[1.0 for _ in scores]` makes a list with one `1.0` per score; `_` is the name you give a loop variable you do not use.
 
-2. In the CLI, `normalize_scores` imported, a `normalize` subcommand whose argument takes zero or more numbers, and its case:
+2. In `cli/hybrid_search_cli.py`: three changes, the import, a `normalize` subcommand whose argument takes zero or more numbers, and its case. First, a new line. It goes at the top of the file, directly below `import argparse`:
 
 ```python
 from lib.hybrid_search import normalize_scores
 ```
 
+Second, inside `main()`: new lines. They go below the `subparsers = parser.add_subparsers(...)` line and above `args = parser.parse_args()`:
+
 ```python
     normalize_parser = subparsers.add_parser("normalize", help="Min-max normalize a list of scores")
     normalize_parser.add_argument("scores", type=float, nargs="*", help="Scores to normalize")
 ```
+
+Third, inside `match args.command:`: a new case. It goes above `case _:`, indented like the other cases:
 
 ```python
         case "normalize":

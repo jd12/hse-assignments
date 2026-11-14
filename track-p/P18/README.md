@@ -48,7 +48,7 @@ Under the timestamp, write today's checklist:
 
 In `~/version_control/rag-search-engine/`. When the chapter page shows every lesson complete, save it as `evidence/p18-bootdev-ch10.png` in the rag repo.
 
-**Lesson 4: citations.** A third command and a third prompt in `cli/augmented_generation_cli.py`. The prompt:
+**Lesson 4: citations.** A third command and a third prompt in `cli/augmented_generation_cli.py`. Four changes. First, new code, the prompt. It goes below the `SUMMARIZE = ...` prompt and above `def format_docs`, with no indent:
 
 ```python
 CITATIONS = """Answer the query below and give information based on the provided documents.
@@ -71,7 +71,7 @@ Instructions:
 Answer:"""
 ```
 
-The parser, the command list, and the arm:
+Second, inside `main()`: new lines, the parser. They go below the last `summarize_parser.add_argument(...)` line and above `args = parser.parse_args()`:
 
 ```python
     citations_parser = subparsers.add_parser("citations", help="Answer with citations to the results")
@@ -79,9 +79,13 @@ The parser, the command list, and the arm:
     citations_parser.add_argument("--limit", type=int, default=5, help="How many results to cite from")
 ```
 
+Third, replace the line that starts `if args.command not in (` with this:
+
 ```python
     if args.command not in ("rag", "summarize", "citations"):
 ```
+
+Fourth, inside `match args.command:`: a new case. It goes below the `summarize` case, at the end of the `match`:
 
 ```python
         case "citations":
@@ -97,7 +101,7 @@ bootdev run -s 09fd0c23-752e-4c00-8f83-456d874366d1
 
 *You should see* the titles with `Eliminators` among them, then an answer with `[1]`-style numbers in it; the title is the check. Write the numbers the answer used in `evidence/P18.md` under Step 2. Look at one: does the sentence that cites `[3]` say what document `[3]` says? That question is Step 3 on your corpus.
 
-**Lesson 5: a question, answered.** The fourth command takes a `question` instead of a `query`, which is the one place this file's shape changes:
+**Lesson 5: a question, answered.** The fourth command takes a `question` instead of a `query`, which is the one place this file's shape changes. In `cli/augmented_generation_cli.py`: four changes. First, new code, the prompt. It goes below the `CITATIONS = ...` prompt and above `def format_docs`, with no indent:
 
 ```python
 QUESTION = """Answer the user's question based on the provided movies that are available on Webflyx, a streaming service.
@@ -116,11 +120,15 @@ Instructions:
 Answer:"""
 ```
 
+Second, inside `main()`: new lines, the parser. They go below the last `citations_parser.add_argument(...)` line and above `args = parser.parse_args()`:
+
 ```python
     question_parser = subparsers.add_parser("question", help="Answer a question from the results")
     question_parser.add_argument("question", type=str, help="The question")
     question_parser.add_argument("--limit", type=int, default=5, help="How many results to answer from")
 ```
+
+Third, replace everything from the line that starts `if args.command not in (` down to the line `query = args.query` with this:
 
 ```python
     if args.command not in ("rag", "summarize", "citations", "question"):
@@ -129,6 +137,8 @@ Answer:"""
 
     query = args.question if args.command == "question" else args.query
 ```
+
+Fourth, inside `match args.command:`: a new case. It goes below the `citations` case, at the end of the `match`:
 
 ```python
         case "question":

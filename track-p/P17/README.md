@@ -53,7 +53,7 @@ Under the timestamp, write today's checklist:
 
 In `~/version_control/rag-search-engine/`. Stop after lesson 3; lessons 4 and 5 are P18. When the chapter page shows lessons 1 to 3 complete, save it as `evidence/p17-bootdev-ch10a.png` in the rag repo.
 
-**Lesson 1: retrieve, augment, generate.** A fourth CLI. Create `cli/augmented_generation_cli.py` with the chapter's `rag` command. The `format_docs` helper numbers the documents, which lesson 4 needs for citations, so it is here from the start:
+**Lesson 1: retrieve, augment, generate.** A fourth CLI. Create the file `cli/augmented_generation_cli.py` with the chapter's `rag` command. The code below is its whole contents. The `format_docs` helper numbers the documents, which lesson 4 needs for citations, so it is here from the start:
 
 ```python
 import argparse
@@ -118,7 +118,7 @@ bootdev run -s 9b47662d-1ee7-4139-ac41-cba1d7c4e553
 
 *You should see* five titles with `Jurassic Park` among them, then `RAG Response:` and a paragraph about them; the title is the check. Write the response's first sentence in `evidence/P17.md` under Step 2. *If it broke* with a response about movies not in the five, the model is answering from memory; the prompt says "based on documents retrieved", and free models do not always listen. Keep the output; it is the Reflection's second question.
 
-**Lesson 2: a summary of several documents.** A second command with a `--limit`, and a second prompt. Add the prompt above `format_docs`:
+**Lesson 2: a summary of several documents.** A second command with a `--limit`, and a second prompt. In `cli/augmented_generation_cli.py`: five changes. First, new code, the prompt. It goes below the `RAG = ...` prompt and above `def format_docs`, with no indent:
 
 ```python
 SUMMARIZE = """Provide information useful to the query below by synthesizing data from multiple search results in detail.
@@ -136,7 +136,7 @@ Search results:
 Provide a comprehensive 3–4 sentence answer that combines information from multiple sources:"""
 ```
 
-The parser, and the `limit` line and the `match` arm:
+Second, inside `main()`: new lines, the parser. They go below the `rag_parser.add_argument(...)` line and above `args = parser.parse_args()`:
 
 ```python
     summarize_parser = subparsers.add_parser("summarize", help="Summarize the search results")
@@ -144,13 +144,19 @@ The parser, and the `limit` line and the `match` arm:
     summarize_parser.add_argument("--limit", type=int, default=5, help="How many results to summarize")
 ```
 
+Third, replace the line `if args.command not in ("rag",):` with this:
+
 ```python
     if args.command not in ("rag", "summarize"):
 ```
 
+Fourth, replace the line `limit = 5` with this:
+
 ```python
     limit = 5 if args.command == "rag" else args.limit
 ```
+
+Fifth, inside `match args.command:`: a new case. It goes below the `rag` case, at the end of the `match`:
 
 ```python
         case "summarize":

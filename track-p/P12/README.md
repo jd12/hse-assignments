@@ -68,7 +68,7 @@ uv add python-dotenv==1.1.0
 uv add openai==2.44.0
 ```
 
-Create `cli/test_llm.py`. The `load_dotenv()` line reads `.env` into the environment; the client is the OpenAI library pointed at OpenRouter's address; the model id is the router:
+Create the file `cli/test_llm.py`. The code below is its whole contents. The `load_dotenv()` line reads `.env` into the environment; the client is the OpenAI library pointed at OpenRouter's address; the model id is the router:
 
 ```python
 import os
@@ -111,7 +111,7 @@ bootdev run -s e42152ba-a4ad-4578-9688-13d3f37e5bee
 
 *You should see* a paragraph about Boot.dev, then `Prompt tokens:` and `Response tokens:` with numbers; the two labels are the check. This lesson's submission is marked safe: a failed check costs nothing, and the chapter says to retry if the provider was the problem. *If it broke* with `RuntimeError: OPENROUTER_API_KEY environment variable not set`, `.env` is in the wrong folder or the line has a typo in the name. *If it broke* with `429` or `rate limit` in the message, wait a minute; the free tier counts per minute as well as per day.
 
-**Lesson 3: spelling.** Two things: a helper that every later lesson calls, and the first `--enhance` option on `rrf-search`. Create `cli/lib/llm.py` so the client is built once and the prompt-to-reply call is one function:
+**Lesson 3: spelling.** Two things: a helper that every later lesson calls, and the first `--enhance` option on `rrf-search`. Create the file `cli/lib/llm.py`, so the client is built once and the prompt-to-reply call is one function. This is its whole contents:
 
 ```python
 import os
@@ -144,7 +144,7 @@ def ask(prompt, model="openrouter/free"):
     return (response.choices[0].message.content or "").strip()
 ```
 
-`global _client` lets the function change the variable outside it, so the second call finds the client already built. Then create `cli/lib/query_enhancement.py` with the chapter's prompt. `PROMPTS` is a dictionary from a method name to its prompt; lessons 4 and 5 add two more entries:
+`global _client` lets the function change the variable outside it, so the second call finds the client already built. Then create the file `cli/lib/query_enhancement.py` with the chapter's prompt. The code below is its whole contents. `PROMPTS` is a dictionary from a method name to its prompt; lessons 4 and 5 add two more entries:
 
 ```python
 from lib.llm import ask
@@ -166,11 +166,13 @@ def enhance_query(method, query):
     return reply
 ```
 
-`.format(query=query)` fills the `{query}` hole in the prompt; `.strip('"')` removes the quotes a model sometimes puts around its answer. In `cli/hybrid_search_cli.py`, import it and add the option to the `rrf-search` parser:
+`.format(query=query)` fills the `{query}` hole in the prompt; `.strip('"')` removes the quotes a model sometimes puts around its answer. In `cli/hybrid_search_cli.py`: three changes. First, a new line. It goes at the top of the file, directly below the `from lib.hybrid_search import ...` line:
 
 ```python
 from lib.query_enhancement import enhance_query
 ```
+
+Second, inside `main()`: new lines that add the option to the `rrf-search` parser. They go directly below the last `rrf_parser.add_argument(...)` line:
 
 ```python
     rrf_parser.add_argument(
@@ -181,7 +183,7 @@ from lib.query_enhancement import enhance_query
     )
 ```
 
-Then, at the top of the `rrf-search` case, before the searcher is built, enhance the query and print the chapter's line:
+Third, inside the `rrf-search` case: replace the two lines `case "rrf-search":` and `searcher = HybridSearch(load_movies())` with these seven. They enhance the query and print the chapter's line before the searcher is built:
 
 ```python
         case "rrf-search":
@@ -193,7 +195,7 @@ Then, at the top of the `rrf-search` case, before the searcher is built, enhance
             searcher = HybridSearch(load_movies())
 ```
 
-and use `query` instead of `args.query` in the search call and the results heading below it. Run, then submit:
+Then, in the lines of that case below these, change `args.query` to `query` wherever it appears, so the search runs on the enhanced query. Run, then submit:
 
 ```bash
 uv run cli/hybrid_search_cli.py rrf-search "briish bear" --enhance spell

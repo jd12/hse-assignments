@@ -55,7 +55,7 @@ In `~/version_control/rag-search-engine/`. When the chapter page shows every les
 
 **Lesson 1: two stages.** A reading and one question; the answer is the one about the query and the full documents together.
 
-**Lesson 2: one request per movie.** Create `cli/lib/reranking.py`. The individual method asks the model for a number per document and sleeps between requests; `parse_json_list` is for lesson 3 and is here because both reranking prompts return JSON or a bare number:
+**Lesson 2: one request per movie.** Create the file `cli/lib/reranking.py`. The code below is its whole contents. The individual method asks the model for a number per document and sleeps between requests; `parse_json_list` is for lesson 3 and is here because both reranking prompts return JSON or a bare number:
 
 ```python
 import json
@@ -99,11 +99,13 @@ def rerank_individual(query, entries):
     return sorted(entries, key=lambda e: e["rerank_score"], reverse=True)
 ```
 
-`reply.strip().split()[0]` takes the first word of the reply, so a model that answers `8.` or `8 out of 10` still gives `8`; the `try` turns a reply with no number at all into `0.0` instead of a crash. In `cli/hybrid_search_cli.py`, import it and add the option to `rrf-search`:
+`reply.strip().split()[0]` takes the first word of the reply, so a model that answers `8.` or `8 out of 10` still gives `8`; the `try` turns a reply with no number at all into `0.0` instead of a crash. In `cli/hybrid_search_cli.py`: three changes. First, a new line. It goes at the top of the file, directly below the `from lib.query_enhancement import enhance_query` line:
 
 ```python
 from lib.reranking import rerank_individual
 ```
+
+Second, inside `main()`: new lines that add the option to the `rrf-search` parser. They go directly below the `--enhance` argument, which ends with a line holding only `)`:
 
 ```python
     rrf_parser.add_argument(
@@ -114,7 +116,7 @@ from lib.reranking import rerank_individual
     )
 ```
 
-In the case, the search pulls five times the limit when a reranker is set, reranks, and cuts to the limit; the printing gains one line when a rerank score is present:
+Third, inside the `rrf-search` case: replace everything from the `searcher = HybridSearch(load_movies())` line to the end of the case with this. The search pulls five times the limit when a reranker is set, reranks, and cuts to the limit; the printing gains one line when a rerank score is present:
 
 ```python
             searcher = HybridSearch(load_movies())
@@ -145,7 +147,7 @@ bootdev run -s 33a9d312-7560-4398-a831-e972f5a29b73
 
 *You should see* `Re-ranking top 15 results using individual method...`, about forty-five seconds of sleeping, then three movies with `Re-rank Score` lines and `The Berenstain Bears' Christmas Tree` among them; that title is the check. *If it broke* with the scores all `0.000`, the model replied with words; print one reply to see, and retry.
 
-**Lesson 3: all the movies in one request.** The batch prompt lists every candidate with its id and asks for the ids back as a JSON list. Add to `cli/lib/reranking.py`:
+**Lesson 3: all the movies in one request.** The batch prompt lists every candidate with its id and asks for the ids back as a JSON list. In `cli/lib/reranking.py`: new code. It goes at the end of the file, below `rerank_individual`:
 
 ```python
 BATCH = """Rank the movies listed below by relevance to the following search query.
@@ -180,20 +182,26 @@ def rerank_batch(query, entries):
     return ranked
 ```
 
-The `if` skips ids the model invented or repeated, which free models do. In the CLI: the import, the choice `"batch"`, an `elif` in the case, and a `Re-rank Rank` line in the printing:
+The `if` skips ids the model invented or repeated, which free models do. In `cli/hybrid_search_cli.py`: four changes. First, replace the `from lib.reranking import ...` line at the top of the file with this:
 
 ```python
 from lib.reranking import rerank_batch, rerank_individual
 ```
 
+Second, inside the `--rerank-method` argument: replace the `choices=[...]` line with this:
+
 ```python
         choices=["individual", "batch"],
 ```
+
+Third, inside the `rrf-search` case: two new lines. They go directly below the `results = rerank_individual(query, results)` line, with `elif` lined up under the `if args.rerank_method == "individual":` above it:
 
 ```python
                 elif args.rerank_method == "batch":
                     results = rerank_batch(query, results)
 ```
+
+Fourth, inside the printing loop of the same case: two new lines. They go directly below the two `rerank_score` lines:
 
 ```python
                 if "rerank_rank" in entry:
@@ -209,11 +217,13 @@ bootdev run -s fbdd5c9c-a24f-49f2-89ca-c9dd0b539684
 
 *You should see* the same three movies in about three seconds instead of forty-five, with `Re-rank Rank: 1`, `2`, `3`; the Berenstain title is the check. *If it broke* with `json.decoder.JSONDecodeError`, the model wrapped its list in text with another bracket in it; print the reply, and retry.
 
-**Lesson 4: the cross-encoder.** No model request at all. Add to `cli/lib/reranking.py`:
+**Lesson 4: the cross-encoder.** No model request at all. In `cli/lib/reranking.py`: two changes. First, a new line. It goes with the other imports at the top of the file:
 
 ```python
 from sentence_transformers import CrossEncoder
 ```
+
+Second, new code. It goes at the end of the file, below `rerank_batch`:
 
 ```python
 # In: a query and RRF entries.  Out: the same entries with "cross_encoder_score", best first. No LLM involved.
@@ -229,20 +239,26 @@ def rerank_cross_encoder(query, entries):
     return sorted(entries, key=lambda e: e["cross_encoder_score"], reverse=True)
 ```
 
-The model is loaded once per query, not once per document; `predict` takes all the pairs at once. In the CLI: the import, the choice `"cross_encoder"`, an `else` in the case, and the score line:
+The model is loaded once per query, not once per document; `predict` takes all the pairs at once. In `cli/hybrid_search_cli.py`: four changes. First, replace the `from lib.reranking import ...` line at the top of the file with this:
 
 ```python
 from lib.reranking import rerank_batch, rerank_cross_encoder, rerank_individual
 ```
 
+Second, inside the `--rerank-method` argument: replace the `choices=[...]` line with this:
+
 ```python
         choices=["individual", "batch", "cross_encoder"],
 ```
+
+Third, inside the `rrf-search` case: two new lines. They go directly below the `results = rerank_batch(query, results)` line, with `else` lined up under the `elif` above it:
 
 ```python
                 else:
                     results = rerank_cross_encoder(query, results)
 ```
+
+Fourth, inside the printing loop of the same case: two new lines. They go directly below the two `rerank_rank` lines:
 
 ```python
                 if "cross_encoder_score" in entry:
@@ -304,7 +320,7 @@ print('hybrid top five still in the top five:', len({pool[i]['id'] for i in orde
 
 **Step 5. The scoreboard with four columns.**
 
-`rag/scoreboard.py` gets a fourth method, `rerank`, the cross-encoder over the hybrid top 20, cut to five. Change `from rag import search` to `from rag import rerank, search`, and add one entry to the dictionary `methods()` returns, below `hybrid`:
+`rag/scoreboard.py` gets a fourth method, `rerank`, the cross-encoder over the hybrid top 20, cut to five. In `rag/scoreboard.py`: two changes. First, at the top of the file, change the line `from rag import search` to `from rag import rerank, search`. Second, inside `methods()`: a new line in the dictionary. It goes directly below the `"hybrid": ...` line:
 
 ```python
         "rerank": lambda q: rerank.rerank(q, 5),

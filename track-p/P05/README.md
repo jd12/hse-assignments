@@ -67,7 +67,7 @@ In `~/version_control/rag-search-engine/`, lessons 1 to 3, each run locally befo
 log((N - df + 0.5) / (df + 0.5) + 1)
 ```
 
-1. In the class, below `get_idf`:
+1. In `cli/lib/keyword_search.py`, inside the `InvertedIndex` class: a new method. It goes below `get_idf`:
 
 ```python
     # In: one processed token.  Out: chapter 3's idf: log((N - df + 0.5) / (df + 0.5) + 1).
@@ -77,12 +77,14 @@ log((N - df + 0.5) / (df + 0.5) + 1)
         return math.log((N - df + 0.5) / (df + 0.5) + 1)
 ```
 
-2. In the CLI, a `bm25idf` subcommand and its case. The course names a helper function `bm25_idf_command` for the loading and tokenizing; the case below does the same three lines in place, which is how the `idf` case already works:
+2. In `cli/keyword_search_cli.py`: two changes, a `bm25idf` subcommand and its case. The course names a helper function `bm25_idf_command` for the loading and tokenizing; the case below does the same three lines in place, which is how the `idf` case already works. First, inside `main()`: new lines. They go below the last `add_parser` or `add_argument` line and above `args = parser.parse_args()`:
 
 ```python
     bm25_idf_parser = subparsers.add_parser("bm25idf", help="Get BM25 IDF score for a given term")
     bm25_idf_parser.add_argument("term", type=str, help="Term to get BM25 IDF score for")
 ```
+
+Second, inside `match args.command:`: a new case. It goes above `case _:`, indented like the other cases:
 
 ```python
         case "bm25idf":
@@ -113,13 +115,13 @@ bootdev run -s <lesson-id>
 
 Put the chapter's table in `scratch/p05-bm25.md`: 1 occurrence gives 1.0, 2 gives 1.4, 5 gives 1.9, 10 gives 2.2, 20 gives 2.3. The number can never reach `k1 + 1`.
 
-1. At the top of `cli/lib/keyword_search.py`, next to `PUNCT`, the constant. The course suggests a separate module for constants; one file is fine for this project:
+1. In `cli/lib/keyword_search.py`: a new line. It goes near the top of the file, below the `PUNCT = ...` line and above `class InvertedIndex`, because the class uses it. The course suggests a separate module for constants; one file is fine for this project:
 
 ```python
 BM25_K1 = 1.5     # chapter 3 lesson 2: how fast term frequency saturates
 ```
 
-2. In the class, below `get_bm25_idf`:
+2. In the same file, inside the `InvertedIndex` class: a new method. It goes below `get_bm25_idf`:
 
 ```python
     # In: a document id, one processed token and k1.  Out: the saturated term frequency, between 0 and k1 + 1.
@@ -128,11 +130,13 @@ BM25_K1 = 1.5     # chapter 3 lesson 2: how fast term frequency saturates
         return (tf * (k1 + 1)) / (tf + k1)
 ```
 
-3. In the CLI: `BM25_K1` joins the import, a `bm25tf` subcommand with an optional third argument, and its case. `nargs="?"` makes the argument optional, with `default` used when it is left out:
+3. In `cli/keyword_search_cli.py`: three changes, the import, a `bm25tf` subcommand with an optional third argument, and its case. `nargs="?"` makes the argument optional, with `default` used when it is left out. `BM25_K1` joins the import, so first replace the `from lib.keyword_search import ...` line at the top of the file with this:
 
 ```python
 from lib.keyword_search import BM25_K1, InvertedIndex, build_command, search_titles, tokenize_single_term
 ```
+
+Second, inside `main()`: new lines. They go below the last `add_parser` or `add_argument` line and above `args = parser.parse_args()`:
 
 ```python
     bm25_tf_parser = subparsers.add_parser("bm25tf", help="Get BM25 TF score for a given document ID and term")
@@ -140,6 +144,8 @@ from lib.keyword_search import BM25_K1, InvertedIndex, build_command, search_tit
     bm25_tf_parser.add_argument("term", type=str, help="Term to get BM25 TF score for")
     bm25_tf_parser.add_argument("k1", type=float, nargs="?", default=BM25_K1, help="Tunable BM25 K1 parameter")
 ```
+
+Third, inside `match args.command:`: a new case. It goes above `case _:`, indented like the other cases:
 
 ```python
         case "bm25tf":
@@ -171,22 +177,22 @@ tf_component = (tf * (k1 + 1)) / (tf + k1 * length_norm)
 
 An average-length document has `length_norm` 1 and is scored as in lesson 2; a longer one is pushed down, a shorter one up. `b = 0` switches the whole thing off.
 
-1. The constant, under `BM25_K1`:
+1. In `cli/lib/keyword_search.py`: a new line. It goes directly below the `BM25_K1 = 1.5` line:
 
 ```python
 BM25_B = 0.75     # chapter 3 lesson 3: how much document length counts against a document
 ```
 
-2. The index needs each document's length and a fourth cache file. In `__init__`:
+2. The index needs each document's length and a fourth cache file. In the same file, inside `__init__` of the class: two new lines. They go at the end of the method, below the `self.term_frequencies = {}` line:
 
 ```python
         self.doc_lengths = {}       # document id -> how many tokens the document had
         self.doc_lengths_path = os.path.join(CACHE_DIR, "doc_lengths.pkl")
 ```
 
-The course keeps a `CACHE_DIR` constant for the folder name; add `CACHE_DIR = "cache"` next to the other constants.
+The course keeps a `CACHE_DIR` constant for the folder name; so add one more new line, `CACHE_DIR = "cache"`, directly below the `BM25_B = 0.75` line.
 
-3. In `__add_document`, count the tokens before the loop, so the length is stored once per document:
+3. In the same file: replace the whole `__add_document` method with this. It counts the tokens before the loop, so the length is stored once per document:
 
 ```python
     def __add_document(self, doc_id, text):
@@ -198,19 +204,21 @@ The course keeps a `CACHE_DIR` constant for the folder name; add `CACHE_DIR = "c
             self.term_frequencies[doc_id][token] += 1
 ```
 
-4. A fourth file in `save` and `load`, the same shape as the other three:
+4. In the same file, a fourth file in `save` and `load`, the same shape as the other three. Inside `save`: two new lines. They go at the end of the method:
 
 ```python
         with open(self.doc_lengths_path, "wb") as f:
             pickle.dump(self.doc_lengths, f)
 ```
 
+Inside `load`: two new lines. They go at the end of the method:
+
 ```python
         with open(self.doc_lengths_path, "rb") as f:
             self.doc_lengths = pickle.load(f)
 ```
 
-5. The average, as a private helper, and `get_bm25_tf` with the normalization in it. The course asks for the empty-index case to return `0.0`:
+5. In the same file, inside the class: two changes. `__get_avg_doc_length` is a new method. It goes below `get_bm25_idf` and above `get_bm25_tf`. Then replace the whole `get_bm25_tf` method with the one below, which has the normalization in it. The course asks for the empty-index case to return `0.0`:
 
 ```python
     # In: nothing.  Out: the average document length in tokens, 0.0 if there are no documents.
@@ -226,11 +234,13 @@ The course keeps a `CACHE_DIR` constant for the folder name; add `CACHE_DIR = "c
         return (tf * (k1 + 1)) / (tf + k1 * length_norm)
 ```
 
-6. In the CLI: `BM25_B` joins the import, a fourth optional argument, and the case passes it through:
+6. In `cli/keyword_search_cli.py`: three changes. First, `BM25_B` joins the import: on the `from lib.keyword_search import ...` line at the top, add `BM25_B, ` in front of `BM25_K1`. Second, inside `main()`: a new line, a fourth optional argument. It goes directly below the `bm25_tf_parser.add_argument("k1", ...)` line:
 
 ```python
     bm25_tf_parser.add_argument("b", type=float, nargs="?", default=BM25_B, help="Tunable BM25 b parameter")
 ```
+
+Third, inside the `bm25tf` case: replace the line that starts `bm25tf = ix.get_bm25_tf(` with this, which passes `b` through:
 
 ```python
             bm25tf = ix.get_bm25_tf(args.doc_id, tokenize_single_term(args.term), args.k1, args.b)

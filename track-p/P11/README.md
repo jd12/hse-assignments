@@ -44,7 +44,7 @@ In `~/version_control/rag-search-engine/`. When the chapter page shows every les
 
 **Lesson 4: the weighted combination.** Both engines run, both score lists are normalized with lesson 3's function, and each movie's hybrid score is `alpha * bm25 + (1 - alpha) * semantic`. `alpha = 1` is keyword search; `alpha = 0` is semantic.
 
-1. In `cli/lib/hybrid_search.py`, above the class:
+1. In `cli/lib/hybrid_search.py`: new code. It goes below `normalize_scores` and above `class HybridSearch`, with no indent:
 
 ```python
 # In: a normalized BM25 score, a normalized semantic score, and alpha.  Out: their weighted mix.
@@ -52,7 +52,7 @@ def hybrid_score(bm25_score, semantic_score, alpha=0.5):
     return alpha * bm25_score + (1 - alpha) * semantic_score
 ```
 
-2. Replace the `weighted_search` stub. Each engine is asked for 500 times the limit, so a movie near the top of one list and far down the other is still in both. The dictionary collects every movie either engine returned, with `0.0` for the engine that did not return it:
+2. In the same file, inside the `HybridSearch` class: replace the whole `weighted_search` stub with this method. Each engine is asked for 500 times the limit, so a movie near the top of one list and far down the other is still in both. The dictionary collects every movie either engine returned, with `0.0` for the engine that did not return it:
 
 ```python
     # In: a query, alpha, how many results.  Out: every movie either engine returned, with both normalized scores and the mix, best mix first.
@@ -74,12 +74,14 @@ def hybrid_score(bm25_score, semantic_score, alpha=0.5):
 
 `setdefault` here is the same trick as the inverted index: it returns the entry already there, or stores and returns a new one with both scores at `0.0`.
 
-3. In the CLI, `HybridSearch` and `load_movies` imported, a `weighted-search` subcommand with `query`, `--alpha` (default 0.5) and `--limit` (default 5), and a case that prints the top `limit` the chapter's way:
+3. In `cli/hybrid_search_cli.py`: three changes, the imports, a `weighted-search` subcommand with `query`, `--alpha` (default 0.5) and `--limit` (default 5), and a case that prints the top `limit` the chapter's way. First, replace the `from lib.hybrid_search import ...` line at the top with these two lines:
 
 ```python
 from lib.hybrid_search import HybridSearch, normalize_scores
 from lib.search_utils import load_movies
 ```
+
+Second, inside `main()`: new lines. They go below the last `add_parser` or `add_argument` line and above `args = parser.parse_args()`:
 
 ```python
     weighted_parser = subparsers.add_parser("weighted-search", help="Hybrid search with a weighted score")
@@ -87,6 +89,8 @@ from lib.search_utils import load_movies
     weighted_parser.add_argument("--alpha", type=float, default=0.5, help="Weight of the keyword score, 0 to 1")
     weighted_parser.add_argument("--limit", type=int, default=5, help="How many results")
 ```
+
+Third, inside `match args.command:`: a new case. It goes above `case _:`, indented like the other cases:
 
 ```python
         case "weighted-search":
@@ -112,7 +116,7 @@ bootdev run -s <lesson-id>
 
 **Lesson 5: reciprocal rank fusion.** No scores, no normalization. Each list votes `1 / (k + rank)` for every movie it ranked, and the votes are added.
 
-1. Above the class:
+1. In `cli/lib/hybrid_search.py`: new code. It goes below `hybrid_score` and above `class HybridSearch`, with no indent:
 
 ```python
 # In: a rank (1 is first) and k.  Out: that rank's vote.
@@ -120,7 +124,7 @@ def rrf_score(rank, k=60):
     return 1 / (k + rank)
 ```
 
-2. Replace the `rrf_search` stub. The same shape as `weighted_search`, with ranks where the scores were:
+2. In the same file, inside the `HybridSearch` class: replace the whole `rrf_search` stub with this method. The same shape as `weighted_search`, with ranks where the scores were:
 
 ```python
     # In: a query, k, how many results.  Out: every movie either engine returned, with both ranks and the summed vote, best first.
@@ -137,7 +141,7 @@ def rrf_score(rank, k=60):
         return sorted(combined.values(), key=lambda e: e["rrf"], reverse=True)
 ```
 
-3. In the CLI, an `rrf-search` subcommand with `query`, `-k` (default 60) and `--limit` (default 5), and its case. A rank of `None` prints as `-`:
+3. In `cli/hybrid_search_cli.py`: two changes, an `rrf-search` subcommand with `query`, `-k` (default 60) and `--limit` (default 5), and its case. A rank of `None` prints as `-`. The imports do not change. First, inside `main()`: new lines. They go below the last `add_parser` or `add_argument` line and above `args = parser.parse_args()`:
 
 ```python
     rrf_parser = subparsers.add_parser("rrf-search", help="Hybrid search with reciprocal rank fusion")
@@ -145,6 +149,8 @@ def rrf_score(rank, k=60):
     rrf_parser.add_argument("-k", type=int, default=60, help="The RRF constant")
     rrf_parser.add_argument("--limit", type=int, default=5, help="How many results")
 ```
+
+Second, inside `match args.command:`: a new case. It goes above `case _:`, indented like the other cases:
 
 ```python
         case "rrf-search":
@@ -223,12 +229,14 @@ c00307 ranks [6, 5] score 0.0305
 
 **Step 5. The scoreboard on chunks.**
 
-Replace `methods()` and the top of `rag/scoreboard.py`. Passages are finished; from here every method runs on chunks:
+In `rag/scoreboard.py`: three changes. Passages are finished; from here every method runs on chunks. First, two new lines. They go with the other imports at the top of the file:
 
 ```python
 from rag import search
 from rag.chunking import OVERLAP, SIZE, load_chunks
 ```
+
+Second, replace the whole `methods()` function with this:
 
 ```python
 def methods():
@@ -242,7 +250,7 @@ def methods():
     }
 ```
 
-Change `from rag.corpus import ROOT, load_passages` to `from rag.corpus import ROOT`, and delete the `from rag.keyword import Keyword` and `from rag.semantic import Semantic` lines; `__main__` stays as it was. Your predictions are already under `## Predictions` in `evidence/P10.md`, committed. Then:
+Third, still at the top of the file, change `from rag.corpus import ROOT, load_passages` to `from rag.corpus import ROOT`, and delete the `from rag.keyword import Keyword` and `from rag.semantic import Semantic` lines; `__main__` stays as it was. Your predictions are already under `## Predictions` in `evidence/P10.md`, committed. Then:
 
 ```bash
 uv run python -m rag.scoreboard

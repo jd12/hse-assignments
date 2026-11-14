@@ -46,13 +46,13 @@ In `~/version_control/rag-search-engine/`, the last two lessons, each run locall
 math.log((total_doc_count + 1) / (term_match_doc_count + 1))
 ```
 
-1. At the top of `cli/lib/keyword_search.py`:
+1. In `cli/lib/keyword_search.py`: a new line. It goes with the other imports at the top of the file:
 
 ```python
 import math
 ```
 
-2. In the class, below `get_tf`. The index already knows both counts: `docmap` has one entry per document, and `get_documents` returns the documents that contain the token:
+2. In the same file, inside the `InvertedIndex` class: a new method. It goes below `get_tf`. The index already knows both counts: `docmap` has one entry per document, and `get_documents` returns the documents that contain the token:
 
 ```python
     # In: one processed token.  Out: its inverse document frequency, by the chapter's formula.
@@ -60,12 +60,14 @@ import math
         return math.log((len(self.docmap) + 1) / (len(self.get_documents(term)) + 1))
 ```
 
-3. In the CLI, an `idf` subcommand that takes a term, and its case:
+3. In `cli/keyword_search_cli.py`: two changes, an `idf` subcommand that takes a term, and its case. First, inside `main()`: new lines. They go below the last `add_parser` or `add_argument` line and above `args = parser.parse_args()`:
 
 ```python
     idf_parser = subparsers.add_parser("idf", help="Inverse document frequency of a term")
     idf_parser.add_argument("term", type=str, help="One word")
 ```
+
+Second, inside `match args.command:`: a new case. It goes above `case _:`, indented like the other cases:
 
 ```python
         case "idf":
@@ -89,13 +91,15 @@ bootdev run -s <lesson-id>
 
 **Lesson 6: tf-idf.** The product of the two numbers: a term scores high in a document when it is frequent there (tf) and rare across the collection (idf). The lesson's example has `cyborg` at idf 3.9 and `bear` at 0.05, so one `cyborg` outweighs two `bear`s.
 
-1. In the CLI, a `tfidf` subcommand that takes a document id and a term, and its case. No new method: `get_tf` and `get_idf` already exist, and the score is their product:
+1. In `cli/keyword_search_cli.py`: two changes, a `tfidf` subcommand that takes a document id and a term, and its case. Nothing changes in `cli/lib/keyword_search.py`: `get_tf` and `get_idf` already exist, and the score is their product. First, inside `main()`: new lines. They go below the last `add_parser` or `add_argument` line and above `args = parser.parse_args()`:
 
 ```python
     tfidf_parser = subparsers.add_parser("tfidf", help="TF-IDF of a term in one document")
     tfidf_parser.add_argument("doc_id", type=int, help="Document id")
     tfidf_parser.add_argument("term", type=str, help="One word")
 ```
+
+Second, inside `match args.command:`: a new case. It goes above `case _:`, indented like the other cases:
 
 ```python
         case "tfidf":
@@ -121,7 +125,7 @@ That is the chapter's whole scorer: a raw count times a log of a ratio of docume
 
 **Step 3. The index on your corpus.**
 
-Open `rag/tfidf.py` and read the class, down to `top_terms`: a `TfidfIndex` holds one `Counter` of terms per passage, the passage lengths, and `df`, how many passages each term is in; `tf`, `idf` and `tfidf` are three one-line functions; `top_terms` sorts a passage's terms by tf-idf. The code under `if __name__` prints the report and you can skip it. Check the `# CHAPTER FORMULA` line against `scratch/p03-formula.md`. Then make `tf` the chapter's raw count, so the one-line body of `tf` reads:
+Open `rag/tfidf.py` and read the class, down to `top_terms`: a `TfidfIndex` holds one `Counter` of terms per passage, the passage lengths, and `df`, how many passages each term is in; `tf`, `idf` and `tfidf` are three one-line functions; `top_terms` sorts a passage's terms by tf-idf. The code under `if __name__` prints the report and you can skip it. Check the `# CHAPTER FORMULA` line against `scratch/p03-formula.md`. Then make `tf` the chapter's raw count. In `rag/tfidf.py`, inside the `tf` method of the `TfidfIndex` class: replace the one `return` line with this:
 
 ```python
         return self.docs[i][term]

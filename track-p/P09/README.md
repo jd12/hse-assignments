@@ -54,7 +54,7 @@ In `~/version_control/rag-search-engine/`. When the chapter page shows every les
 
 **Lesson 1: fixed-size chunks.** Groups of `n` words. The function goes in the library so lesson 4 can reuse it; the CLI prints.
 
-1. In `cli/lib/semantic_search.py`, above the class:
+1. In `cli/lib/semantic_search.py`: new code. It goes above `class SemanticSearch` and below `cosine_similarity`, with no indent:
 
 ```python
 # In: text, a chunk size in words, an overlap in words.  Out: a list of chunk strings.
@@ -72,13 +72,15 @@ def chunk_words(text, chunk_size=200, overlap=0):
 
 `overlap` is there already for lesson 2; with the default `0`, `step` is the chunk size and the windows do not share words. The `break` matters: without it, after the window that reaches the last word, the loop would keep making shorter copies of the end.
 
-2. In the CLI, `chunk_words` joins the import, a `chunk` subcommand with a positional `text` and `--chunk-size` (default 200), and its case:
+2. In `cli/semantic_search_cli.py`: three changes. First, `chunk_words` joins the import: add `chunk_words` to the `from lib.semantic_search import ...` line at the top. Second, a `chunk` subcommand with a positional `text` and `--chunk-size` (default 200), inside `main()`: new lines. They go below the last `add_parser` or `add_argument` line and above `args = parser.parse_args()`:
 
 ```python
     chunk_parser = subparsers.add_parser("chunk", help="Split text into fixed-size word chunks")
     chunk_parser.add_argument("text", type=str, help="The text to chunk")
     chunk_parser.add_argument("--chunk-size", type=int, default=200, help="Words per chunk")
 ```
+
+Third, inside `match args.command:`: a new case. It goes above `case _:`, indented like the other cases:
 
 ```python
         case "chunk":
@@ -103,11 +105,13 @@ bootdev run -s <lesson-id>
 
 **Lesson 2: overlap.** Each chunk repeats the last `overlap` words of the one before it, so a sentence cut by a boundary is whole in at least one chunk.
 
-1. The function already takes `overlap`. In the CLI, one more argument and pass it through:
+1. The function already takes `overlap`, so nothing changes in `cli/lib/semantic_search.py`. In `cli/semantic_search_cli.py`: two changes. First, inside `main()`: a new line. It goes directly below the `chunk_parser.add_argument("--chunk-size", ...)` line:
 
 ```python
     chunk_parser.add_argument("--overlap", type=int, default=0, help="Words shared between neighbouring chunks")
 ```
+
+Second, inside the `chunk` case: replace the line that starts `chunks = chunk_words(` with this, which passes the overlap through:
 
 ```python
             chunks = chunk_words(args.text, args.chunk_size, args.overlap)
@@ -127,7 +131,7 @@ bootdev run -s <lesson-id>
 
 **Lesson 3: sentence chunks.** Split at sentence ends instead of every `n` words, so a chunk is whole thoughts. The regular expression is the chapter's; the Notes say what it does.
 
-1. At the top of `cli/lib/semantic_search.py`, `import re`. Above the class, beside `chunk_words`:
+1. In `cli/lib/semantic_search.py`: two changes. First, a new line, `import re`. It goes with the other imports at the top of the file. Second, new code. It goes below `chunk_words` and above `class SemanticSearch`, with no indent:
 
 ```python
 # In: text, a maximum number of sentences per chunk, an overlap in sentences.  Out: a list of chunk strings.
@@ -145,7 +149,7 @@ def semantic_chunk(text, max_chunk_size=4, overlap=0):
 
 The same loop as `chunk_words`, over sentences instead of words.
 
-2. In the CLI, a `semantic_chunk` subcommand with `text`, `--max-chunk-size` (default 4) and `--overlap` (default 0), and a case that prints `Semantically chunking N characters` and the numbered chunks, the same shape as `chunk`.
+2. In `cli/semantic_search_cli.py`, three changes in the usual three places (the import line at the top, the subcommand lines above `args = parser.parse_args()`, the case above `case _:`): `semantic_chunk` joins the import, then a `semantic_chunk` subcommand with `text`, `--max-chunk-size` (default 4) and `--overlap` (default 0), and a case that prints `Semantically chunking N characters` and the numbered chunks, the same shape as `chunk`.
 
 3. Run, then submit:
 
@@ -160,7 +164,7 @@ bootdev run -s <lesson-id>
 
 **Lesson 4: embeddings for chunks.** The descriptions get chunked with `semantic_chunk`, four sentences with one of overlap, every chunk gets a vector, and a metadata list remembers which movie each chunk came from.
 
-1. `import json` at the top. Below the `SemanticSearch` class, a subclass. `super().__init__(model_name)` runs the parent's constructor first, so `self.model` exists:
+1. In `cli/lib/semantic_search.py`: two changes. First, a new line, `import json`. It goes with the other imports at the top of the file. Second, a new class. It goes at the end of the file, with no indent on its first line. `super().__init__(model_name)` runs the parent's constructor first, so `self.model` exists:
 
 ```python
 class ChunkedSemanticSearch(SemanticSearch):
@@ -206,11 +210,13 @@ class ChunkedSemanticSearch(SemanticSearch):
 
 `movie_idx` is the movie's position in the list, not its id; `search_chunks` uses it to get back to `self.documents[movie_idx]`.
 
-2. In the CLI, `ChunkedSemanticSearch` joins the import from `lib.semantic_search`, `load_movies` is imported from `lib.search_utils`, and there is an `embed_chunks` subcommand and its case:
+2. In `cli/semantic_search_cli.py`: four changes. First, `ChunkedSemanticSearch` joins the import: add it to the `from lib.semantic_search import ...` line at the top. Second, a new line. It goes directly below that import line:
 
 ```python
 from lib.search_utils import load_movies
 ```
+
+Third, inside `main()`: one new line, `subparsers.add_parser("embed_chunks", help="Build or load the chunk embeddings")`. It goes below the last `add_parser` or `add_argument` line and above `args = parser.parse_args()`. Fourth, inside `match args.command:`: a new case. It goes above `case _:`, indented like the other cases:
 
 ```python
         case "embed_chunks":
@@ -231,7 +237,7 @@ bootdev run -s <lesson-id>
 
 **Lesson 5: search over chunks.** Every chunk is scored against the query, each movie keeps its best chunk's score, and the movies are ranked by that.
 
-1. In the subclass:
+1. In `cli/lib/semantic_search.py`, inside the `ChunkedSemanticSearch` class: a new method. It goes at the end of the class, below `load_or_create_chunk_embeddings`:
 
 ```python
     # In: a query and how many results.  Out: up to limit movies, each scored by its best-matching chunk, best first.
@@ -255,7 +261,7 @@ bootdev run -s <lesson-id>
         return results
 ```
 
-2. In the CLI, a `search_chunked` subcommand with `query` and `--limit` (default 5), and a case that loads the movies, builds a `ChunkedSemanticSearch`, loads the chunk vectors, and prints each result as the chapter shows, the title with its score to four places on one line and the first 100 characters on the next.
+2. In `cli/semantic_search_cli.py`, two changes in the usual places (the subcommand lines above `args = parser.parse_args()`, the case above `case _:`): a `search_chunked` subcommand with `query` and `--limit` (default 5), and a case that loads the movies, builds a `ChunkedSemanticSearch`, loads the chunk vectors, and prints each result as the chapter shows, the title with its score to four places on one line and the first 100 characters on the next.
 
 3. Run, then submit:
 
@@ -267,7 +273,7 @@ bootdev run -s <lesson-id>
 
 *You should see* `Kick-Ass`, `The Incredibles` and `Logan` somewhere in the 25; the checks are those and the `romantic comedy` ones. *If it broke* with `TypeError` in `search_chunks`, `chunk_metadata` is `None`: `load_or_create_chunk_embeddings` was not called first.
 
-**Lesson 6: edge cases.** Real text has leading spaces, no final period, and empty strings. The chapter's four fixes go into `semantic_chunk`, and both the command and the builder get them, because they share the function:
+**Lesson 6: edge cases.** Real text has leading spaces, no final period, and empty strings. The chapter's four fixes go into `semantic_chunk`, and both the command and the builder get them, because they share the function. In `cli/lib/semantic_search.py`: replace the whole `semantic_chunk` function with this:
 
 ```python
 def semantic_chunk(text, max_chunk_size=4, overlap=0):

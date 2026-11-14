@@ -49,11 +49,13 @@ Under the timestamp, write today's checklist:
 
 In `~/version_control/rag-search-engine/`. When the chapter page shows every lesson complete, save it as `evidence/p16-bootdev-ch9.png` in the rag repo.
 
-**Lesson 5: F1.** One formula and one line. In `cli/evaluation_cli.py`, after the recall line:
+**Lesson 5: F1.** One formula and one line. In `cli/evaluation_cli.py`, inside the `for` loop of `main()`: two new lines, in two places. The first goes directly below the `recall = ...` line:
 
 ```python
         f1 = 0.0 if precision + recall == 0 else 2 * (precision * recall) / (precision + recall)
 ```
+
+The second goes directly below the `print(f"- Recall@{limit}: ...")` line:
 
 ```python
         print(f"- F1 Score: {f1:.4f}")
@@ -70,7 +72,7 @@ bootdev run -s 4bc96f50-0a24-4af3-b300-bad11568f3f3
 
 *You should see* `children's animated bear adventure` at four with `Precision@4: 0.2500`, `Recall@4: 0.0769` and `F1 Score: 0.1176`, and `friendship transformation magic with bears` at eight with `0.2500`, `0.6667` and `0.3636`; those are the checks. The first is one of thirteen relevant titles found: recall is small because the denominator is thirteen, and F1 sits near the smaller of the two. *If it broke* with `ZeroDivisionError`, the `if` is on the wrong side of the division.
 
-**Lesson 6: error analysis.** Four debug lines in `rrf-search`, each printing what one stage produced, so a missing result can be traced to the stage that lost it. In `cli/hybrid_search_cli.py`, above `main`:
+**Lesson 6: error analysis.** Four debug lines in `rrf-search`, each printing what one stage produced, so a missing result can be traced to the stage that lost it. In `cli/hybrid_search_cli.py`: three changes. First, new code. It goes below the imports and above `def main`, with no indent:
 
 ```python
 # In: a label and anything.  Out: nothing. Prints it only when --debug is on (chapter 9, error analysis).
@@ -79,13 +81,13 @@ def debug(enabled, label, value):
         print(f"[debug] {label}: {value}")
 ```
 
-A `--debug` flag on the `rrf-search` parser:
+Second, inside `main()`: a new line, a `--debug` flag on the `rrf-search` parser. It goes directly below the `--rerank-method` argument, which ends with a line holding only `)`:
 
 ```python
     rrf_parser.add_argument("--debug", action="store_true", help="Print what each stage of the pipeline did")
 ```
 
-`action="store_true"` makes a flag with no value: present means `True`. Then the four calls in the case, one after each stage:
+`action="store_true"` makes a flag with no value: present means `True`. Third, inside the `rrf-search` case: four new lines, one after each stage. The block below shows the case from its top with the four in place. Add only the lines that start with `debug(` and leave the rest as it is:
 
 ```python
             query = args.query
@@ -113,12 +115,14 @@ uv run cli/hybrid_search_cli.py rrf-search "dinosaur" --rerank-method cross_enco
 
 *You should see* the four `[debug]` lines around the normal output. Find `Land Before Time XI` in them: if it is in the `after RRF` list and not in `final results`, the reranker dropped it; if it is in neither, hybrid search never gave it to the reranker, and the BM25 and semantic ranks tell you which engine. Answer the lesson's question from that, and write your choice and the line that decided it under `## Step 2` in `evidence/P16.md`. No submission for this lesson; the question is the check.
 
-**Lesson 7: the model as judge.** A flag that, after the results print, asks the model to score each one from 0 to 3. In `cli/hybrid_search_cli.py`, the prompt above `main`, the import, the flag, and the block at the end of the case:
+**Lesson 7: the model as judge.** A flag that, after the results print, asks the model to score each one from 0 to 3. In `cli/hybrid_search_cli.py`: four changes. First, two new lines. They go with the other imports at the top of the file. The second is one more import from `lib.reranking`, and the `from lib.reranking import ...` line already there stays:
 
 ```python
 from lib.llm import ask
 from lib.reranking import parse_json_list
 ```
+
+Second, new code, the prompt. It goes below `debug` and above `def main`, with no indent:
 
 ```python
 EVALUATE = """Rate how relevant each result is to this query on a 0-3 scale:
@@ -141,9 +145,13 @@ Return ONLY the scores in the same order you were given the documents. Return a 
 [2, 0, 3, 2, 0, 1]"""
 ```
 
+Third, inside `main()`: a new line. It goes directly below the `--debug` line:
+
 ```python
     rrf_parser.add_argument("--evaluate", action="store_true", help="Rate the results with the LLM, 0 to 3")
 ```
+
+Fourth, inside the `rrf-search` case: new lines. They go at the very end of the case, below the printing loop and above the next `case`, indented like the `for` that starts that loop:
 
 ```python
             if args.evaluate:
@@ -188,7 +196,7 @@ Read the rows against each other. BM25 beats semantic on this corpus by a wide m
 
 **Step 4. The second cross-encoder, predicted first.**
 
-`ms-marco-MiniLM-L-6-v2` is the same family as the chapter's model, six layers instead of two, about 90 MB. Before you run it, write under `## Step 4` in `evidence/P16.md` whether it will raise or lower recall@5 and MRR, and by about how much, and commit the file. I check your commit timestamps. Then, in `rag/rerank.py`, change the one line:
+`ms-marco-MiniLM-L-6-v2` is the same family as the chapter's model, six layers instead of two, about 90 MB. Before you run it, write under `## Step 4` in `evidence/P16.md` whether it will raise or lower recall@5 and MRR, and by about how much, and commit the file. I check your commit timestamps. Then, in `rag/rerank.py`, replace the line near the top of the file that starts `MODEL = ` with this:
 
 ```python
 MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"

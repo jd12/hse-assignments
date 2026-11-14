@@ -43,7 +43,7 @@ Under the timestamp, write today's checklist:
 
 In `~/version_control/rag-search-engine/`. When the chapter page shows every lesson complete, save it as `evidence/p13-bootdev-ch7.png` in the rag repo.
 
-**Lesson 4: rewriting.** A second prompt and a second choice. In `cli/lib/query_enhancement.py`, add the prompt above `PROMPTS` and the entry inside it:
+**Lesson 4: rewriting.** A second prompt and a second choice. In `cli/lib/query_enhancement.py`: two changes. First, new code, the prompt. It goes below the `SPELL = ...` prompt and above the `PROMPTS = ...` line:
 
 ```python
 REWRITE = """Rewrite the user-provided movie search query below to be more specific and searchable.
@@ -67,11 +67,13 @@ User query: "{query}"
 """
 ```
 
+Second, replace the `PROMPTS = ...` line with this:
+
 ```python
 PROMPTS = {"spell": SPELL, "rewrite": REWRITE}
 ```
 
-In the CLI, the choice:
+In `cli/hybrid_search_cli.py`, inside the `--enhance` argument of the `rrf-search` parser: replace the `choices=[...]` line with this:
 
 ```python
         choices=["spell", "rewrite"],
@@ -86,7 +88,7 @@ bootdev run -s 5fd4c9aa-f463-429f-8e3a-3a980118dce4
 
 *You should see* an `Enhanced query (rewrite)` line with something like `funny bear comedy movie` and results to match; the word `rewrite` is the check. Write the rewritten query in `evidence/P13.md` under Step 2. *If it broke* with `KeyError: 'rewrite'`, the `PROMPTS` entry is missing.
 
-**Lesson 5: expansion.** The third prompt returns only new terms, so `enhance_query` has to append them:
+**Lesson 5: expansion.** The third prompt returns only new terms, so `enhance_query` has to append them. In `cli/lib/query_enhancement.py`: two changes. First, new code, the prompt. It goes below the `REWRITE = ...` prompt and above the `PROMPTS = ...` line:
 
 ```python
 EXPAND = """Expand the user-provided movie search query below with related terms.
@@ -104,6 +106,8 @@ User query: "{query}"
 """
 ```
 
+Second, replace the `PROMPTS = ...` line and the whole `enhance_query` function with this:
+
 ```python
 PROMPTS = {"spell": SPELL, "rewrite": REWRITE, "expand": EXPAND}
 
@@ -115,6 +119,8 @@ def enhance_query(method, query):
         return f"{query} {reply}"
     return reply
 ```
+
+In `cli/hybrid_search_cli.py`, inside the `--enhance` argument: replace the `choices=[...]` line with this:
 
 ```python
         choices=["spell", "rewrite", "expand"],

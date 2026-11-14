@@ -54,14 +54,14 @@ In `~/version_control/rag-search-engine/`, lessons 1 to 4, each run locally befo
 
 **Lesson 1: the inverted index.** Chapter 1's search read every title on every query. This lesson reads every movie once, builds a table from each token to the ids of the movies that contain it, and saves the table to disk. The course wants a class, `InvertedIndex`, in `cli/lib/keyword_search.py`, with a `build` command that uses it.
 
-1. At the top of `cli/lib/keyword_search.py`, two more imports:
+1. In `cli/lib/keyword_search.py`: two new lines. They go with the other imports at the top of the file:
 
 ```python
 import os
 import pickle
 ```
 
-2. Below `tokenize_text`, the class:
+2. In the same file: new code. It goes below `tokenize_text` and above `search_titles`:
 
 ```python
 class InvertedIndex:
@@ -95,7 +95,7 @@ class InvertedIndex:
 
 `setdefault(token, set())` returns the set already stored under that token, or stores an empty one first; either way `.add(doc_id)` goes into the right set. A set, not a list, so a token that appears twice in one description does not list the movie twice. `get_documents` uses `.get(term, set())` so an unknown token gives an empty list instead of a `KeyError`; lesson 2 depends on that. `pickle.dump` writes a Python object to a file as bytes, which is why the files are opened with `"wb"`.
 
-3. Below the class, the function the CLI will call. The lesson's check is that the first document for `merida` is 4651, *Brave*:
+3. In the same file: new code. It goes below the whole `InvertedIndex` class, with no indent, and above `search_titles`. It is the function the CLI will call. The lesson's check is that the first document for `merida` is 4651, *Brave*:
 
 ```python
 # In: nothing.  Out: nothing; cache/ now holds the index built from data/movies.json.
@@ -107,15 +107,19 @@ def build_command():
     print(f"First document for token 'merida' = {docs[0]}")
 ```
 
-4. In `cli/keyword_search_cli.py`, add `build_command` to the import, a `build` subcommand next to the `search` one, and its case:
+4. In `cli/keyword_search_cli.py`: three changes. `build_command` joins the import, so first replace the `from lib.keyword_search import ...` line at the top of the file with this:
 
 ```python
 from lib.keyword_search import search_titles, build_command
 ```
 
+Second, inside `main()`: new lines. They go below the last `add_parser` or `add_argument` line and above `args = parser.parse_args()`:
+
 ```python
     subparsers.add_parser("build", help="Build the inverted index and save it to cache/")
 ```
+
+Third, inside `match args.command:`: a new case. It goes above `case _:`, indented like the other cases:
 
 ```python
         case "build":
@@ -136,7 +140,7 @@ bootdev run -s <lesson-id>
 
 1. Delete the two `merida` lines from `build_command`; they were a check, not a feature.
 
-2. In the class, below `save`, the reverse of it. `open` on a missing file raises `FileNotFoundError` on its own, which is the error the lesson asks for:
+2. In `cli/lib/keyword_search.py`, inside the `InvertedIndex` class: a new method. It goes below `save`, indented like the other methods. It is the reverse of `save`. `open` on a missing file raises `FileNotFoundError` on its own, which is the error the lesson asks for:
 
 ```python
     # In: nothing.  Out: nothing; the index and the docmap are back from cache/.
@@ -147,7 +151,7 @@ bootdev run -s <lesson-id>
             self.docmap = pickle.load(f)
 ```
 
-3. Replace the whole of `search_titles`. The loop over every movie goes; each query token is looked up, and the search stops at five:
+3. In the same file: replace the whole `search_titles` function with this. The loop over every movie goes; each query token is looked up, and the search stops at five:
 
 ```python
 # In: a query string.  Out: up to five movie dicts that share a token with it, found through the index.
@@ -173,7 +177,7 @@ def search_titles(query):
 
 `seen` keeps a movie that matches two query tokens from appearing twice. The order is the query's token order, then ascending id within a token, which is what `get_documents` sorted for.
 
-4. In the CLI's `search` case, print the id with the title:
+4. In `cli/keyword_search_cli.py`, inside the `search` case: replace the `print(f"{i}. {movie['title']}")` line with this, which prints the id with the title:
 
 ```python
                 print(f"{i}. {movie['title']} ({movie['id']})")
@@ -194,13 +198,13 @@ bootdev run -s <lesson-id>
 
 **Lesson 4: term frequency.** How many times a token is in one document. The index can say *which* movies contain `trapper`; this lesson records *how many times* each one does, in a `Counter` per movie, and adds a `tf` command to read it back.
 
-1. At the top of `cli/lib/keyword_search.py`:
+1. In `cli/lib/keyword_search.py`: a new line. It goes with the other imports at the top of the file:
 
 ```python
 from collections import Counter
 ```
 
-2. In the class, a third dictionary, filled in `__add_document` as each token goes by:
+2. In the same file, inside the `InvertedIndex` class: replace the whole `__init__` and `__add_document` methods with these. They add a third dictionary, filled as each token goes by:
 
 ```python
     def __init__(self):
@@ -218,7 +222,7 @@ from collections import Counter
 
 A `Counter` is a dict whose missing keys read as 0, so `+= 1` works on a token the first time it is seen.
 
-3. A method to read a count back, and a third file in `save` and `load`:
+3. In the same file, inside the class: three changes, a method to read a count back and a third file in `save` and `load`. First, a new method. It goes below `get_documents`:
 
 ```python
     # In: a document id and one processed token.  Out: how many times the token is in that document, 0 if it is not.
@@ -226,17 +230,21 @@ A `Counter` is a dict whose missing keys read as 0, so `+= 1` works on a token t
         return self.term_frequencies.get(doc_id, Counter())[term]
 ```
 
+Second, inside `save`: two new lines. They go at the end of the method, below the `docmap.pkl` lines:
+
 ```python
         with open("cache/term_frequencies.pkl", "wb") as f:
             pickle.dump(self.term_frequencies, f)
 ```
+
+Third, inside `load`: two new lines. They go at the end of the method, below the `docmap.pkl` lines:
 
 ```python
         with open("cache/term_frequencies.pkl", "rb") as f:
             self.term_frequencies = pickle.load(f)
 ```
 
-4. Below `tokenize_text`, the helper the lesson asks for. The index holds processed tokens, `grizzli` and not `grizzly`, so a word typed at the command line has to go through the same pipeline before it is looked up:
+4. In the same file: new code. It goes below `tokenize_text` and above `class InvertedIndex`, with no indent. It is the helper the lesson asks for. The index holds processed tokens, `grizzli` and not `grizzly`, so a word typed at the command line has to go through the same pipeline before it is looked up:
 
 ```python
 # In: one word.  Out: its single processed token, or an exception if processing did not leave exactly one.
@@ -247,17 +255,21 @@ def tokenize_single_term(term):
     return tokens[0]
 ```
 
-5. In the CLI: `InvertedIndex` and `tokenize_single_term` join the import, a `tf` subcommand takes a document id and a term, and its case loads the index and prints the count:
+5. In `cli/keyword_search_cli.py`: three changes. `InvertedIndex` and `tokenize_single_term` join the import, so first replace the `from lib.keyword_search import ...` line at the top of the file with this:
 
 ```python
 from lib.keyword_search import search_titles, build_command, InvertedIndex, tokenize_single_term
 ```
+
+Second, a `tf` subcommand that takes a document id and a term, inside `main()`: new lines. They go below the last `add_parser` or `add_argument` line and above `args = parser.parse_args()`:
 
 ```python
     tf_parser = subparsers.add_parser("tf", help="Term frequency of a term in one document")
     tf_parser.add_argument("doc_id", type=int, help="Document id")
     tf_parser.add_argument("term", type=str, help="One word")
 ```
+
+Third, its case, which loads the index and prints the count, inside `match args.command:`: a new case. It goes above `case _:`, indented like the other cases:
 
 ```python
         case "tf":

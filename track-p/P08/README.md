@@ -44,7 +44,7 @@ In `~/version_control/rag-search-engine/`. When the chapter page shows every les
 
 **Lesson 10: one text to one vector.** The model's `encode` takes a list and returns a list, so one text goes in as a list of one and the first result comes out.
 
-1. In the class, below `__init__`:
+1. In `cli/lib/semantic_search.py`, inside the `SemanticSearch` class: a new method. It goes below `__init__`:
 
 ```python
     # In: one string.  Out: its vector from the model, a numpy array.
@@ -54,7 +54,7 @@ In `~/version_control/rag-search-engine/`. When the chapter page shows every les
         return self.model.encode([text])[0]
 ```
 
-2. Below `verify_model`, the function the CLI calls, with the chapter's three prints:
+2. In the same file: new code. It goes below `verify_model`, with no indent. It is the function the CLI calls, with the chapter's three prints:
 
 ```python
 # In: one string.  Out: nothing; prints the text, the first three numbers of its vector, and the vector's length.
@@ -66,12 +66,14 @@ def embed_text(text):
     print(f"Dimensions: {embedding.shape[0]}")
 ```
 
-3. In the CLI, `embed_text` joins the import, an `embed_text` subcommand with one argument, and its case:
+3. In `cli/semantic_search_cli.py`: three changes. First, `embed_text` joins the import: change the line at the top to `from lib.semantic_search import verify_model, embed_text`. Second, an `embed_text` subcommand with one argument, inside `main()`: new lines. They go below the last `add_parser` or `add_argument` line and above `args = parser.parse_args()`:
 
 ```python
     embed_text_parser = subparsers.add_parser("embed_text", help="Embed one text and print the vector's start")
     embed_text_parser.add_argument("text", type=str, help="The text to embed")
 ```
+
+Third, inside `match args.command:`: a new case. It goes above `case _:`, indented like the other cases:
 
 ```python
         case "embed_text":
@@ -90,7 +92,7 @@ bootdev run -s <lesson-id>
 
 **Lesson 11: every movie to a vector, saved.** The slow step, done once. `uv add numpy==2.3.3` first; the chapter pins the version.
 
-1. At the top of `cli/lib/semantic_search.py`, two imports, and three more attributes in `__init__`:
+1. In `cli/lib/semantic_search.py`: two changes. First, two new lines. They go with the other imports at the top of the file:
 
 ```python
 import os
@@ -98,13 +100,15 @@ import os
 import numpy as np
 ```
 
+Second, inside `__init__` of the `SemanticSearch` class: three new lines. They go at the end of the method:
+
 ```python
         self.embeddings = None
         self.documents = None
         self.document_map = {}
 ```
 
-2. In the class, the builder and the loader. Each movie becomes one string, title and description together, and `encode` on the whole list does the work with a progress bar:
+2. In the same file, inside the `SemanticSearch` class: two new methods, the builder and the loader. They go below `generate_embedding`. Each movie becomes one string, title and description together, and `encode` on the whole list does the work with a progress bar:
 
 ```python
     # In: a list of movie dicts.  Out: one vector per movie, also saved to cache/movie_embeddings.npy.
@@ -132,11 +136,13 @@ import numpy as np
 
 `[f"{doc['title']}: {doc['description']}" for doc in documents]` is a list comprehension: a loop that builds a list in one line, the same as a `for` loop with `append`.
 
-3. Below `embed_text`, the verifier, and in the CLI a `verify_embeddings` subcommand that calls it. `load_movies` comes from `lib.search_utils`, the same one the keyword CLI uses:
+3. In `cli/lib/semantic_search.py`: two changes. First, a new line. It goes with the other imports at the top of the file. `load_movies` comes from `lib.search_utils`, the same one the keyword CLI uses:
 
 ```python
 from lib.search_utils import load_movies
 ```
+
+Second, new code, the verifier. It goes below `embed_text`, with no indent:
 
 ```python
 # In: nothing.  Out: nothing; builds or loads the movie vectors and prints their shape.
@@ -148,9 +154,13 @@ def verify_embeddings():
     print(f"Embeddings shape: {embeddings.shape[0]} vectors in {embeddings.shape[1]} dimensions")
 ```
 
+Then in `cli/semantic_search_cli.py`: add `verify_embeddings` to the `from lib.semantic_search import ...` line at the top, and add a `verify_embeddings` subcommand, inside `main()`: new lines. They go below the last `add_parser` or `add_argument` line and above `args = parser.parse_args()`:
+
 ```python
     subparsers.add_parser("verify_embeddings", help="Build or load the movie vectors")
 ```
+
+Its case, inside `match args.command:`: a new case. It goes above `case _:`, indented like the other cases:
 
 ```python
         case "verify_embeddings":
@@ -168,7 +178,7 @@ bootdev run -s <lesson-id>
 
 *You should see* a progress bar for a minute or two the first time, then `5000 vectors in 384 dimensions`, and the second run print the same line at once with no bar: it loaded. That line is the check. *If it broke* with `NameError: name 'np' is not defined`, the import is missing. *If it broke* with the bar running again on the second run, the `len` comparison failed; `cache/movie_embeddings.npy` was saved from a different movie list.
 
-**Lesson 12: the query to a vector.** The same `generate_embedding`, printed the chapter's way:
+**Lesson 12: the query to a vector.** The same `generate_embedding`, printed the chapter's way. In `cli/lib/semantic_search.py`: new code. It goes below `verify_embeddings`, with no indent:
 
 ```python
 # In: a query string.  Out: nothing; prints the query, the first three numbers of its vector, and the vector's shape.
@@ -180,7 +190,7 @@ def embed_query_text(query):
     print(f"Shape: {embedding.shape}")
 ```
 
-An `embed_query` subcommand with one positional argument, its case, and the import. Run, then submit:
+Then in `cli/semantic_search_cli.py`, the same three changes as lesson 10: add `embed_query_text` to the `from lib.semantic_search import ...` line at the top, add an `embed_query` subcommand with one positional argument named `query` below the last `add_argument` line, and add its case above `case _:`, calling `embed_query_text(args.query)`. Run, then submit:
 
 ```bash
 uv run cli/semantic_search_cli.py embed_query "funny bear movies"
@@ -195,7 +205,7 @@ bootdev run -s <lesson-id>
 
 **Lesson 14: the search.** The five steps, assembled. Cosine similarity comes back as NumPy, which the lesson gives you to paste:
 
-1. Above the class:
+1. In `cli/lib/semantic_search.py`: new code. It goes below the imports and above `class SemanticSearch`, with no indent:
 
 ```python
 # In: two vectors, numpy arrays.  Out: the cosine of the angle between them, 0.0 if either has no length.
@@ -210,7 +220,7 @@ def cosine_similarity(vec1, vec2):
 
 This is lesson 8's function with `np.dot` for the loop and `np.linalg.norm` for `euclidean_norm`.
 
-2. In the class, below `load_or_create_embeddings`. `zip` walks two lists together, one movie with its vector:
+2. In the same file, inside the `SemanticSearch` class: a new method. It goes below `load_or_create_embeddings`. `zip` walks two lists together, one movie with its vector:
 
 ```python
     # In: a query and how many results.  Out: up to limit dicts with score, title and description, best first.
@@ -228,7 +238,7 @@ This is lesson 8's function with `np.dot` for the loop and `np.linalg.norm` for 
         return results
 ```
 
-3. Below `embed_query_text`, the helper, with the chapter's output format, and in the CLI a `search` subcommand with a positional `query` and `--limit` (default 5):
+3. In the same file: new code, the helper, with the chapter's output format. It goes below `embed_query_text`, with no indent:
 
 ```python
 # In: a query and how many results.  Out: nothing; prints the results the chapter's way.
@@ -241,11 +251,15 @@ def semantic_search(query, limit):
         print()
 ```
 
+Then in `cli/semantic_search_cli.py`: add `semantic_search` to the `from lib.semantic_search import ...` line at the top, and add a `search` subcommand with a positional `query` and `--limit` (default 5), inside `main()`: new lines. They go below the last `add_parser` or `add_argument` line and above `args = parser.parse_args()`:
+
 ```python
     search_parser = subparsers.add_parser("search", help="Search movies by meaning")
     search_parser.add_argument("query", type=str, help="Search query")
     search_parser.add_argument("--limit", type=int, default=5, help="How many results")
 ```
+
+Its case, inside `match args.command:`: a new case. It goes above `case _:`, indented like the other cases:
 
 ```python
         case "search":
@@ -317,11 +331,13 @@ Change one character in `p1059`'s text and search again: it still comes back at 
 
 **Step 5. The semantic column.**
 
-In `rag/scoreboard.py`, import `Semantic` and add one entry to the dictionary `methods()` returns:
+In `rag/scoreboard.py`: two changes. First, a new line that imports `Semantic`. It goes with the other imports at the top of the file:
 
 ```python
 from rag.semantic import Semantic
 ```
+
+Second, inside `methods()`: replace everything from `return {` to the closing `}` with these lines. They add the `sem = ...` line and one entry to the dictionary:
 
 ```python
     sem = Semantic(units, "passages")

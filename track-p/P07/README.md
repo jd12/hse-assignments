@@ -51,7 +51,7 @@ Under the timestamp, write today's checklist:
 
 In `~/version_control/rag-search-engine/`. Stop after lesson 9; lessons 10 to 16 are P08. Only lessons 1 and 3 touch the project; 5, 7 and 8 are in the browser; 2, 4, 6 and 9 are readings with a question at the end.
 
-**Lesson 1: a second CLI.** Semantic search gets its own entry point, `cli/semantic_search_cli.py`, beside the keyword one. The course gives you the skeleton to paste. Its `match args.command` needs a `command` attribute to exist, so add the subparsers line now rather than in lesson 3:
+**Lesson 1: a second CLI.** Semantic search gets its own entry point, `cli/semantic_search_cli.py`, beside the keyword one. The course gives you the skeleton to paste. Its `match args.command` needs a `command` attribute to exist, so add the subparsers line now rather than in lesson 3. Create the file `cli/semantic_search_cli.py`. This is its whole contents:
 
 ```python
 import argparse
@@ -92,7 +92,7 @@ bootdev run -s <lesson-id>
 uv add sentence-transformers
 ```
 
-2. Create `cli/lib/semantic_search.py`. The constructor takes the model name with the chapter's as the default, which chapter 5 relies on:
+2. Create the file `cli/lib/semantic_search.py`. This is its whole contents. The constructor takes the model name with the chapter's as the default, which chapter 5 relies on:
 
 ```python
 from sentence_transformers import SentenceTransformer
@@ -112,15 +112,19 @@ def verify_model():
 
 `device="cpu"` is the line the lesson says to add if you get an error about your GPU; adding it up front costs nothing on a laptop.
 
-3. In the CLI, the import, a `verify` subcommand and its case:
+3. In `cli/semantic_search_cli.py`: three changes, the import, a `verify` subcommand and its case. First, a new line. It goes at the top of the file, directly below `import argparse`:
 
 ```python
 from lib.semantic_search import verify_model
 ```
 
+Second, inside `main()`: a new line. It goes below the `subparsers = parser.add_subparsers(...)` line and above `args = parser.parse_args()`:
+
 ```python
     subparsers.add_parser("verify", help="Load the embedding model and print its limits")
 ```
+
+Third, inside `match args.command:`: a new case. It goes above `case _:`, indented like the other cases:
 
 ```python
         case "verify":
@@ -139,7 +143,7 @@ bootdev run -s <lesson-id>
 
 **Lesson 4: model selection.** A reading on general, domain and multilingual models. One multiple-choice question.
 
-**Lesson 5: vector operations.** In the browser. `add_vectors` and `subtract_vectors` each check the two lengths match, raise `ValueError` if not, and loop over the positions:
+**Lesson 5: vector operations.** In the browser, in the lesson's `main.py`. Nothing goes in your project. `add_vectors` and `subtract_vectors` each check the two lengths match, raise `ValueError` if not, and loop over the positions:
 
 ```python
 def add_vectors(vec1: list[float], vec2: list[float]) -> list[float]:
@@ -164,7 +168,7 @@ def subtract_vectors(vec1: list[float], vec2: list[float]) -> list[float]:
 
 **Lesson 6: dimensions.** A reading: the chapter's vectors have hundreds of numbers, and distance still means similarity. A Boots question; answer in the chat box until it is satisfied.
 
-**Lesson 7: the dot product.** In the browser. Multiply position by position and add up:
+**Lesson 7: the dot product.** In the browser, in the lesson's `main.py`. Nothing goes in your project. Multiply position by position and add up:
 
 ```python
 def dot(vec1: list[float], vec2: list[float]) -> float:
@@ -178,7 +182,7 @@ def dot(vec1: list[float], vec2: list[float]) -> float:
 
 The lesson's example, `[.8, .5, .5]` against `[.5, .4, .6]`, is `0.4 + 0.2 + 0.3`, which is `0.9`. Check your function gives it.
 
-**Lesson 8: cosine similarity.** In the browser, with `dot` and `euclidean_norm` handed to you from `lib`. The dot product divided by the two lengths, with a guard for a zero-length vector:
+**Lesson 8: cosine similarity.** In the browser, in the lesson's `main.py` (nothing goes in your project), with `dot` and `euclidean_norm` handed to you from `lib`. The dot product divided by the two lengths, with a guard for a zero-length vector:
 
 ```python
 from lib import dot, euclidean_norm
