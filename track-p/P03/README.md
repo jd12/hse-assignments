@@ -95,7 +95,7 @@ class InvertedIndex:
 
 `setdefault(token, set())` returns the set already stored under that token, or stores an empty one first; either way `.add(doc_id)` goes into the right set. A set, not a list, so a token that appears twice in one description does not list the movie twice. `get_documents` uses `.get(term, set())` so an unknown token gives an empty list instead of a `KeyError`; lesson 2 depends on that. `pickle.dump` writes a Python object to a file as bytes, which is why the files are opened with `"wb"`.
 
-3. In the same file: new code. It goes below the whole `InvertedIndex` class, with no indent, and above `search_titles`. It is the function the CLI will call. The lesson's check is that the first document for `merida` is 4651, *Brave*:
+3. In the same file: new code. It goes below the whole `InvertedIndex` class, with no indent, and above `search_titles`. It is the function the CLI will call. The lesson's check is that the first document for `merida` is 4651, *Brave*. Merida is the heroine of *Brave*, so a correct index finds her name in that movie's description:
 
 ```python
 # In: nothing.  Out: nothing; cache/ now holds the index built from data/movies.json.
