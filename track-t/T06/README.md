@@ -75,6 +75,36 @@ Your `matmul` and NumPy's, on the 10×V chapter matrix times its transpose, at t
 
 Half a page, four parts: both band lines; which pair of chapters is most alike in the ranks 51-250 band, with one sentence on why from what you know about your corpus; your two predictions, copied from `evidence/T06.md` unchanged, with one sentence each on whether they held; and the timing table with one sentence under it giving the `V=50` and `V=2000` ratios.
 
+In `linear/FINDINGS.md`: a new file. Start from this, and replace every line in angle brackets:
+
+````markdown
+# T06 findings: which of my chapters are alike
+
+## The two bands
+
+```text
+<paste: the two band lines>
+```
+
+## The most alike pair in ranks 51-250
+
+<answer: the pair, and one sentence on why, from what you know about your corpus>
+
+## My two predictions
+
+<paste: your two predictions from evidence/T06.md, unchanged>
+
+<answer: one sentence for each prediction on whether it held>
+
+## The timing
+
+```text
+<paste: the three V= lines>
+```
+
+<answer: one sentence giving the V=50 and V=2000 ratios>
+````
+
 **Commit, push, PR, sign off.** Fill `## Reflection` in `evidence/T06.md` (the questions are below) and run `uv run python scripts/check_evidence.py T06` until it says `all slots filled`. Then:
 
 ```bash
