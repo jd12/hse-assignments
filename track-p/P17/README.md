@@ -8,7 +8,7 @@
 
 **During the chapter**
 
-**Write the three verbs.** Lesson 1 says what RAG does in three steps, each one verb. Write them in `scratch/p17-rag.md` in the rag repo, and beside each the P-assignment where you first built it. Two of the three were done by P14.
+**Write the three verbs.** Lesson 1 says what RAG does in three steps, each one verb. Write them in `scratch/p17-rag.md` in the rag repo, and beside each the P-assignment where you first built it. The file is already in your repo with a slot for each item. If it is not there, create it. Two of the three were done by P14.
 
 **Lesson 3 is a reading with a question; answer it from your corpus, not the movies.** The question asks which kind of document would least need a conflict step. Write your answer in `scratch/p17-rag.md`, then one line on whether your corpus is that kind.
 

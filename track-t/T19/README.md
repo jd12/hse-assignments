@@ -3,7 +3,7 @@
 **Meetings:** D43 · **Points:** 15 pts
 
 **Watch — none**
- · `names/embeddings.png` once it exists, `evidence/T19.md`, `names/SAMPLES.md` (new), terminal in the repo root.
+ · `names/embeddings.png` once it exists, `evidence/T19.md`, `names/SAMPLES.md`, terminal in the repo root.
 
 No video. Thursday's segment ended with two things you typed and did not have time to read: the picture of the embedding table, and sampling from the trained MLP. Today is both of those on your names, and a judgment call: of twenty names the model makes up, which five could pass as names from your corpus, and why.
 
@@ -67,7 +67,7 @@ Open `names/embeddings.png`. On Homer `a`, `o`, `e` and `i` sit in a group at th
 
 **Step 3. Twenty samples, five that pass.**
 
-Read the twenty. For each one, decide: a name your corpus could contain, a word rather than a name, or noise. Then create `names/SAMPLES.md` with the twenty listed under those three headings, and under a fourth heading the five best, each with one line on what makes it pass: the ending, a familiar three-letter run, a real name it is one letter from. On Homer, `atus`, `leus`, `lyodus`, `iuretus` and `adcius` pass on their endings alone, `mon` and `depo` are words, and `fepesastilasgius` and `pelocianrysixippus` are three names run together. Under `## Step 3`, write how many of the twenty went under each of the three headings, and paste the five with their reasons.
+Read the twenty. For each one, decide: a name your corpus could contain, a word rather than a name, or noise. Then open `names/SAMPLES.md`, which is already in your repo with four headings (if it is not there, create it). List the twenty under the first three, and under the fourth the five best, each with one line on what makes it pass: the ending, a familiar three-letter run, a real name it is one letter from. On Homer, `atus`, `leus`, `lyodus`, `iuretus` and `adcius` pass on their endings alone, `mon` and `depo` are words, and `fepesastilasgius` and `pelocianrysixippus` are three names run together. Under `## Step 3`, write how many of the twenty went under each of the three headings, and paste the five with their reasons.
 
 **Extension — The same twenty, before and after training** *(assigned)*
 

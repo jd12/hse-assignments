@@ -8,7 +8,7 @@
 
 **During the chapter**
 
-**Write down the fusion.** Lesson 2's reading and the stub it gives you name two ways of combining a keyword ranking with a semantic one. Write both names in `scratch/p10-hybrid.md` in the rag repo, and as lessons 3 to 5 give you their constants (`alpha`, `k`), write each one down with its value. P11 puts `k` into `rag/hybrid.py`.
+**Write down the fusion.** Lesson 2's reading and the stub it gives you name two ways of combining a keyword ranking with a semantic one. Write both names in `scratch/p10-hybrid.md` in the rag repo, and as lessons 3 to 5 give you their constants (`alpha`, `k`), write each one down with its value. The file is already in your repo with a slot for each item. If it is not there, create it. P11 puts `k` into `rag/hybrid.py`.
 
 **Predict the fusion on your five queries.** Before P11 runs it, write under `## Predictions` in `evidence/P10.md`, for each of your five queries, whether you expect the hybrid rank to be better than the better of BM25 and semantic, the same, or worse. One line each. Commit the file; I check the timestamps.
 

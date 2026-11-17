@@ -133,7 +133,7 @@ uv run python micrograd/train.py
 
 **Step 6. `micrograd/MILESTONE.md`.**
 
-Half a page, four parts: the engine, as a table of every operation `Value` supports with its local derivative in one column (`+` passes through, `*` gives the other factor, `tanh` gives `1 - t²`, `exp` gives itself, `**k` gives `k·x^(k-1)`); the network, `MLP(2, [4, 4, 1])`, 37 parameters, what its inputs and labels are on your corpus; the result, T12's final loss and count with the misses explained in one line each; and the clean-clone commands from Step 5 that reproduce it. The derivation page stays in `evidence/T21.md`; link to it.
+Half a page, four parts. The file is already in your repo with the four headings (if it is not there, create it): the engine, as a table of every operation `Value` supports with its local derivative in one column (`+` passes through, `*` gives the other factor, `tanh` gives `1 - t²`, `exp` gives itself, `**k` gives `k·x^(k-1)`); the network, `MLP(2, [4, 4, 1])`, 37 parameters, what its inputs and labels are on your corpus; the result, T12's final loss and count with the misses explained in one line each; and the clean-clone commands from Step 5 that reproduce it. The derivation page stays in `evidence/T21.md`; link to it.
 
 **Commit, push, PR, sign off.** Fill `## Reflection` in `evidence/T21.md` (the questions are below) and run `uv run python scripts/check_evidence.py T21` until it says `all slots filled`. Then:
 

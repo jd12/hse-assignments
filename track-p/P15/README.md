@@ -8,7 +8,7 @@
 
 **During the chapter**
 
-**Copy lesson 1's three questions.** The vibe check is three questions you ask of a result list. Write them in `scratch/p15-eval.md` in the rag repo, exactly as the lesson words them. Step 3 asks them of your own results.
+**Copy lesson 1's three questions.** The vibe check is three questions you ask of a result list. Write them in `scratch/p15-eval.md` in the rag repo, exactly as the lesson words them. The file is already in your repo with a slot for each item. If it is not there, create it. Step 3 asks them of your own results.
 
 **Write the two formulas as fractions.** Lessons 3 and 4 each give one line of arithmetic. Write both in `scratch/p15-eval.md` with the words the chapter uses for numerator and denominator, and beside each, which of the two "how much of what you found" and "how much of what is there" it answers. P16's runner computes both and you will need to say which is which without looking.
 

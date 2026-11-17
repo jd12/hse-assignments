@@ -8,7 +8,7 @@
 
 **During the chapter**
 
-**Break the chunker on purpose.** When lesson 2's `--overlap` passes, run the `chunk` command once more with the overlap equal to the chunk size, and write what happened in `scratch/p09-chunks.md` in the rag repo: an error, a hang (press Ctrl-C), or output. Step 3 does the same to the walkthrough's chunker and the answer is different.
+**Break the chunker on purpose.** When lesson 2's `--overlap` passes, run the `chunk` command once more with the overlap equal to the chunk size, and write what happened in `scratch/p09-chunks.md` in the rag repo: an error, a hang (press Ctrl-C), or output. The file is already in your repo with a slot for each item. If it is not there, create it. Step 3 does the same to the walkthrough's chunker and the answer is different.
 
 **Start lesson 4's build early.** `embed_chunks` embeds about 73,000 chunks and takes several minutes on a laptop. Start it, then read lessons 7 and 8 while the bar runs.
 

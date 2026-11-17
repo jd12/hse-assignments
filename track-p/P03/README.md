@@ -8,7 +8,7 @@
 
 **During the chapter**
 
-**Copy the chapter's definitions exactly.** Lesson 4 defines term frequency. Copy its definition into `scratch/p03-formula.md` in the rag repo character for character: what is counted, and whether the count is divided by anything. Lesson 5, in P04, gives the idf formula, and it goes under the same heading, every `+ 1` included. P04 has a line in `rag/tfidf.py` marked `# CHAPTER FORMULA`, and that file is checked against this one.
+**Copy the chapter's definitions exactly.** Lesson 4 defines term frequency. Copy its definition into `scratch/p03-formula.md` in the rag repo character for character: what is counted, and whether the count is divided by anything. The file is already in your repo with a heading for each of the two formulas. If it is not there, create it. Lesson 5, in P04, gives the idf formula, and it goes under the same heading, every `+ 1` included. P04 has a line in `rag/tfidf.py` marked `# CHAPTER FORMULA`, and that file is checked against this one.
 
 **Notes**
 

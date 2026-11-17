@@ -8,7 +8,7 @@
 
 **During the chapter**
 
-**Write the two constants down.** Lessons 2 and 3 each introduce a tuning constant, `k1` and `b`. When the chapter gives you a value, write it into `scratch/p05-bm25.md` in the rag repo with one sentence, in the chapter's own words, saying what it controls. P06 puts both into `rag/keyword.py`.
+**Write the two constants down.** Lessons 2 and 3 each introduce a tuning constant, `k1` and `b`. When the chapter gives you a value, write it into `scratch/p05-bm25.md` in the rag repo with one sentence, in the chapter's own words, saying what it controls. The file is already in your repo with a slot for each item. If it is not there, create it. P06 puts both into `rag/keyword.py`.
 
 **Predict a two-word ranking.** Before lesson 3, pick two words from your corpus, one common and one rare, and write under `## Prediction` in `evidence/P05.md` which word you think will decide the ranking when P06 searches for both together, and whether a long passage or a short one will win. Commit the file; I check the timestamps. P06 checks the prediction.
 

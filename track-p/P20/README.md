@@ -153,7 +153,7 @@ Paste the verdicts under `## Step 4`. If the three runs of one question disagree
 
 **Extension — The report** *(assigned)*
 
-`rag/MILESTONE.md`, five numbered sections, one page:
+`rag/MILESTONE.md`, five numbered sections, one page. The file is already in your repo with the five headings (if it is not there, create it):
 
 1. **The table.** Both summary lines from Step 2, pasted. Under them, your headline in one sentence with two numbers in it: `correct` for `none` against `tool` out of twenty.
 2. **Routing.** From Step 3: how many `tool`-mode misses were routing, how many retrieval, how many generation, and one question from each kind with the model's query where there was one.

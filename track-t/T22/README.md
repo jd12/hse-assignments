@@ -3,7 +3,7 @@
 **Meetings:** D44 · **Points:** 15 pts
 
 **Watch — none**
- · `evidence/T21.md` (the derivation page), `names/demo.py`, `names/PRACTICAL.md` (new), `evidence/T22.md`, terminal in the repo root.
+ · `evidence/T21.md` (the derivation page), `names/demo.py`, `names/PRACTICAL.md`, `evidence/T22.md`, terminal in the repo root.
 
 No video. Tomorrow is the Semester 1 Practical: ten minutes, oral, one at a time while the others ship. Three parts: the name model demonstrated from a clean clone, the T21 derivation page explained aloud, and one question about a tensor shape in your own makemore code. Today is the rehearsal, and the deliverable is the page you will have in front of you.
 
@@ -90,7 +90,7 @@ Open `evidence/T21.md` at `## Step 3`. Set a timer for three minutes and explain
 
 **Step 4. Five shape questions.**
 
-Create `names/PRACTICAL.md` with the demo command at the top, the seed you chose, and then these five, each answered with the shape and one sentence on why, from your own `mlp.py` and `train_mlp.py`:
+Open `names/PRACTICAL.md`, which is already in your repo (if it is not there, create it), and fill in the demo command at the top, the seed you chose, and then these five, each answered with the shape and one sentence on why, from your own `mlp.py` and `train_mlp.py`:
 
 1. `X` for your whole name list: its shape, and why the first number is T13's bigram total.
 2. `C[X]`: its shape, and what each of the three numbers in it counts.

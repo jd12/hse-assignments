@@ -8,7 +8,7 @@
 
 **During the chapter**
 
-**Write down what the model is allowed to do.** Lesson 1 lists four things a model can do to a query before the search runs. Write the four in `scratch/p12-llm.md` in the rag repo. Lesson 3's prompt forbids three of them; mark which three. P13 adds two of them back on purpose.
+**Write down what the model is allowed to do.** Lesson 1 lists four things a model can do to a query before the search runs. Write the four in `scratch/p12-llm.md` in the rag repo. The file is already in your repo with a slot for each item. If it is not there, create it. Lesson 3's prompt forbids three of them; mark which three. P13 adds two of them back on purpose.
 
 **Count the requests.** Lesson 2 gives two numbers for the free tier: requests per day and requests per minute. Write both in `scratch/p12-llm.md`. Every script in this repo from today on prints how many requests it made, and the Reflection asks you to add them up.
 

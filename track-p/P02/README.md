@@ -8,7 +8,7 @@
 
 **During the chapter**
 
-**Keep the list.** In `scratch/p02-order.md` in the rag repo, write every operation the chapter applies to text, in the order it applies them. The walkthrough has you write the same pipeline for your corpus, and the chapter's order is the one to copy or argue with.
+**Keep the list.** In `scratch/p02-order.md` in the rag repo, write every operation the chapter applies to text, in the order it applies them. The walkthrough has you write the same pipeline for your corpus, and the chapter's order is the one to copy or argue with. The file is already in your repo with five numbered slots. If it is not there, create it.
 
 **Notes**
 
@@ -252,7 +252,7 @@ Paste both lines under `## Step 4`. *If it broke:* `don’t` surviving with its 
 
 **Extension — three sentences from your corpus (ASSIGNED)**
 
-Pick three sentences from `data/corpus.txt`, select-and-copy, never retyped: one with a name, one with a number, and one with punctuation the chapter's examples did not have. Put them in `scratch/p02-sentences.txt` with a blank line between them; the corpus file wraps its lines, so a copied sentence arrives on two or three lines, and that is fine, the blank line is what separates one sentence from the next. Before you run anything, write under `## Extension` in `evidence/P02.md` which of the three you expect the pipeline to damage most, and how. Commit that file. I will check your commit timestamps. Then:
+Pick three sentences from `data/corpus.txt`, select-and-copy, never retyped: one with a name, one with a number, and one with punctuation the chapter's examples did not have. Put them in `scratch/p02-sentences.txt`, which is already in your repo with three marked lines to replace, and keep a blank line between them; the corpus file wraps its lines, so a copied sentence arrives on two or three lines, and that is fine, the blank line is what separates one sentence from the next. Before you run anything, write under `## Extension` in `evidence/P02.md` which of the three you expect the pipeline to damage most, and how. Commit that file. I will check your commit timestamps. Then:
 
 ```bash
 uv run python scratch/p02-sentences.py

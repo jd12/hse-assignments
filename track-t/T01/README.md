@@ -14,7 +14,7 @@
 
 **A vector is a list of numbers and an arrow, and they are the same thing.** Today's vectors are word counts: a chapter is `[how many times it says the, how many times it says your word]`, and that pair of numbers is an arrow from the origin. Adding two chapters' counts adds the arrows. Scaling a chapter by 2 doubles the arrow.
 
-**Columns or rows.** 3Blue1Brown writes a vector as a column. Karpathy and PyTorch write it as a row. Start `linear/NOTATION.md` today with that one line, and add to it every time a source does it differently. It will save you in micrograd.
+**Columns or rows.** 3Blue1Brown writes a vector as a column. Karpathy and PyTorch write it as a row. Start `linear/NOTATION.md` today with that one line, and add to it every time a source does it differently. The file is already in your repo with a heading for it. If it is not there, create it. It will save you in micrograd.
 
 **Run every script from the repo root.** The scripts open `data/corpus.txt` by a path relative to where you are standing, so `cd linear && uv run python chapter_vectors.py` fails with `FileNotFoundError: 'data/corpus.txt'` even though the file is right there.
 

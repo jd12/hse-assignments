@@ -145,7 +145,7 @@ Two questions recovered, g04 and g20: the reranker, once it could see them, put 
 
 **Extension — `rag/POSTMORTEM.md`** *(assigned)*
 
-One page, three parts:
+One page, three parts. The file is already in your repo with the three headings (if it is not there, create it):
 
 1. **Five questions, one line each**, in the form `id: lost at <stage> because <mechanism>`, where the mechanism names the words: which query words BM25 matched, why the semantic model did not see it, what the reranker preferred instead. Not "it ranked low"; why.
 2. **The one change**, what it recovered and what it cost, from the Step 4 table, with the sentence that says whether it is a real improvement or a fit to five questions you wrote yourself.

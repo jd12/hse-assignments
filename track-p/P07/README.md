@@ -8,7 +8,7 @@
 
 **During the chapter**
 
-**Write the model down.** Lesson 3 names the embedding model and lesson 3's check prints one number about it. Write the model's name, that number, and the vector dimension once lesson 10 prints it (P08) into `scratch/p07-model.md` in the rag repo. Lesson 9 says why the chapter uses cosine similarity and not the dot product; write that reason under the model in one sentence of your own.
+**Write the model down.** Lesson 3 names the embedding model and lesson 3's check prints one number about it. Write the model's name, that number, and the vector dimension once lesson 10 prints it (P08) into `scratch/p07-model.md` in the rag repo. The file is already in your repo with a slot for each item. If it is not there, create it. Lesson 9 says why the chapter uses cosine similarity and not the dot product; write that reason under the model in one sentence of your own.
 
 **Predict the paraphrase queries.** Your P06 scoreboard has two `paraphrase` queries that keyword search missed. Before P08 runs semantic search on them, write under `## Predictions` in `evidence/P07.md` which of your five queries you expect semantic search to find in the top 3 and which you expect it to miss, one sentence each. Commit the file; I check the timestamps. P08 checks the predictions.
 

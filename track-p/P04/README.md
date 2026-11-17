@@ -40,7 +40,7 @@ Under the timestamp, write today's checklist:
 
 In `~/version_control/rag-search-engine/`, the last two lessons, each run locally before it is submitted. Both add one command to `cli/keyword_search_cli.py` and one method to the class in `cli/lib/keyword_search.py`. When the chapter page shows every lesson complete, save it as `evidence/p04-bootdev-ch2.png` in the rag repo.
 
-**Lesson 5: inverse document frequency.** `actor` is in a large share of movie descriptions, so a match on it says little; `grizzly` is in a handful, so a match on it says a lot. idf scores a term by how few documents contain it. The lesson's formula, which goes into `scratch/p03-formula.md` under your term frequency line, character for character:
+**Lesson 5: inverse document frequency.** `actor` is in a large share of movie descriptions, so a match on it says little; `grizzly` is in a handful, so a match on it says a lot. idf scores a term by how few documents contain it. The lesson's formula, which goes into `scratch/p03-formula.md` under the `## Inverse document frequency` heading, below your term frequency line, character for character:
 
 ```python
 math.log((total_doc_count + 1) / (term_match_doc_count + 1))
@@ -179,7 +179,7 @@ term occurrences removed: 11.8%
 top-5 slots changed: 38 of 10590
 ```
 
-The list is stems, which is why `drop_stems` in `preprocess` filters after stemming: `ulyss`, not `ulysses`. Filter it against raw tokens and `ulyss` never matches anything, because no word in the text is spelled that way. The script wrote the list to `rag/corpus_stopwords.txt`. Then write `rag/corpus_notes.md`:
+The list is stems, which is why `drop_stems` in `preprocess` filters after stemming: `ulyss`, not `ulysses`. Filter it against raw tokens and `ulyss` never matches anything, because no word in the text is spelled that way. The script wrote the list to `rag/corpus_stopwords.txt`. Then fill in `rag/corpus_notes.md`, which is already in your repo with these four headings (if it is not there, create it):
 
 1. The three threshold counts and which threshold you kept. 20% is a starting point, not an answer.
 2. Your list, with the words that carry meaning marked.

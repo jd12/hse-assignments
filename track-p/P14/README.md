@@ -8,7 +8,7 @@
 
 **During the chapter**
 
-**Write down the two stages.** Lesson 1 names them with numbers: how many candidates the fast stage pulls and how many the slow stage keeps. Write both in `scratch/p14-rerank.md` in the rag repo, and beside them the number the chapter's code actually uses (five times the limit). `rag/rerank.py` uses 20; the Reflection asks what that costs.
+**Write down the two stages.** Lesson 1 names them with numbers: how many candidates the fast stage pulls and how many the slow stage keeps. Write both in `scratch/p14-rerank.md` in the rag repo, and beside them the number the chapter's code actually uses (five times the limit). The file is already in your repo with a slot for each item. If it is not there, create it. `rag/rerank.py` uses 20; the Reflection asks what that costs.
 
 **Count the requests before you run lesson 2.** Lesson 2 sends one request per document with a three-second sleep between them. Work out, before running it, how many requests and how many seconds the check command costs for `--limit 3`, and write both in `scratch/p14-rerank.md`. Then run it and see.
 
