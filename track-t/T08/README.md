@@ -134,7 +134,9 @@ L = 34.0060   grad 0.0000   (*)
 drawn: micrograd/expr.svg
 ```
 
-Open `micrograd/expr.svg`. It reads left to right from five leaves (`a1`, `b1`, `a2`, `b2`, `s`) through two `*` nodes and a `+` to `d`, then one more `*` to `L`: the same shape as his `L = (a*b + c) * f`, with your corpus's numbers in the boxes. The order of the children under each node in the text version can differ from Homer's; a `set` has no order. Paste the three value lines under `## Step 3` in `evidence/T08.md`.
+The lines under a node can come out in either order, on your machine and from one run to the next: `s` before `d`, or `b1` before `a1`. `_prev` in your engine is a `set`, and a set has no order. Compare the values and the indentation, not the order.
+
+Open `micrograd/expr.svg`. It reads left to right from five leaves (`a1`, `b1`, `a2`, `b2`, `s`) through two `*` nodes and a `+` to `d`, then one more `*` to `L`: the same shape as his `L = (a*b + c) * f`, with your corpus's numbers in the boxes. Paste the three value lines under `## Step 3` in `evidence/T08.md`.
 
 *If it broke* with a line that starts `could not draw` and ends `ExecutableNotFound`, the `dot` program is missing, or your terminal has not seen it yet; on Windows that means `dot` is not on your `PATH`, so go back to Step 2's `echo` and `source` lines, check `dot -V`, and run again; if it still fails the text graph is your picture today. *If it broke* with `TypeError: Value.__init__() got an unexpected keyword argument 'label'`, your `__init__` is missing `label=""`; he adds it while building the drawing, so the boxes have names.
 
